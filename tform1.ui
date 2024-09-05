@@ -19,7 +19,7 @@
      <property name="styleSheet">
       <string notr="true">QGroupBox {
     background-color: #f8f8f8;
-    border: none solid #cccccc;
+    border: 1px solid #cccccc;
     border-radius: 5px;
 }</string>
      </property>
