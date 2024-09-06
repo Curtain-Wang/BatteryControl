@@ -58,21 +58,37 @@
         </property>
         <property name="styleSheet">
          <string notr="true">QPushButton {
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    padding: 10px;
-    border-radius: 5px;
-    font-size: 15px;
+    background-color: #4CAF50; /* 按钮正常状态为绿色 */
+    color: white; /* 按钮文字为白色 */
+    border: none; /* 无边框 */
+    border-radius: 5px; /* 圆角按钮 */
+    font-size: 15px; /* 字体大小 */
+    min-height: 50px; /* 按钮最小高度 */
+    width: 120px; /* 按钮宽度 */
 }
-QPushButton:hover {
-    background-color: #45a049; /* 鼠标悬停时变为稍深的绿色 */
-}
+
 QPushButton#pushButton_2 {
-    background-color: #f44336; /* 取消按钮使用红色 */
+    background-color: #f44336; /* “取消”按钮为红色 */
 }
+
+QPushButton:hover {
+    background-color: #45a049; /* 鼠标悬停时按钮稍微变暗 */
+}
+
 QPushButton#pushButton_2:hover {
-    background-color: #d32f2f; /* 鼠标悬停时的颜色 */
+    background-color: #d32f2f; /* “取消”按钮悬停时稍微变暗 */
+}
+
+QPushButton:pressed {
+    background-color: #388E3C; /* 改变颜色，表示按下状态 */
+    border: 1px solid #2E7D32; /* 按下时添加一个边框，提升立体感 */
+    transform: translateY(2px); /* 按下时按钮下移，模拟按下效果 */
+}
+
+QPushButton#pushButton_2:pressed {
+    background-color: #c62828; /* “取消”按钮按下时变为深红色 */
+    border: 1px solid #b71c1c; /* 添加边框提升立体感 */
+    transform: translateY(2px); /* 按下时按钮下移，模拟按下效果 */
 }
 </string>
         </property>
@@ -102,21 +118,37 @@ QPushButton#pushButton_2:hover {
         </property>
         <property name="styleSheet">
          <string notr="true">QPushButton {
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    padding: 10px;
-    border-radius: 5px;
-    font-size: 15px;
+    background-color: #4CAF50; /* 按钮正常状态为绿色 */
+    color: white; /* 按钮文字为白色 */
+    border: none; /* 无边框 */
+    border-radius: 5px; /* 圆角按钮 */
+    font-size: 15px; /* 字体大小 */
+    min-height: 50px; /* 按钮最小高度 */
+    width: 120px; /* 按钮宽度 */
 }
-QPushButton:hover {
-    background-color: #45a049; /* 鼠标悬停时变为稍深的绿色 */
-}
+
 QPushButton#pushButton_2 {
-    background-color: #f44336; /* 取消按钮使用红色 */
+    background-color: #f44336; /* “取消”按钮为红色 */
 }
+
+QPushButton:hover {
+    background-color: #45a049; /* 鼠标悬停时按钮稍微变暗 */
+}
+
 QPushButton#pushButton_2:hover {
-    background-color: #d32f2f; /* 鼠标悬停时的颜色 */
+    background-color: #d32f2f; /* “取消”按钮悬停时稍微变暗 */
+}
+
+QPushButton:pressed {
+    background-color: #388E3C; /* 改变颜色，表示按下状态 */
+    border: 1px solid #2E7D32; /* 按下时添加一个边框，提升立体感 */
+    transform: translateY(2px); /* 按下时按钮下移，模拟按下效果 */
+}
+
+QPushButton#pushButton_2:pressed {
+    background-color: #c62828; /* “取消”按钮按下时变为深红色 */
+    border: 1px solid #b71c1c; /* 添加边框提升立体感 */
+    transform: translateY(2px); /* 按下时按钮下移，模拟按下效果 */
 }
 </string>
         </property>
