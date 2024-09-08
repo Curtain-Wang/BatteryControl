@@ -14,6 +14,7 @@ class TForm3 : public QWidget
 public:
     explicit TForm3(QWidget *parent = nullptr);
     ~TForm3();
+    void refresh();
 
 private:
     Ui::TForm3 *ui;

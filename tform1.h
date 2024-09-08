@@ -14,6 +14,7 @@ class TForm1 : public QWidget
 public:
     explicit TForm1(QWidget *parent = nullptr);
     ~TForm1();
+    void refresh();
 
 private:
     Ui::TForm1 *ui;

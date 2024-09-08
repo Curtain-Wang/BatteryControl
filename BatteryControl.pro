@@ -14,20 +14,29 @@ SOURCES += \
     mainwindow.cpp \
     tform1.cpp \
     tform2.cpp \
-    tform3.cpp
+    tform3.cpp \
+    tform4.cpp \
+    tform5.cpp \
+    tform6.cpp
 
 HEADERS += \
     globalparam.h \
     mainwindow.h \
     tform1.h \
     tform2.h \
-    tform3.h
+    tform3.h \
+    tform4.h \
+    tform5.h \
+    tform6.h
 
 FORMS += \
     mainwindow.ui \
     tform1.ui \
     tform2.ui \
-    tform3.ui
+    tform3.ui \
+    tform4.ui \
+    tform5.ui \
+    tform6.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

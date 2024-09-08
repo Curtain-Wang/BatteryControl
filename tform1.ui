@@ -84,7 +84,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="lineEdit">
+             <widget class="QLineEdit" name="x0e">
               <property name="minimumSize">
                <size>
                 <width>0</width>
@@ -150,7 +150,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="lineEdit_2">
+             <widget class="QLineEdit" name="x14">
               <property name="minimumSize">
                <size>
                 <width>0</width>
@@ -216,7 +216,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="lineEdit_3">
+             <widget class="QLineEdit" name="x10">
               <property name="minimumSize">
                <size>
                 <width>0</width>
@@ -313,7 +313,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="lineEdit_7">
+             <widget class="QLineEdit" name="x0f">
               <property name="minimumSize">
                <size>
                 <width>0</width>
@@ -379,7 +379,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="lineEdit_8">
+             <widget class="QLineEdit" name="x15">
               <property name="minimumSize">
                <size>
                 <width>0</width>
@@ -445,7 +445,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="lineEdit_9">
+             <widget class="QLineEdit" name="x11">
               <property name="minimumSize">
                <size>
                 <width>0</width>

@@ -3,16 +3,23 @@
 #include "tform1.h"
 #include "tform2.h"
 #include "tform3.h"
+#include "tform4.h"
+#include "tform5.h"
+#include "tform6.h"
 #include <QDateTime>
 #include <QTimer>
 #include "globalparam.h"
 #include <QMessageBox>
 #include <QSerialPort>
 #include <QSerialPortInfo>
+#include <QFile>
+#include <QSettings>
+#include <QDir>
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
     , serialPort(new QSerialPort(this))
+    , connectStatusLabel(new QLabel(this))
 {
     ui->setupUi(this);
     init();
@@ -67,6 +74,12 @@ bool MainWindow::isCreated(int num)
         return tform2 != nullptr;
     case 3:
         return tform3 != nullptr;
+    case 4:
+        return tform4 != nullptr;
+    case 5:
+        return tform5 != nullptr;
+    case 6:
+        return tform6 != nullptr;
     default:
         return false;
     }
@@ -95,18 +108,231 @@ void MainWindow::init()
     connect(receiveTimer, &QTimer::timeout, this, &MainWindow::on_receiveTimer_timeout);
     receiveTimer->setInterval(10);
     receiveTimer->start();
+    refreshPort();
+    //状态栏
+    connectStatusLabel->setMinimumWidth(50);
+    ui->statusBar->addWidget(connectStatusLabel);
+    connectStatusLabel->setText("未连接");
+    connectStatusLabel->setStyleSheet("QLabel { background-color : red; color : white; }");
+    //加载配置文件
+    loadConfig();
 }
 
-void MainWindow::sendPortData()
+void MainWindow::refreshPort()
 {
-    QByteArray buf(sendDataBuf, sendLength);
+    //清空combox中已经有的串口名
+    ui->comboBox_2->clear();
+    // 获取系统中所有可用串口
+    QList<QSerialPortInfo> portList = QSerialPortInfo::availablePorts();
+
+    // 按串口名升序排序
+    std::sort(portList.begin(), portList.end(), [](const QSerialPortInfo &a, const QSerialPortInfo &b) {
+        return a.portName() < b.portName();
+    });
+
+    // 遍历可用串口，将串口名添加到 comboBox中
+    for (const QSerialPortInfo &portInfo : portList) {
+        ui->comboBox_2->addItem(portInfo.portName());
+    }
+}
+
+void MainWindow::sendGetAllDataCMD()
+{
+    QByteArray buf;
+    buf.append(static_cast<char>(0x01));
+    buf.append(static_cast<char>(0x03));
+    //起始地址
+    buf.append(static_cast<char>(0x00));
+    buf.append(static_cast<char>(0x00));
+    //个数
+    buf.append(static_cast<char>(0x00));
+    buf.append(static_cast<char>((TIMING_MESSAGE_SIZE - 5) / 2));
+
+    QByteArray crcArray = calculateCRCArray(buf, 6);
+
+    //crC
+    buf.append(crcArray[0]);
+    buf.append(crcArray[1]);
+    messageSize = TIMING_MESSAGE_SIZE;
+    cmd = 3;
     sendSerialData(buf);
+}
+
+void MainWindow::refresh()
+{
+    ui->d20->setText(QString::number(static_cast<float>(timingDataBuf[20]) / 10, 'f', 1));
+    ui->d21->setText(QString::number(static_cast<float>(timingDataBuf[21]) / 10, 'f', 1));
+}
+
+void MainWindow::refresh(int num)
+{
+    switch(num)
+    {
+    case 1:
+        if(isCreated(1))
+        {
+            tform1->refresh();
+        }
+        break;
+    case 2:
+        if(isCreated(2))
+        {
+            tform2->refresh();
+        }
+        break;
+    case 3:
+        if(isCreated(3))
+        {
+            tform3->refresh();
+        }
+        break;
+    case 4:
+        if(isCreated(4))
+        {
+            tform4->refresh();
+        }
+        break;
+    case 5:
+        if(isCreated(5))
+        {
+            tform5->refresh();
+        }
+        break;
+    case 6:
+        if(isCreated(6))
+        {
+            tform6->refresh();
+        }
+        break;
+    }
+}
+
+void MainWindow::refreshAll()
+{
+    refresh();
+    for(int i = 1; i <= 6; i++)
+    {
+        refresh(i);
+    }
+}
+
+void MainWindow::test()
+{
+    QByteArray buf;
+    buf.append(static_cast<char>(0x01));
+    buf.append(static_cast<char>(0x03));
+    //起始地址
+    buf.append(static_cast<char>(0x00));
+    buf.append(static_cast<char>(0x20));
+    //个数
+    buf.append(static_cast<char>(0x00));
+    buf.append(static_cast<char>(0x01));
+
+    QByteArray crcArray = calculateCRCArray(buf, 6);
+
+    //crC
+    buf.append(crcArray[0]);
+    buf.append(crcArray[1]);
+    manualFlag = 1;
+    messageSize = 7;
+    cmd = 3;
+    sendSerialData(buf);
+}
+
+void MainWindow::loadConfig()
+{
+    QString configFileName = "config.ini";
+    QString iniFilePath = QDir::currentPath() + "/" + configFileName;
+    QFile configFile(iniFilePath);
+    QSettings settings(iniFilePath, QSettings::IniFormat);
+    //不存在则初始化
+    if(!configFile.exists())
+    {
+        settings.beginGroup("CONFIG");
+        settings.setValue("AOV", 0);
+        settings.setValue("AUV", 0);
+        settings.setValue("BOV", 0);
+        settings.setValue("BUV", 0);
+    }
+    //加载配置
+    else
+    {
+        aov = settings.value("AOV").toInt();
+        auv = settings.value("AUV").toInt();
+        bov = settings.value("BOV").toInt();
+        buv = settings.value("BUV").toInt();
+    }
+    ui->aov->setText(QString::number(aov));
+    ui->bov->setText(QString::number(bov));
+    ui->auv->setText(QString::number(auv));
+    ui->buv->setText(QString::number(buv));
+}
+
+void MainWindow::AOVUpdate()
+{
+    aov = ui->aov->text().toInt();
+    QString configFileName = "config.ini";
+    QString iniFilePath = QDir::currentPath() + "/" + configFileName;
+    QFile configFile(iniFilePath);
+    QSettings settings(iniFilePath, QSettings::IniFormat);
+    settings.beginGroup("CONFIG");
+    settings.setValue("AOV", aov);
+}
+
+void MainWindow::BOVUpdate()
+{
+    bov = ui->bov->text().toInt();
+    QString configFileName = "config.ini";
+    QString iniFilePath = QDir::currentPath() + "/" + configFileName;
+    QFile configFile(iniFilePath);
+    QSettings settings(iniFilePath, QSettings::IniFormat);
+    settings.beginGroup("CONFIG");
+    settings.setValue("BOV", bov);
+}
+
+void MainWindow::AUVUpdate()
+{
+    auv = ui->auv->text().toInt();
+    QString configFileName = "config.ini";
+    QString iniFilePath = QDir::currentPath() + "/" + configFileName;
+    QFile configFile(iniFilePath);
+    QSettings settings(iniFilePath, QSettings::IniFormat);
+    settings.beginGroup("CONFIG");
+    settings.setValue("AUV", auv);
+}
+
+void MainWindow::BUVUpdate()
+{
+    buv = ui->auv->text().toInt();
+    QString configFileName = "config.ini";
+    QString iniFilePath = QDir::currentPath() + "/" + configFileName;
+    QFile configFile(iniFilePath);
+    QSettings settings(iniFilePath, QSettings::IniFormat);
+    settings.beginGroup("CONFIG");
+    settings.setValue("BUV", buv);
+}
+
+void MainWindow::sendPortData(QByteArray data)
+{
+    if(data == nullptr)
+    {
+        QByteArray buf(sendDataBuf, sendLength);
+        sendSerialData(buf);
+    }
+    else
+    {
+        sendSerialData(data);
+    }
     //设置等待时间
     waitMessageRemaingTime = 20;
 }
 
 void MainWindow::on_sendTimer_timeout()
 {
+    if(connFlag == 0)
+    {
+        return;
+    }
     if(waitMessageRemaingTime > 0)
     {
         waitMessageRemaingTime--;
@@ -124,19 +350,13 @@ void MainWindow::on_sendTimer_timeout()
         {
             //手动命令下发
             sendPortData();
+            manualFlag = 0;
         }
         //说明没有手动命令要下发，就判断是否到了刷新时间
         else if(dataRefreshRemaingTime <= 0)
         {
-            switch (dataRefreshStep) {
-            case 1:
-                //TODO 数据刷新
-                //最后一步要重置刷新时间
-                dataRefreshRemaingTime = 20;
-                break;
-            default:
-                break;
-            }
+            sendGetAllDataCMD();
+            dataRefreshRemaingTime = 20;
         }
     }
 }
@@ -147,19 +367,28 @@ void MainWindow::on_receiveTimer_timeout()
     //当缓冲区的消息长度大于messageSize，那说明可能存在一条完整的响应
     while (messageSize > 0 && (receiveEndIndex + 500 - receiveStartIndex) % 500 >= messageSize) {
         //没有匹配到开始
-        if(receiveDataBuf[receiveStartIndex] != module || receiveDataBuf[(receiveStartIndex + 1) % 500] != cmd)
+        if(static_cast<uint8_t>(receiveDataBuf[receiveStartIndex]) != module
+            || static_cast<uint8_t>(receiveDataBuf[(receiveStartIndex + 1) % 500]) != cmd)
         {
+            qDebug() << "static_cast<uint8_t>(receiveDataBuf[receiveStartIndex]): " <<static_cast<uint8_t>(receiveDataBuf[receiveStartIndex]);
+            qDebug() << "static_cast<uint8_t>(receiveDataBuf[(receiveStartIndex + 1) % 500])" << static_cast<uint8_t>(receiveDataBuf[(receiveStartIndex + 1) % 500]);
+            qDebug() << "module: " << module;
+            qDebug() << "cmd: " << cmd;
+
             receiveStartIndex = (receiveStartIndex + 1) % 500;
             continue;
         }
         //构建消息
-        QByteArray buf(messageSize, 0);
+        QByteArray buf;
         for (int var = 0; var < messageSize; var++) {
             buf.append(receiveDataBuf[(receiveStartIndex + var) % 500]);
         }
         //判断是否是一个完整的消息
         if(receiveDataCRCCheck(buf))
         {
+            //首先更新接收缓冲区的开始坐标
+            qDebug() << "完整的消息：" << buf.toHex();
+            receiveStartIndex = (receiveStartIndex + messageSize) % 500;
             dealMessage(buf);
             break;
         }
@@ -174,13 +403,13 @@ void MainWindow::on_receiveTimer_timeout()
 
 void MainWindow::on_pushButton_5_clicked()
 {
-    if(!isCreated(1))
+    if(!isCreated(5))
     {
-        tform1 = new TForm1(this);
-        tform1->setAttribute(Qt::WA_DeleteOnClose);
-        connect(tform1, &TForm1::destroyed, this, &MainWindow::onTFormDestroyed);
+        tform5 = new TForm5(this);
+        tform5->setAttribute(Qt::WA_DeleteOnClose);
+        connect(tform5, &TForm5::destroyed, this, &MainWindow::onTFormDestroyed);
     }
-    tform1->show();
+    tform5->show();
 }
 
 void MainWindow::onTFormDestroyed(QObject *obj)
@@ -267,38 +496,6 @@ void MainWindow::on_pushButton_3_clicked()
     tform3->show();
 }
 
-
-void MainWindow::on_pushButton_6_clicked()
-{
-    if(ui->comboBox_2->currentIndex() == -1)
-    {
-        QMessageBox::information(this, tr("提示"),
-                                 tr("请选择串口!"));
-        return;
-    }
-    serialPort->setBaudRate(ui->comboBox_3->currentText().toInt());
-    serialPort->setPortName(ui->comboBox_2->currentText());
-    serialPort->setDataBits(QSerialPort::Data8);
-    serialPort->setStopBits(QSerialPort::OneStop);
-    serialPort->setParity(QSerialPort::EvenParity);
-    //连接失败
-    if(!serialPort->open(QIODevice::ReadWrite))
-    {
-        QMessageBox::information(this, tr("错误"),
-                                 tr("无法启动串口通讯！！！"));
-        connFlag = 0;
-        return;
-    }
-    //连接成功
-    else
-    {
-        connFlag = 1;
-        ui->pushButton_6->setEnabled(false);
-        ui->comboBox_2->setEnabled(false);
-        ui->comboBox_3->setEnabled(false);
-    }
-}
-
 void MainWindow::sendSerialData(const QByteArray &data)
 {
     //串口未开启
@@ -307,6 +504,7 @@ void MainWindow::sendSerialData(const QByteArray &data)
         QMessageBox::critical(this, "错误", "串口未开启!");
         return;
     }
+    qDebug() << "发送串口数据：" << data.toHex();
     serialPort->write(data);
 }
 
@@ -350,11 +548,133 @@ void MainWindow::cacheReceiveData()
 bool MainWindow::receiveDataCRCCheck(const QByteArray &data)
 {
     QByteArray crcResultArray = calculateCRCArray(data, data.length() - 2);
+    qDebug() << "cal crc low: " << crcResultArray[0];
+    qDebug() << "cal crc high: " << crcResultArray[1];
+    qDebug() << "data[data.size() - 2]: " << data[data.size() - 2];
+    qDebug() << "data[data.size() - 1]: " << data[data.size() - 1];
     return crcResultArray[0] == data[data.size() - 2] && crcResultArray[1] == data[data.size() - 1];
 }
 
 void MainWindow::dealMessage(const QByteArray &data)
 {
+    //查询所有的命令
+    if(static_cast<uint8_t>(data[1]) == 3 && messageSize == TIMING_MESSAGE_SIZE)
+    {
+        //更新缓存
+        QByteArray dataBuf = data.mid(3, TIMING_MESSAGE_SIZE - 5);
+        for(int i = 0; i < dataBuf.size(); i = i + 2)
+        {
+            timingDataBuf[i / 2] = static_cast<quint16>(dataBuf.at(i)) * 256 + static_cast<quint16>(dataBuf.at(i + 1));
+        }
+        refreshAll();
+    }
+}
 
+
+void MainWindow::on_connBtn_clicked()
+{
+    if(ui->comboBox_2->currentIndex() == -1)
+    {
+        QMessageBox::information(this, tr("提示"),
+                                 tr("请选择串口!"));
+        return;
+    }
+    serialPort->setBaudRate(BR);
+    serialPort->setPortName(ui->comboBox_2->currentText());
+    serialPort->setDataBits(QSerialPort::Data8);
+    serialPort->setStopBits(QSerialPort::OneStop);
+    serialPort->setParity(QSerialPort::EvenParity);
+    //连接失败
+    if(!serialPort->open(QIODevice::ReadWrite))
+    {
+        QMessageBox::information(this, tr("错误"),
+                                 tr("无法启动串口通讯！！！"));
+        connFlag = 0;
+        connectStatusLabel->setText("未连接");
+        connectStatusLabel->setStyleSheet("QLabel { background-color : red; color : white; }");
+        return;
+    }
+    //连接成功
+    else
+    {
+        connFlag = 1;
+        ui->connBtn->setEnabled(false);
+        ui->comboBox_2->setEnabled(false);
+        connectStatusLabel->setText("已连接");
+        connectStatusLabel->setStyleSheet("QLabel { background-color : green; color : white; }");
+        test();
+    }
+}
+
+
+void MainWindow::on_pushButton_4_clicked()
+{
+    if(!isCreated(4))
+    {
+        tform4 = new TForm4(this);
+        tform4->setAttribute(Qt::WA_DeleteOnClose);
+        connect(tform4, &TForm4::destroyed, this, &MainWindow::onTFormDestroyed);
+    }
+    tform4->show();
+}
+
+
+void MainWindow::on_pushButton_6_clicked()
+{
+    if(!isCreated(6))
+    {
+        tform6 = new TForm6(this);
+        tform6->setAttribute(Qt::WA_DeleteOnClose);
+        connect(tform6, &TForm6::destroyed, this, &MainWindow::onTFormDestroyed);
+    }
+    tform6->show();
+}
+
+
+void MainWindow::on_aov_editingFinished()
+{
+    AOVUpdate();
+}
+
+
+void MainWindow::on_aov_returnPressed()
+{
+    AOVUpdate();
+}
+
+
+void MainWindow::on_auv_editingFinished()
+{
+    AUVUpdate();
+}
+
+
+void MainWindow::on_auv_returnPressed()
+{
+    AUVUpdate();
+}
+
+
+void MainWindow::on_bov_editingFinished()
+{
+    BOVUpdate();
+}
+
+
+void MainWindow::on_bov_returnPressed()
+{
+    BOVUpdate();
+}
+
+
+void MainWindow::on_buv_editingFinished()
+{
+    BUVUpdate();
+}
+
+
+void MainWindow::on_buv_returnPressed()
+{
+    BUVUpdate();
 }
 

@@ -14,3 +14,8 @@ TForm1::~TForm1()
 {
     delete ui;
 }
+
+void TForm1::refresh()
+{
+
+}
