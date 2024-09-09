@@ -43,6 +43,9 @@ public:
     void BOVUpdate();
     void AUVUpdate();
     void BUVUpdate();
+    void manualReadCMDBuild(char startHigh, char startLow, char numHigh, char numLow);
+    void manualWriteOneCMDBuild(char startHigh, char startLow, char valueHigh, char valueLow);
+    void manualWriteMultipleCMDBuild(QByteArray buf);
 private slots:
     void on_sendTimer_timeout();
     void on_receiveTimer_timeout();
@@ -73,6 +76,10 @@ private slots:
 
     void on_buv_returnPressed();
 
+    void on_pushButton_clicked();
+
+    void on_pushButton_7_clicked();
+
 private:
     Ui::MainWindow *ui;
     QSerialPort* serialPort;
@@ -86,6 +93,7 @@ private:
     QTimer* sendTimer = nullptr;
     QTimer* receiveTimer = nullptr;
     QLabel* connectStatusLabel;
+    QLabel* runningStatusLabel;
     int dataRefreshStep = 1;
 };
 #endif // MAINWINDOW_H
