@@ -111,12 +111,12 @@ void MainWindow::init()
     receiveTimer->start();
     refreshPort();
     //状态栏
-    connectStatusLabel->setMinimumWidth(100);
+    connectStatusLabel->setMinimumWidth(150);
     ui->statusBar->addWidget(connectStatusLabel);
     connectStatusLabel->setText("连接状态：未连接");
     connectStatusLabel->setStyleSheet("QLabel { background-color : red; color : white; }");
 
-    runningStatusLabel->setMinimumWidth(110);
+    runningStatusLabel->setMinimumWidth(150);
     ui->statusBar->addWidget(runningStatusLabel);
     runningStatusLabel->setText("运行状态：未知");
     //加载配置文件
@@ -538,18 +538,18 @@ void MainWindow::onTFormDestroyed(QObject *obj)
     {
         tform3 = nullptr;
     }
-    // if(obj == tform4)
-    // {
-    //     tform4 = nullptr;
-    // }
-    // if(obj == tform5)
-    // {
-    //     tform5 = nullptr;
-    // }
-    // if(obj == tform6)
-    // {
-    //     tform6 = nullptr;
-    // }
+    if(obj == tform4)
+    {
+        tform4 = nullptr;
+    }
+    if(obj == tform5)
+    {
+        tform5 = nullptr;
+    }
+    if(obj == tform6)
+    {
+        tform6 = nullptr;
+    }
     // if(obj == tform7)
     // {
     //     tform7 = nullptr;
@@ -840,6 +840,98 @@ void MainWindow::on_pushButton_clicked()
 //手动模式A->B
 void MainWindow::on_pushButton_7_clicked()
 {
+    if(connFlag == 0)
+    {
+        QMessageBox::information(this, tr("提示"), tr("请先建立连接!"));
+        return;
+    }
+    if(timingDataBuf[3] == 4 && timingDataBuf[2] == 7)
+    {
+        QMessageBox::information(this, tr("提示"), tr("当前已经是手动模式A->B!"));
+        return;
+    }
+    if(auv * 10 >= timingDataBuf[20])
+    {
+        QMessageBox::information(this, tr("提示"), tr("A侧电流欠压，不满足下发条件"));
+        return;
+    }
+    if(bov * 10 <= timingDataBuf[21])
+    {
+        QMessageBox::information(this, tr("提示"), tr("B侧电流过压，不满足下发条件"));
+        return;
+    }
+    QByteArray buf;
+        //起始地址
+    buf.append(static_cast<char>(0x00));
+    buf.append(0x02);
+    //字数
+    buf.append(static_cast<char>(0x00));
+    buf.append(0x02);
+    //字节数
+    buf.append(0x04);
+    //写入值.
+    buf.append(static_cast<char>(0x00));
+    buf.append(static_cast<char>(0x07));
+    //写入值,停止控制变换字
+    buf.append(static_cast<char>(0x00));
+    buf.append(static_cast<char>(0x00));
+    manualWriteMultipleCMDBuild(buf);
+}
 
+//手动B->A
+void MainWindow::on_pushButton_8_clicked()
+{
+    if(connFlag == 0)
+    {
+        QMessageBox::information(this, tr("提示"), tr("请先建立连接!"));
+        return;
+    }
+    if(timingDataBuf[3] == 4 && timingDataBuf[2] == 5)
+    {
+        QMessageBox::information(this, tr("提示"), tr("当前已经是手动模式B->A!"));
+        return;
+    }
+    if(buv * 10 >= timingDataBuf[21])
+    {
+        QMessageBox::information(this, tr("提示"), tr("B侧电流欠压，不满足下发条件"));
+        return;
+    }
+    if(aov * 10 <= timingDataBuf[20])
+    {
+        QMessageBox::information(this, tr("提示"), tr("A侧电流过压，不满足下发条件"));
+        return;
+    }
+    QByteArray buf;
+        //起始地址
+    buf.append(static_cast<char>(0x00));
+    buf.append(0x02);
+    //字数
+    buf.append(static_cast<char>(0x00));
+    buf.append(0x02);
+    //字节数
+    buf.append(0x04);
+    //写入值.
+    buf.append(static_cast<char>(0x00));
+    buf.append(static_cast<char>(0x05));
+    //写入值,停止控制变换字
+    buf.append(static_cast<char>(0x00));
+    buf.append(static_cast<char>(0x00));
+    manualWriteMultipleCMDBuild(buf);
+}
+
+//手动关闭
+void MainWindow::on_pushButton_9_clicked()
+{
+    if(connFlag == 0)
+    {
+        QMessageBox::information(this, tr("提示"), tr("请先建立连接!"));
+        return;
+    }
+    if(timingDataBuf[3] == 5)
+    {
+        QMessageBox::information(this, tr("提示"), tr("当前已经是关闭状态!"));
+        return;
+    }
+    manualWriteOneCMDBuild(static_cast<char>(0x00), 0x03, static_cast<char>(0x00), 0x05);
 }
 
