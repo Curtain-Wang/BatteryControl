@@ -2,7 +2,7 @@
 #include "ui_tform5.h"
 #include "globalparam.h"
 #include "mainwindow.h"
-
+#include <QMessageBox>
 TForm5::TForm5(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::TForm5)
@@ -11,6 +11,8 @@ TForm5::TForm5(QWidget *parent)
     mainwindow = qobject_cast<MainWindow*>(parent);
     //设置窗口标志，确保有边框和标题栏、最小化、关闭，最大化
     setWindowFlags(Qt::Window | Qt::WindowTitleHint | Qt::WindowCloseButtonHint);
+    setWindowIcon(QIcon(":/icons/images/battery_control_icon.ico"));
+    refresh();
     connectAll();
     // qDebug() << "parent 的类型是：" << parent->metaObject()->className();
 }
@@ -40,6 +42,11 @@ void TForm5::connectAll()
 
 void TForm5::onEditingFinished()
 {
+    if(connFlag == 0)
+    {
+        QMessageBox::information(this, tr("提示"), tr("请先建立连接!"));
+        return;
+    }
     // 获取触发此信号的对象
     QLineEdit* senderLineEdit = qobject_cast<QLineEdit*>(sender());
     if (senderLineEdit) {

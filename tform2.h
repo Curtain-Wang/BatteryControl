@@ -2,7 +2,7 @@
 #define TFORM2_H
 
 #include <QWidget>
-
+class MainWindow;
 namespace Ui {
 class TForm2;
 }
@@ -16,8 +16,14 @@ public:
     ~TForm2();
     void refresh();
 
+private slots:
+    void on_lineEdit_returnPressed();
+
+    void on_lineEdit_2_returnPressed();
+
 private:
     Ui::TForm2 *ui;
+    MainWindow* mainwindow;
 };
 
 #endif // TFORM2_H

@@ -2,6 +2,7 @@
 #include "ui_tform6.h"
 #include "globalparam.h"
 #include "mainwindow.h"
+#include <QMessageBox>
 TForm6::TForm6(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::TForm6)
@@ -10,6 +11,9 @@ TForm6::TForm6(QWidget *parent)
     mainwindow = qobject_cast<MainWindow*>(parent);
     //设置窗口标志，确保有边框和标题栏、最小化、关闭，最大化
     setWindowFlags(Qt::Window | Qt::WindowTitleHint | Qt::WindowCloseButtonHint);
+    setWindowIcon(QIcon(":/icons/images/battery_control_icon.ico"));
+    refresh();
+    connectAll();
 }
 
 TForm6::~TForm6()
@@ -38,6 +42,11 @@ void TForm6::connectAll()
 
 void TForm6::onEditingFinished()
 {
+    if(connFlag == 0)
+    {
+        QMessageBox::information(this, tr("提示"), tr("请先建立连接!"));
+        return;
+    }
     QLineEdit* senderLineEdit = qobject_cast<QLineEdit*>(sender());
     if (senderLineEdit) {
         // 打印对象名称

@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/icons">
         <file>images/arrow_down.png</file>
+        <file>images/battery_control_icon.ico</file>
     </qresource>
 </RCC>

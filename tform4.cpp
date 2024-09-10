@@ -8,6 +8,8 @@ TForm4::TForm4(QWidget *parent)
     ui->setupUi(this);
     //设置窗口标志，确保有边框和标题栏、最小化、关闭，最大化
     setWindowFlags(Qt::Window | Qt::WindowTitleHint | Qt::WindowCloseButtonHint);
+    setWindowIcon(QIcon(":/icons/images/battery_control_icon.ico"));
+    refresh();
 }
 
 TForm4::~TForm4()

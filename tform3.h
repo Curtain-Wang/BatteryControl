@@ -2,7 +2,8 @@
 #define TFORM3_H
 
 #include <QWidget>
-
+class QLineEdit;
+class MainWindow;
 namespace Ui {
 class TForm3;
 }
@@ -15,9 +16,15 @@ public:
     explicit TForm3(QWidget *parent = nullptr);
     ~TForm3();
     void refresh();
+    void connectAll();
+private slots:
+    void on_lineEdit_13_returnPressed();
+    void onEditingFinished();
 
 private:
     Ui::TForm3 *ui;
+    QVector<QLineEdit*> lineEdits;
+    MainWindow* mainwindow;
 };
 
 #endif // TFORM3_H

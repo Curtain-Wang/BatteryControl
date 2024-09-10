@@ -15,6 +15,10 @@ public:
     explicit TForm1(QWidget *parent = nullptr);
     ~TForm1();
     void refresh();
+    void displayInfo(QString info);
+
+private slots:
+    void on_pushButton_2_clicked();
 
 private:
     Ui::TForm1 *ui;

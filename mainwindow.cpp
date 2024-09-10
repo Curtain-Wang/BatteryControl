@@ -15,6 +15,7 @@
 #include <QFile>
 #include <QSettings>
 #include <QDir>
+#include <QKeyEvent>
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -23,6 +24,7 @@ MainWindow::MainWindow(QWidget *parent)
     , runningStatusLabel(new QLabel(this))
 {
     ui->setupUi(this);
+    setWindowIcon(QIcon(":/icons/images/battery_control_icon.ico"));
     init();
 }
 
@@ -101,12 +103,12 @@ void MainWindow::init()
     // timer1->start();
     //发送数据
     sendTimer = new QTimer(this);
-    connect(sendTimer, &QTimer::timeout, this, &MainWindow::on_sendTimer_timeout);
+    connect(sendTimer, &QTimer::timeout, this, &MainWindow::onSendTimerTimeout);
     sendTimer->setInterval(100);
     sendTimer->start();
     //接收数据
     receiveTimer = new QTimer(this);
-    connect(receiveTimer, &QTimer::timeout, this, &MainWindow::on_receiveTimer_timeout);
+    connect(receiveTimer, &QTimer::timeout, this, &MainWindow::onReceiveTimerTimeout);
     receiveTimer->setInterval(10);
     receiveTimer->start();
     refreshPort();
@@ -121,6 +123,10 @@ void MainWindow::init()
     runningStatusLabel->setText("运行状态：未知");
     //加载配置文件
     loadConfig();
+    // 创建定时器，用于在一段时间后重置按键计数
+    resetTimer = new QTimer(this);
+    resetTimer->setInterval(2000);  // 0.5秒内按两次空格才算有效
+    connect(resetTimer, &QTimer::timeout, this, &MainWindow::resetKeyPressCount);
 }
 
 void MainWindow::refreshPort()
@@ -431,7 +437,7 @@ void MainWindow::sendPortData(QByteArray data)
     waitMessageRemaingTime = 20;
 }
 
-void MainWindow::on_sendTimer_timeout()
+void MainWindow::onSendTimerTimeout()
 {
     if(connFlag == 0)
     {
@@ -465,7 +471,7 @@ void MainWindow::on_sendTimer_timeout()
     }
 }
 
-void MainWindow::on_receiveTimer_timeout()
+void MainWindow::onReceiveTimerTimeout()
 {
     cacheReceiveData();
     //当缓冲区的消息长度大于messageSize，那说明可能存在一条完整的响应
@@ -499,7 +505,10 @@ void MainWindow::on_receiveTimer_timeout()
         if(receiveDataCRCCheck(buf))
         {
             //首先更新接收缓冲区的开始坐标
-            qDebug() << "完整的消息：" << buf.toHex();
+            if(isCreated(1))
+            {
+                tform1->displayInfo("串口上传上来且验证通过的一条消息：" + buf.toHex());
+            }
             receiveStartIndex = (receiveStartIndex + messageSize) % 500;
             dealMessage(buf);
             break;
@@ -616,7 +625,10 @@ void MainWindow::sendSerialData(const QByteArray &data)
         QMessageBox::critical(this, "错误", "串口未开启!");
         return;
     }
-    qDebug() << "发送串口数据：" << data.toHex();
+    if(isCreated(1))
+    {
+        tform1->displayInfo("上位机发送的串口数据：" + data.toHex());
+    }
     serialPort->write(data);
 }
 
@@ -648,7 +660,10 @@ void MainWindow::cacheReceiveData()
         QByteArray data = serialPort->readAll();
         if(data.length() > 0)
         {
-            qDebug() << "receive data: " << data;
+            if(isCreated(1))
+            {
+                tform1->displayInfo("定时抽取到下位机上传上来的数据：" + data.toHex());
+            }
         }
         for (auto byte : data) {
             receiveDataBuf[receiveEndIndex] = byte;
@@ -693,36 +708,50 @@ void MainWindow::dealMessage(const QByteArray &data)
 
 void MainWindow::on_connBtn_clicked()
 {
-    if(ui->comboBox_2->currentIndex() == -1)
+    if(ui->connBtn->text() == "建立连接")
     {
-        QMessageBox::information(this, tr("提示"),
-                                 tr("请选择串口!"));
-        return;
+        if(ui->comboBox_2->currentIndex() == -1)
+        {
+            QMessageBox::information(this, tr("提示"),
+                                     tr("请选择串口!"));
+            return;
+        }
+        serialPort->setBaudRate(BR);
+        serialPort->setPortName(ui->comboBox_2->currentText());
+        serialPort->setDataBits(QSerialPort::Data8);
+        serialPort->setStopBits(QSerialPort::OneStop);
+        serialPort->setParity(QSerialPort::EvenParity);
+        //连接失败
+        if(!serialPort->open(QIODevice::ReadWrite))
+        {
+            QMessageBox::information(this, tr("错误"),
+                                     tr("无法启动串口通讯！！！"));
+            connFlag = 0;
+            connectStatusLabel->setText("连接状态：未连接");
+            connectStatusLabel->setStyleSheet("QLabel { background-color : red; color : white; }");
+            return;
+        }
+        //连接成功
+        else
+        {
+            connFlag = 1;
+            ui->comboBox_2->setEnabled(false);
+            connectStatusLabel->setText("连接状态：已连接");
+            connectStatusLabel->setStyleSheet("QLabel { background-color : green; color : white; }");
+            ui->connBtn->setText("断开连接");
+        }
     }
-    serialPort->setBaudRate(BR);
-    serialPort->setPortName(ui->comboBox_2->currentText());
-    serialPort->setDataBits(QSerialPort::Data8);
-    serialPort->setStopBits(QSerialPort::OneStop);
-    serialPort->setParity(QSerialPort::EvenParity);
-    //连接失败
-    if(!serialPort->open(QIODevice::ReadWrite))
+    else if(ui->connBtn->text() == "断开连接")
     {
-        QMessageBox::information(this, tr("错误"),
-                                 tr("无法启动串口通讯！！！"));
+        if(!serialPort->isOpen())
+        {
+            return;
+        }
+        serialPort->close();
         connFlag = 0;
-        connectStatusLabel->setText("未连接");
+        connectStatusLabel->setText("连接状态：未连接");
         connectStatusLabel->setStyleSheet("QLabel { background-color : red; color : white; }");
-        return;
-    }
-    //连接成功
-    else
-    {
-        connFlag = 1;
-        ui->connBtn->setEnabled(false);
-        ui->comboBox_2->setEnabled(false);
-        connectStatusLabel->setText("已连接");
-        connectStatusLabel->setStyleSheet("QLabel { background-color : green; color : white; }");
-        test();
+        ui->connBtn->setText("建立连接");
     }
 }
 
@@ -935,3 +964,36 @@ void MainWindow::on_pushButton_9_clicked()
     manualWriteOneCMDBuild(static_cast<char>(0x00), 0x03, static_cast<char>(0x00), 0x05);
 }
 
+void MainWindow::resetKeyPressCount()
+{
+    spaceKeyPressCount = 0;
+    resetTimer->stop();  // 停止定时器
+}
+
+void MainWindow::keyPressEvent(QKeyEvent *event)
+{
+    if (event->key() == Qt::Key_Return) {
+        spaceKeyPressCount++;
+
+        if (spaceKeyPressCount == 1) {
+            // 第一次按空格，启动定时器
+            resetTimer->start();
+        } else if (spaceKeyPressCount == 2) {
+            // 第二次按空格，弹出隐藏界面
+            if(!isCreated(1))
+            {
+                tform1 = new TForm1(this);
+                tform1->setAttribute(Qt::WA_DeleteOnClose);
+                connect(tform1, &TForm1::destroyed, this, &MainWindow::onTFormDestroyed);
+            }
+            tform1->show();
+            resetTimer->stop();
+            spaceKeyPressCount = 0;  // 重置计数
+        }
+    } else {
+        // 非空格键时重置计数
+        spaceKeyPressCount = 0;
+    }
+
+    QMainWindow::keyPressEvent(event);  // 保留默认的按键处理
+}

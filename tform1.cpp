@@ -8,6 +8,7 @@ TForm1::TForm1(QWidget *parent)
     ui->setupUi(this);
     //设置窗口标志，确保有边框和标题栏、最小化、关闭，最大化
     setWindowFlags(Qt::Window | Qt::WindowTitleHint | Qt::WindowCloseButtonHint);
+    setWindowIcon(QIcon(":/icons/images/battery_control_icon.ico"));
 }
 
 TForm1::~TForm1()
@@ -19,3 +20,17 @@ void TForm1::refresh()
 {
 
 }
+
+void TForm1::displayInfo(QString info)
+{
+    if(!ui->checkBox->isChecked())
+    {
+        ui->plainTextEdit->appendPlainText(info);
+    }
+}
+
+void TForm1::on_pushButton_2_clicked()
+{
+    ui->plainTextEdit->clear();
+}
+

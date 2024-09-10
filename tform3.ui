@@ -51,7 +51,7 @@ QLineEdit[readOnly=&quot;true&quot;] {
            </font>
           </property>
           <property name="text">
-           <string>高压侧</string>
+           <string>B侧</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -126,7 +126,7 @@ QLineEdit[readOnly=&quot;true&quot;] {
             </widget>
            </item>
            <item row="1" column="1">
-            <widget class="QLineEdit" name="lineEdit">
+            <widget class="QLineEdit" name="d53">
              <property name="minimumSize">
               <size>
                <width>80</width>
@@ -142,7 +142,7 @@ QLineEdit[readOnly=&quot;true&quot;] {
             </widget>
            </item>
            <item row="1" column="2">
-            <widget class="QLineEdit" name="lineEdit_6">
+            <widget class="QLineEdit" name="d61">
              <property name="minimumSize">
               <size>
                <width>80</width>
@@ -177,7 +177,7 @@ QLineEdit[readOnly=&quot;true&quot;] {
             </widget>
            </item>
            <item row="2" column="1">
-            <widget class="QLineEdit" name="lineEdit_2">
+            <widget class="QLineEdit" name="d52">
              <property name="minimumSize">
               <size>
                <width>80</width>
@@ -193,7 +193,7 @@ QLineEdit[readOnly=&quot;true&quot;] {
             </widget>
            </item>
            <item row="2" column="2">
-            <widget class="QLineEdit" name="lineEdit_5">
+            <widget class="QLineEdit" name="d60">
              <property name="minimumSize">
               <size>
                <width>80</width>
@@ -225,7 +225,7 @@ QLineEdit[readOnly=&quot;true&quot;] {
             </widget>
            </item>
            <item row="3" column="1">
-            <widget class="QLineEdit" name="lineEdit_3">
+            <widget class="QLineEdit" name="d21">
              <property name="minimumSize">
               <size>
                <width>80</width>
@@ -244,7 +244,7 @@ QLineEdit[readOnly=&quot;true&quot;] {
             </widget>
            </item>
            <item row="3" column="2">
-            <widget class="QLineEdit" name="lineEdit_4">
+            <widget class="QLineEdit" name="d74">
              <property name="minimumSize">
               <size>
                <width>80</width>
@@ -283,7 +283,7 @@ QLineEdit[readOnly=&quot;true&quot;] {
            </font>
           </property>
           <property name="text">
-           <string>低压侧</string>
+           <string>A压侧</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -358,7 +358,7 @@ QLineEdit[readOnly=&quot;true&quot;] {
             </widget>
            </item>
            <item row="1" column="1">
-            <widget class="QLineEdit" name="lineEdit_7">
+            <widget class="QLineEdit" name="d49">
              <property name="minimumSize">
               <size>
                <width>80</width>
@@ -374,7 +374,7 @@ QLineEdit[readOnly=&quot;true&quot;] {
             </widget>
            </item>
            <item row="1" column="2">
-            <widget class="QLineEdit" name="lineEdit_8">
+            <widget class="QLineEdit" name="d57">
              <property name="minimumSize">
               <size>
                <width>80</width>
@@ -409,7 +409,7 @@ QLineEdit[readOnly=&quot;true&quot;] {
             </widget>
            </item>
            <item row="2" column="1">
-            <widget class="QLineEdit" name="lineEdit_9">
+            <widget class="QLineEdit" name="d48">
              <property name="minimumSize">
               <size>
                <width>80</width>
@@ -425,7 +425,7 @@ QLineEdit[readOnly=&quot;true&quot;] {
             </widget>
            </item>
            <item row="2" column="2">
-            <widget class="QLineEdit" name="lineEdit_10">
+            <widget class="QLineEdit" name="d56">
              <property name="minimumSize">
               <size>
                <width>80</width>
@@ -457,7 +457,7 @@ QLineEdit[readOnly=&quot;true&quot;] {
             </widget>
            </item>
            <item row="3" column="1">
-            <widget class="QLineEdit" name="lineEdit_11">
+            <widget class="QLineEdit" name="d20">
              <property name="minimumSize">
               <size>
                <width>80</width>
@@ -476,7 +476,7 @@ QLineEdit[readOnly=&quot;true&quot;] {
             </widget>
            </item>
            <item row="3" column="2">
-            <widget class="QLineEdit" name="lineEdit_12">
+            <widget class="QLineEdit" name="d73">
              <property name="minimumSize">
               <size>
                <width>80</width>
