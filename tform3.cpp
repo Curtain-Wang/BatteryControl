@@ -31,16 +31,21 @@ void TForm3::refresh()
     ui->d49->setText(QString::number(static_cast<float>(timingDataBuf[49]) / 10000, 'f', 4));
     ui->d57->setText(QString::number(static_cast<float>(timingDataBuf[57]) / 10000, 'f', 4));
     //B
-    ui->d52->setText(QString::number(static_cast<float>(timingDataBuf[52]) / 1000, 'f', 3));
-    ui->d60->setText(QString::number(static_cast<float>(timingDataBuf[60]) / 1000, 'f', 3));
-    ui->d48->setText(QString::number(static_cast<float>(timingDataBuf[48]) / 1000, 'f', 3));
-    ui->d56->setText(QString::number(static_cast<float>(timingDataBuf[56]) / 1000, 'f', 3));
+    qint16 value = timingDataBuf[52];
+    ui->d52->setText(QString::number(static_cast<float>(value) / 1000, 'f', 3));
+    value = timingDataBuf[60];
+    ui->d60->setText(QString::number(static_cast<float>(value) / 1000, 'f', 3));
+    value = timingDataBuf[48];
+    ui->d48->setText(QString::number(static_cast<float>(value) / 1000, 'f', 3));
+    value = timingDataBuf[56];
+    ui->d56->setText(QString::number(static_cast<float>(value) / 1000, 'f', 3));
 
     ui->d21->setText(QString::number(static_cast<float>(timingDataBuf[21]) / 10, 'f', 1));
-    ui->d74->setText(QString::number(static_cast<float>(timingDataBuf[74]) / 10, 'f', 1));
     ui->d20->setText(QString::number(static_cast<float>(timingDataBuf[20]) / 10, 'f', 1));
-    ui->d73->setText(QString::number(static_cast<float>(timingDataBuf[73]) / 10, 'f', 1));
-
+    value = timingDataBuf[23];
+    ui->d23->setText(QString::number(static_cast<float>(value) / 10, 'f', 1));
+    value = timingDataBuf[22];
+    ui->d22->setText(QString::number(static_cast<float>(value) / 10, 'f', 1));
 }
 
 void TForm3::connectAll()
