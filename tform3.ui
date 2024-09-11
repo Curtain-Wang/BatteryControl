@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>560</width>
-    <height>348</height>
+    <height>354</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -244,7 +244,7 @@ QLineEdit[readOnly=&quot;true&quot;] {
             </widget>
            </item>
            <item row="3" column="2">
-            <widget class="QLineEdit" name="d74">
+            <widget class="QLineEdit" name="d23">
              <property name="minimumSize">
               <size>
                <width>80</width>
@@ -476,7 +476,7 @@ QLineEdit[readOnly=&quot;true&quot;] {
             </widget>
            </item>
            <item row="3" column="2">
-            <widget class="QLineEdit" name="d73">
+            <widget class="QLineEdit" name="d22">
              <property name="minimumSize">
               <size>
                <width>80</width>
