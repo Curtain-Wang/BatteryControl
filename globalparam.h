@@ -16,7 +16,6 @@ extern QByteArray receiveDataBuf;
 extern int receiveStartIndex;
 extern int receiveEndIndex;
 extern QByteArray manualSendDataBuf;
-extern int sendLength;
 //定时获取到的数据
 extern int timingDataBuf[];
 extern const int TIMING_MESSAGE_SIZE;
@@ -30,4 +29,6 @@ extern float buv;
 extern int cycleNum;
 extern int autoOrManual;
 extern QString displayInfo;
+extern QString connStatus;
+extern QString runningStatus;
 #endif // GLOBALPARAM_H

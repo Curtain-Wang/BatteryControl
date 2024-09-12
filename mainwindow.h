@@ -37,7 +37,6 @@ public:
     void refresh();
     void refresh(int num);
     void refreshAll();
-    void test();
     void loadConfig();
     void AOVUpdate();
     void BOVUpdate();
@@ -98,6 +97,7 @@ private:
     QTimer* timer1 = nullptr;
     QTimer* sendTimer = nullptr;
     QTimer* receiveTimer = nullptr;
+    QTimer* refreshPortTimer = nullptr;
     QLabel* connectStatusLabel;
     QLabel* runningStatusLabel;
     int dataRefreshStep = 1;

@@ -115,18 +115,23 @@ void MainWindow::init()
     //状态栏
     connectStatusLabel->setMinimumWidth(150);
     ui->statusBar->addWidget(connectStatusLabel);
-    connectStatusLabel->setText("连接状态：未连接");
+    connectStatusLabel->setText(connStatus.arg("未连接"));
     connectStatusLabel->setStyleSheet("QLabel { background-color : red; color : white; }");
 
     runningStatusLabel->setMinimumWidth(150);
     ui->statusBar->addWidget(runningStatusLabel);
-    runningStatusLabel->setText("运行状态：未知");
+    runningStatusLabel->setText(runningStatus.arg("未知"));
     //加载配置文件
     loadConfig();
     // 创建定时器，用于在一段时间后重置按键计数
     resetTimer = new QTimer(this);
     resetTimer->setInterval(2000);  // 0.5秒内按两次空格才算有效
     connect(resetTimer, &QTimer::timeout, this, &MainWindow::resetKeyPressCount);
+    //创建定时器，定时刷新端口
+    refreshPortTimer = new QTimer(this);
+    refreshPortTimer->setInterval(1000);
+    connect(refreshPortTimer, &QTimer::timeout, this, &MainWindow::refreshPort);
+    refresh();
 }
 
 void MainWindow::refreshPort()
@@ -169,6 +174,12 @@ void MainWindow::sendGetAllDataCMD()
 
 void MainWindow::manualReadCMDBuild(char startHigh, char startLow, char numHigh, char numLow)
 {
+    if(manualFlag == 1)
+    {
+        QMessageBox::information(this, "冲突", "当前有其他手动命令在发送, 请稍后再试!");
+        return;
+    }
+    manualSendDataBuf.clear();
     manualFlag = 1;
     manualSendDataBuf.append(MODULE);
     manualSendDataBuf.append(READ_CMD);
@@ -232,15 +243,15 @@ void MainWindow::refresh()
     }
     if(timingDataBuf[3] == 1)
     {
-        runningStatusLabel->setText("运行状态：自动模式");
+        runningStatusLabel->setText(runningStatus.arg("自动模式"));
     }
     else if(timingDataBuf[3] == 4)
     {
-        runningStatusLabel->setText("运行状态：手动模式");
+        runningStatusLabel->setText(runningStatus.arg("手动模式"));
     }
     else
     {
-        runningStatusLabel->setText("运行状态：关闭");
+        runningStatusLabel->setText(runningStatus.arg("关闭"));
     }
 }
 
@@ -294,27 +305,6 @@ void MainWindow::refreshAll()
     {
         refresh(i);
     }
-}
-
-void MainWindow::test()
-{
-    QByteArray buf;
-    buf.append(static_cast<char>(0x01));
-    buf.append(static_cast<char>(0x03));
-    //起始地址
-    buf.append(static_cast<char>(0x00));
-    buf.append(static_cast<char>(0x20));
-    //个数
-    buf.append(static_cast<char>(0x00));
-    buf.append(static_cast<char>(0x01));
-
-    QByteArray crcArray = calculateCRCArray(buf, 6);
-
-    //crC
-    buf.append(crcArray[0]);
-    buf.append(crcArray[1]);
-    manualFlag = 1;
-    sendSerialData(buf);
 }
 
 void MainWindow::loadConfig()
@@ -397,6 +387,12 @@ void MainWindow::BUVUpdate()
 
 void MainWindow::manualWriteOneCMDBuild(char startHigh, char startLow, char valueHigh, char valueLow)
 {
+    if(manualFlag == 1)
+    {
+        QMessageBox::information(this, "冲突", "当前有其他手动命令在发送, 请稍后再试!");
+        return;
+    }
+    manualSendDataBuf.clear();
     manualFlag = 1;
     manualSendDataBuf.append(MODULE);
     manualSendDataBuf.append(WRITE_ONE_CMD);
@@ -412,6 +408,13 @@ void MainWindow::manualWriteOneCMDBuild(char startHigh, char startLow, char valu
 
 void MainWindow::manualWriteMultipleCMDBuild(QByteArray buf)
 {
+
+    if(manualFlag == 1)
+    {
+        QMessageBox::information(this, "冲突", "当前有其他手动命令在发送, 请稍后再试!");
+        return;
+    }
+    manualSendDataBuf.clear();
     manualFlag = 1;
     manualSendDataBuf.append(MODULE);
     manualSendDataBuf.append(WRITE_MULTIPLE_CMD);
@@ -426,8 +429,7 @@ void MainWindow::sendPortData(QByteArray data)
 {
     if(data == nullptr)
     {
-        QByteArray buf(manualSendDataBuf, sendLength);
-        sendSerialData(buf);
+        sendSerialData(manualSendDataBuf);
     }
     else
     {
@@ -473,6 +475,12 @@ void MainWindow::onSendTimerTimeout()
 
 void MainWindow::onReceiveTimerTimeout()
 {
+
+    if(connFlag == 0)
+    {
+        return;
+    }
+
     cacheReceiveData();
     //当缓冲区的消息长度大于messageSize，那说明可能存在一条完整的响应
     while ((receiveEndIndex + 500 - receiveStartIndex) % 500 >= 6) {
@@ -727,7 +735,7 @@ void MainWindow::on_connBtn_clicked()
             QMessageBox::information(this, tr("错误"),
                                      tr("无法启动串口通讯！！！"));
             connFlag = 0;
-            connectStatusLabel->setText("连接状态：未连接");
+            connectStatusLabel->setText(connStatus.arg("未连接"));
             connectStatusLabel->setStyleSheet("QLabel { background-color : red; color : white; }");
             return;
         }
@@ -736,9 +744,10 @@ void MainWindow::on_connBtn_clicked()
         {
             connFlag = 1;
             ui->comboBox_2->setEnabled(false);
-            connectStatusLabel->setText("连接状态：已连接");
+            connectStatusLabel->setText(connStatus.arg("已连接"));
             connectStatusLabel->setStyleSheet("QLabel { background-color : green; color : white; }");
             ui->connBtn->setText("断开连接");
+            refreshPortTimer->stop();
         }
     }
     else if(ui->connBtn->text() == "断开连接")
@@ -749,9 +758,10 @@ void MainWindow::on_connBtn_clicked()
         }
         serialPort->close();
         connFlag = 0;
-        connectStatusLabel->setText("连接状态：未连接");
+        connectStatusLabel->setText(connStatus.arg("未连接"));
         connectStatusLabel->setStyleSheet("QLabel { background-color : red; color : white; }");
         ui->connBtn->setText("建立连接");
+        refreshPortTimer->start();
     }
 }
 
