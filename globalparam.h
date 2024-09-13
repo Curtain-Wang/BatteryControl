@@ -2,6 +2,7 @@
 #define GLOBALPARAM_H
 class QByteArray;
 class QString;
+class MainWindow;
 extern const int DATA_REFRESH_CYCLE;
 extern int dataRefreshRemaingTime;
 extern int dataRefreshStep;
@@ -18,7 +19,6 @@ extern int receiveEndIndex;
 extern QByteArray manualSendDataBuf;
 //定时获取到的数据
 extern int timingDataBuf[];
-extern const int TIMING_MESSAGE_SIZE;
 //0未连接 1已连接
 extern int connFlag;
 extern const int BR;
@@ -31,4 +31,6 @@ extern int autoOrManual;
 extern QString displayInfo;
 extern QString connStatus;
 extern QString runningStatus;
+extern int editAddrLow;
+extern MainWindow* mainwindow;
 #endif // GLOBALPARAM_H

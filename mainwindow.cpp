@@ -24,6 +24,7 @@ MainWindow::MainWindow(QWidget *parent)
     , runningStatusLabel(new QLabel(this))
 {
     ui->setupUi(this);
+    mainwindow = this;
     setWindowIcon(QIcon(":/icons/images/battery_control_icon.ico"));
     init();
 }
@@ -152,19 +153,19 @@ void MainWindow::sendGetAllDataCMD()
     QByteArray buf;
     buf.append(MODULE);
     buf.append(READ_CMD);
+
     //起始地址
     buf.append(static_cast<char>(0x00));
     buf.append(static_cast<char>(0x00));
     //个数
     buf.append(static_cast<char>(0x00));
-    buf.append(static_cast<char>((TIMING_MESSAGE_SIZE - 5) / 2));
-
+    buf.append(static_cast<char>(0x41));
     QByteArray crcArray = calculateCRCArray(buf, 6);
-
     //crC
     buf.append(crcArray[0]);
     buf.append(crcArray[1]);
     sendPortData(buf);
+    dataRefreshRemaingTime = DATA_REFRESH_CYCLE;
 }
 
 void MainWindow::manualReadCMDBuild(char startHigh, char startLow, char numHigh, char numLow)
@@ -463,7 +464,6 @@ void MainWindow::onSendTimerTimeout()
         else if(dataRefreshRemaingTime <= 0)
         {
             sendGetAllDataCMD();
-            dataRefreshRemaingTime = 20;
         }
     }
 }
@@ -484,8 +484,11 @@ void MainWindow::onReceiveTimerTimeout()
         //没有匹配到开始
         if(module != MODULE || (cmd != 3 && cmd != 6 && cmd != 16))
         {
+            //更新开始点
+            receiveStartIndex = (receiveStartIndex + 1) % 500;
             continue;
         }
+        //匹配到开始,再匹配下长度是否符合
         int messageSize = 0;
         if(cmd == 3)
         {
@@ -498,6 +501,10 @@ void MainWindow::onReceiveTimerTimeout()
         if(cmd == 16)
         {
             messageSize = 16;
+        }
+        if((receiveEndIndex + 500 - receiveStartIndex) % 500 < messageSize){
+            //消息还没接收完整，等下一次定时去接,不更新开始点
+            break;
         }
         //构建消息
         QByteArray buf;
@@ -519,6 +526,7 @@ void MainWindow::onReceiveTimerTimeout()
         //crc校验失败
         else
         {
+            //更新开始点
             receiveStartIndex = (receiveStartIndex + 1) % 500;
             continue;
         }
@@ -661,13 +669,6 @@ void MainWindow::cacheReceiveData()
     if(serialPort->isOpen())
     {
         QByteArray data = serialPort->readAll();
-        if(data.length() > 0)
-        {
-            if(isCreated(1))
-            {
-                tform1->displayInfo("定时抽取到下位机上传上来的数据：" + data.toHex());
-            }
-        }
         for (auto byte : data) {
             receiveDataBuf[receiveEndIndex] = byte;
             receiveEndIndex = (receiveEndIndex + 1) % 500;
@@ -678,6 +679,10 @@ void MainWindow::cacheReceiveData()
 bool MainWindow::receiveDataCRCCheck(const QByteArray &data)
 {
     QByteArray crcResultArray = calculateCRCArray(data, data.length() - 2);
+    if(isCreated(1))
+    {
+        tform1->displayInfo("待校验的下位机数据：" + data.toHex());
+    }
     qDebug() << "cal crc low: " << crcResultArray[0];
     qDebug() << "cal crc high: " << crcResultArray[1];
     qDebug() << "data[data.size() - 2]: " << data[data.size() - 2];
@@ -692,9 +697,16 @@ void MainWindow::dealMessage(const QByteArray &data)
     {
         //更新缓存
         QByteArray dataBuf = data.mid(3, data.size() - 5);
+        qDebug() << "dataBuf: " << dataBuf.toHex();
         for(int i = 0; i < dataBuf.size(); i = i + 2)
         {
-            timingDataBuf[i / 2] = static_cast<quint16>(dataBuf.at(i)) * 256 + static_cast<quint16>(dataBuf.at(i + 1));
+            timingDataBuf[i / 2] = static_cast<quint8>(dataBuf.at(i)) * 256 + static_cast<quint8>(dataBuf.at(i + 1));
+            if(i == 40)
+            {
+                qDebug() << "40 : " << static_cast<quint8>(dataBuf.at(i));
+                qDebug() << "41 : " << static_cast<quint8>(dataBuf.at(i + 1));
+                qDebug() << "第二十： " << timingDataBuf[i / 2];
+            }
         }
         refreshAll();
     }
@@ -752,6 +764,7 @@ void MainWindow::on_connBtn_clicked()
         }
         serialPort->close();
         connFlag = 0;
+        ui->comboBox_2->setEnabled(true);
         connectStatusLabel->setText(connStatus.arg("未连接"));
         connectStatusLabel->setStyleSheet("QLabel { background-color : red; color : white; }");
         ui->connBtn->setText("建立连接");

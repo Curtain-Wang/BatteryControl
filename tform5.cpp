@@ -8,7 +8,6 @@ TForm5::TForm5(QWidget *parent)
     , ui(new Ui::TForm5)
 {
     ui->setupUi(this);
-    mainwindow = qobject_cast<MainWindow*>(parent);
     //设置窗口标志，确保有边框和标题栏、最小化、关闭，最大化
     setWindowFlags(Qt::Window | Qt::WindowTitleHint | Qt::WindowCloseButtonHint);
     setWindowIcon(QIcon(":/icons/images/battery_control_icon.ico"));

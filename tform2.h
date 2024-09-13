@@ -2,7 +2,6 @@
 #define TFORM2_H
 
 #include <QWidget>
-class MainWindow;
 namespace Ui {
 class TForm2;
 }
@@ -23,7 +22,6 @@ private slots:
 
 private:
     Ui::TForm2 *ui;
-    MainWindow* mainwindow;
 };
 
 #endif // TFORM2_H

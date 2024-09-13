@@ -12,22 +12,28 @@ SOURCES += \
     globalparam.cpp \
     main.cpp \
     mainwindow.cpp \
+    mycombobox.cpp \
+    mylineedit.cpp \
     tform1.cpp \
     tform2.cpp \
     tform3.cpp \
     tform4.cpp \
     tform5.cpp \
-    tform6.cpp
+    tform6.cpp \
+    tform7.cpp
 
 HEADERS += \
     globalparam.h \
     mainwindow.h \
+    mycombobox.h \
+    mylineedit.h \
     tform1.h \
     tform2.h \
     tform3.h \
     tform4.h \
     tform5.h \
-    tform6.h
+    tform6.h \
+    tform7.h
 
 FORMS += \
     mainwindow.ui \
@@ -36,7 +42,8 @@ FORMS += \
     tform3.ui \
     tform4.ui \
     tform5.ui \
-    tform6.ui
+    tform6.ui \
+    tform7.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

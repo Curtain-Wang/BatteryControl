@@ -19,7 +19,8 @@ TForm4::~TForm4()
 
 void TForm4::refresh()
 {
-    ui->d5->setText(QString::number(timingDataBuf[5]));
+    ui->d5->setText(QString::number(timingDataBuf[5], 16).toUpper());
+    qDebug() << "d20: " << timingDataBuf[20];
     ui->d20_1->setText(QString::number(static_cast<float>(timingDataBuf[20]) / 10, 'f', 1));
     ui->d21_1->setText(QString::number(static_cast<float>(timingDataBuf[21]) / 10, 'f', 1));
     qint16 value = timingDataBuf[22];

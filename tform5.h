@@ -20,8 +20,6 @@ private slots:
     void onEditingFinished();
 private:
     Ui::TForm5 *ui;
-
-    MainWindow* mainwindow;
 };
 
 #endif // TFORM5_H

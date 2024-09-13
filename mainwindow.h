@@ -102,6 +102,7 @@ private:
     int dataRefreshStep = 1;
     int spaceKeyPressCount = 0; // 空格键按下次数
     QTimer *resetTimer;     // 用于重置按键计数的定时器
+    int step = 0;
 
     // QWidget interface
 protected:

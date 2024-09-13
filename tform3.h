@@ -24,7 +24,6 @@ private slots:
 private:
     Ui::TForm3 *ui;
     QVector<QLineEdit*> lineEdits;
-    MainWindow* mainwindow;
 };
 
 #endif // TFORM3_H

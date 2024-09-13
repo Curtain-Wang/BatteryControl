@@ -70,7 +70,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="d25">
+             <widget class="MyLineEdit" name="d25">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -134,7 +134,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="d27">
+             <widget class="MyLineEdit" name="d27">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -198,7 +198,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="d18">
+             <widget class="MyLineEdit" name="d18">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -259,7 +259,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="d14">
+             <widget class="MyLineEdit" name="d14">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -320,7 +320,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="d12">
+             <widget class="MyLineEdit" name="d12">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -381,7 +381,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="d16">
+             <widget class="MyLineEdit" name="d16">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -457,7 +457,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="d26">
+             <widget class="MyLineEdit" name="d26">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -521,7 +521,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="d28">
+             <widget class="MyLineEdit" name="d28">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -585,7 +585,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="d19">
+             <widget class="MyLineEdit" name="d19">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -646,7 +646,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="d15">
+             <widget class="MyLineEdit" name="d15">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -707,7 +707,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="d13">
+             <widget class="MyLineEdit" name="d13">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -768,7 +768,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="d17">
+             <widget class="MyLineEdit" name="d17">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -811,6 +811,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>MyLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header location="global">mylineedit.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
