@@ -127,11 +127,6 @@ void MainWindow::init()
     resetTimer = new QTimer(this);
     resetTimer->setInterval(2000);  // 0.5秒内按两次空格才算有效
     connect(resetTimer, &QTimer::timeout, this, &MainWindow::resetKeyPressCount);
-    //创建定时器，定时刷新端口
-    refreshPortTimer = new QTimer(this);
-    refreshPortTimer->setInterval(1000);
-    connect(refreshPortTimer, &QTimer::timeout, this, &MainWindow::refreshPort);
-    refresh();
 }
 
 void MainWindow::refreshPort()
@@ -747,7 +742,6 @@ void MainWindow::on_connBtn_clicked()
             connectStatusLabel->setText(connStatus.arg("已连接"));
             connectStatusLabel->setStyleSheet("QLabel { background-color : green; color : white; }");
             ui->connBtn->setText("断开连接");
-            refreshPortTimer->stop();
         }
     }
     else if(ui->connBtn->text() == "断开连接")
@@ -761,7 +755,6 @@ void MainWindow::on_connBtn_clicked()
         connectStatusLabel->setText(connStatus.arg("未连接"));
         connectStatusLabel->setStyleSheet("QLabel { background-color : red; color : white; }");
         ui->connBtn->setText("建立连接");
-        refreshPortTimer->start();
     }
 }
 
