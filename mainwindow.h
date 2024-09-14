@@ -38,13 +38,12 @@ public:
     void refresh(int num);
     void refreshAll();
     void loadConfig();
-    void AOVUpdate();
-    void BOVUpdate();
-    void AUVUpdate();
-    void BUVUpdate();
     void manualReadCMDBuild(char startHigh, char startLow, char numHigh, char numLow);
-    void manualWriteOneCMDBuild(char startHigh, char startLow, char valueHigh, char valueLow);
-    void manualWriteMultipleCMDBuild(QByteArray buf);
+    void manualWriteOneCMDBuild(char startHigh, char startLow, char valueHigh, char valueLow, quint8 secFlag = 0);
+    void manualWriteMultipleCMDBuild(QByteArray buf, quint8 secFlag = 0);
+    void setAtoB();
+    void setBtoA();
+    void secondCMDSend();
 private slots:
     void onSendTimerTimeout();
     void onReceiveTimerTimeout();
@@ -59,22 +58,6 @@ private slots:
 
     void on_pushButton_6_clicked();
 
-    void on_aov_editingFinished();
-
-    void on_aov_returnPressed();
-
-    void on_auv_editingFinished();
-
-    void on_auv_returnPressed();
-
-    void on_bov_editingFinished();
-
-    void on_bov_returnPressed();
-
-    void on_buv_editingFinished();
-
-    void on_buv_returnPressed();
-
     void on_pushButton_clicked();
 
     void on_pushButton_7_clicked();
@@ -84,6 +67,8 @@ private slots:
     void on_pushButton_9_clicked();
 
     void resetKeyPressCount();  // 重置空格键按下计数
+
+    void onEditingFinished();
 
 private:
     Ui::MainWindow *ui;

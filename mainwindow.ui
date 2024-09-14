@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>907</width>
-    <height>515</height>
+    <height>678</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -66,7 +66,7 @@ QStatusBar {
 </string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout_4">
+   <layout class="QVBoxLayout" name="verticalLayout_8">
     <item>
      <widget class="QGroupBox" name="groupBox_33">
       <property name="minimumSize">
@@ -458,7 +458,20 @@ QPushButton:pressed {
      </widget>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_6">
+     <spacer name="verticalSpacer_2">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>23</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_14">
       <item>
        <spacer name="horizontalSpacer">
         <property name="orientation">
@@ -466,14 +479,20 @@ QPushButton:pressed {
         </property>
         <property name="sizeHint" stdset="0">
          <size>
-          <width>168</width>
-          <height>20</height>
+          <width>58</width>
+          <height>373</height>
          </size>
         </property>
        </spacer>
       </item>
       <item>
        <widget class="QGroupBox" name="groupBox">
+        <property name="minimumSize">
+         <size>
+          <width>731</width>
+          <height>0</height>
+         </size>
+        </property>
         <property name="styleSheet">
          <string notr="true">QGroupBox {
     border: none
@@ -483,7 +502,7 @@ QPushButton:pressed {
         <property name="title">
          <string/>
         </property>
-        <layout class="QVBoxLayout" name="verticalLayout_2">
+        <layout class="QVBoxLayout" name="verticalLayout_7">
          <item>
           <widget class="QGroupBox" name="groupBox_12">
            <property name="styleSheet">
@@ -496,7 +515,7 @@ QPushButton:pressed {
            <property name="title">
             <string/>
            </property>
-           <layout class="QHBoxLayout" name="horizontalLayout_10">
+           <layout class="QHBoxLayout" name="horizontalLayout_11">
             <item>
              <widget class="QGroupBox" name="groupBox_2">
               <property name="styleSheet">
@@ -540,6 +559,12 @@ QPushButton:pressed {
                  <layout class="QHBoxLayout" name="horizontalLayout">
                   <item>
                    <widget class="QLabel" name="label_2">
+                    <property name="minimumSize">
+                     <size>
+                      <width>90</width>
+                      <height>0</height>
+                     </size>
+                    </property>
                     <property name="font">
                      <font>
                       <family>Microsoft YaHei</family>
@@ -555,7 +580,7 @@ QPushButton:pressed {
                    </widget>
                   </item>
                   <item>
-                   <widget class="QLineEdit" name="aov">
+                   <widget class="MyLineEdit" name="d14">
                     <property name="minimumSize">
                      <size>
                       <width>0</width>
@@ -571,10 +596,88 @@ QPushButton:pressed {
 }
 </string>
                     </property>
+                    <property name="readOnly">
+                     <bool>true</bool>
+                    </property>
                    </widget>
                   </item>
                   <item>
                    <widget class="QLabel" name="label_3">
+                    <property name="font">
+                     <font>
+                      <family>Microsoft YaHei</family>
+                      <pointsize>-1</pointsize>
+                     </font>
+                    </property>
+                    <property name="text">
+                     <string>V</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item>
+                <widget class="QGroupBox" name="groupBox_5">
+                 <property name="styleSheet">
+                  <string notr="true">QGroupBox {
+    border: none;
+}
+</string>
+                 </property>
+                 <property name="title">
+                  <string/>
+                 </property>
+                 <layout class="QHBoxLayout" name="horizontalLayout_3">
+                  <item>
+                   <widget class="QLabel" name="label_6">
+                    <property name="minimumSize">
+                     <size>
+                      <width>90</width>
+                      <height>0</height>
+                     </size>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <family>Microsoft YaHei</family>
+                      <pointsize>-1</pointsize>
+                     </font>
+                    </property>
+                    <property name="text">
+                     <string>欠压设置</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="MyLineEdit" name="d16">
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>30</height>
+                     </size>
+                    </property>
+                    <property name="styleSheet">
+                     <string notr="true">QLineEdit {
+    border: 1px solid #bbbbbb;
+    border-radius: 3px;
+    padding: 5px;
+    height: 20px; /* 控制输入框的高度 */
+}
+</string>
+                    </property>
+                    <property name="readOnly">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLabel" name="label_7">
                     <property name="font">
                      <font>
                       <family>Microsoft YaHei</family>
@@ -606,6 +709,12 @@ QPushButton:pressed {
                  <layout class="QHBoxLayout" name="horizontalLayout_2">
                   <item>
                    <widget class="QLabel" name="label_4">
+                    <property name="minimumSize">
+                     <size>
+                      <width>90</width>
+                      <height>0</height>
+                     </size>
+                    </property>
                     <property name="font">
                      <font>
                       <family>Microsoft YaHei</family>
@@ -661,72 +770,6 @@ QPushButton:pressed {
                  </layout>
                 </widget>
                </item>
-               <item>
-                <widget class="QGroupBox" name="groupBox_5">
-                 <property name="styleSheet">
-                  <string notr="true">QGroupBox {
-    border: none;
-}
-</string>
-                 </property>
-                 <property name="title">
-                  <string/>
-                 </property>
-                 <layout class="QHBoxLayout" name="horizontalLayout_3">
-                  <item>
-                   <widget class="QLabel" name="label_6">
-                    <property name="font">
-                     <font>
-                      <family>Microsoft YaHei</family>
-                      <pointsize>-1</pointsize>
-                     </font>
-                    </property>
-                    <property name="text">
-                     <string>欠压设置</string>
-                    </property>
-                    <property name="alignment">
-                     <set>Qt::AlignCenter</set>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLineEdit" name="auv">
-                    <property name="minimumSize">
-                     <size>
-                      <width>0</width>
-                      <height>30</height>
-                     </size>
-                    </property>
-                    <property name="styleSheet">
-                     <string notr="true">QLineEdit {
-    border: 1px solid #bbbbbb;
-    border-radius: 3px;
-    padding: 5px;
-    height: 20px; /* 控制输入框的高度 */
-}
-</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLabel" name="label_7">
-                    <property name="font">
-                     <font>
-                      <family>Microsoft YaHei</family>
-                      <pointsize>-1</pointsize>
-                     </font>
-                    </property>
-                    <property name="text">
-                     <string>V</string>
-                    </property>
-                    <property name="alignment">
-                     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </widget>
-               </item>
               </layout>
              </widget>
             </item>
@@ -742,7 +785,7 @@ QPushButton:pressed {
               <property name="title">
                <string/>
               </property>
-              <layout class="QVBoxLayout" name="verticalLayout_3">
+              <layout class="QVBoxLayout" name="verticalLayout_2">
                <item>
                 <widget class="QLabel" name="label_15">
                  <property name="font">
@@ -773,6 +816,12 @@ QPushButton:pressed {
                  <layout class="QHBoxLayout" name="horizontalLayout_7">
                   <item>
                    <widget class="QLabel" name="label_16">
+                    <property name="minimumSize">
+                     <size>
+                      <width>90</width>
+                      <height>0</height>
+                     </size>
+                    </property>
                     <property name="font">
                      <font>
                       <family>Microsoft YaHei</family>
@@ -788,7 +837,7 @@ QPushButton:pressed {
                    </widget>
                   </item>
                   <item>
-                   <widget class="QLineEdit" name="bov">
+                   <widget class="MyLineEdit" name="d15">
                     <property name="minimumSize">
                      <size>
                       <width>0</width>
@@ -804,10 +853,88 @@ QPushButton:pressed {
 }
 </string>
                     </property>
+                    <property name="readOnly">
+                     <bool>true</bool>
+                    </property>
                    </widget>
                   </item>
                   <item>
                    <widget class="QLabel" name="label_17">
+                    <property name="font">
+                     <font>
+                      <family>Microsoft YaHei</family>
+                      <pointsize>-1</pointsize>
+                     </font>
+                    </property>
+                    <property name="text">
+                     <string>V</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item>
+                <widget class="QGroupBox" name="groupBox_11">
+                 <property name="styleSheet">
+                  <string notr="true">QGroupBox {
+    border: none;
+}
+</string>
+                 </property>
+                 <property name="title">
+                  <string/>
+                 </property>
+                 <layout class="QHBoxLayout" name="horizontalLayout_9">
+                  <item>
+                   <widget class="QLabel" name="label_20">
+                    <property name="minimumSize">
+                     <size>
+                      <width>90</width>
+                      <height>0</height>
+                     </size>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <family>Microsoft YaHei</family>
+                      <pointsize>-1</pointsize>
+                     </font>
+                    </property>
+                    <property name="text">
+                     <string>欠压设置</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="MyLineEdit" name="d17">
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>30</height>
+                     </size>
+                    </property>
+                    <property name="styleSheet">
+                     <string notr="true">QLineEdit {
+    border: 1px solid #bbbbbb;
+    border-radius: 3px;
+    padding: 5px;
+    height: 20px; /* 控制输入框的高度 */
+}
+</string>
+                    </property>
+                    <property name="readOnly">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLabel" name="label_21">
                     <property name="font">
                      <font>
                       <family>Microsoft YaHei</family>
@@ -839,6 +966,12 @@ QPushButton:pressed {
                  <layout class="QHBoxLayout" name="horizontalLayout_8">
                   <item>
                    <widget class="QLabel" name="label_18">
+                    <property name="minimumSize">
+                     <size>
+                      <width>90</width>
+                      <height>0</height>
+                     </size>
+                    </property>
                     <property name="font">
                      <font>
                       <family>Microsoft YaHei</family>
@@ -877,72 +1010,6 @@ QPushButton:pressed {
                   </item>
                   <item>
                    <widget class="QLabel" name="label_19">
-                    <property name="font">
-                     <font>
-                      <family>Microsoft YaHei</family>
-                      <pointsize>-1</pointsize>
-                     </font>
-                    </property>
-                    <property name="text">
-                     <string>V</string>
-                    </property>
-                    <property name="alignment">
-                     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </widget>
-               </item>
-               <item>
-                <widget class="QGroupBox" name="groupBox_11">
-                 <property name="styleSheet">
-                  <string notr="true">QGroupBox {
-    border: none;
-}
-</string>
-                 </property>
-                 <property name="title">
-                  <string/>
-                 </property>
-                 <layout class="QHBoxLayout" name="horizontalLayout_9">
-                  <item>
-                   <widget class="QLabel" name="label_20">
-                    <property name="font">
-                     <font>
-                      <family>Microsoft YaHei</family>
-                      <pointsize>-1</pointsize>
-                     </font>
-                    </property>
-                    <property name="text">
-                     <string>欠压设置</string>
-                    </property>
-                    <property name="alignment">
-                     <set>Qt::AlignCenter</set>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLineEdit" name="buv">
-                    <property name="minimumSize">
-                     <size>
-                      <width>0</width>
-                      <height>30</height>
-                     </size>
-                    </property>
-                    <property name="styleSheet">
-                     <string notr="true">QLineEdit {
-    border: 1px solid #bbbbbb;
-    border-radius: 3px;
-    padding: 5px;
-    height: 20px; /* 控制输入框的高度 */
-}
-</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLabel" name="label_21">
                     <property name="font">
                      <font>
                       <family>Microsoft YaHei</family>
@@ -1017,35 +1084,47 @@ QPushButton:pressed {
            <property name="maximumSize">
             <size>
              <width>16777215</width>
-             <height>80</height>
+             <height>9999999</height>
             </size>
            </property>
            <property name="title">
             <string/>
            </property>
-           <layout class="QHBoxLayout" name="horizontalLayout_5">
+           <layout class="QHBoxLayout" name="horizontalLayout_13">
             <item>
-             <widget class="QPushButton" name="pushButton">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
+             <widget class="QGroupBox" name="groupBox_13">
+              <property name="title">
+               <string/>
               </property>
-              <property name="maximumSize">
-               <size>
-                <width>16777215</width>
-                <height>40</height>
-               </size>
-              </property>
-              <property name="sizeIncrement">
-               <size>
-                <width>0</width>
-                <height>40</height>
-               </size>
-              </property>
-              <property name="styleSheet">
-               <string notr="true">QPushButton {
+              <layout class="QVBoxLayout" name="verticalLayout_3">
+               <item>
+                <widget class="QPushButton" name="pushButton">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>0</width>
+                   <height>40</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>16777215</width>
+                   <height>40</height>
+                  </size>
+                 </property>
+                 <property name="sizeIncrement">
+                  <size>
+                   <width>0</width>
+                   <height>40</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QPushButton {
     background-color: #4CAF50;
     color: white;
     border: none;
@@ -1062,35 +1141,100 @@ QPushButton:pressed {
     border: 1px solid #2E7D32; /* 添加一个边框，提升立体感 */
 }
 </string>
-              </property>
-              <property name="text">
-               <string>自动模式</string>
-              </property>
+                 </property>
+                 <property name="text">
+                  <string>自动模式启动</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_5">
+                 <item>
+                  <spacer name="horizontalSpacer_3">
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>13</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="label_8">
+                   <property name="minimumSize">
+                    <size>
+                     <width>30</width>
+                     <height>30</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>30</width>
+                     <height>30</height>
+                    </size>
+                   </property>
+                   <property name="styleSheet">
+                    <string notr="true">QLabel {
+	border: none;
+	border-radius: 15px;
+	background-color: gray;
+}</string>
+                   </property>
+                   <property name="text">
+                    <string/>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="horizontalSpacer_4">
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>13</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                </layout>
+               </item>
+              </layout>
              </widget>
             </item>
             <item>
-             <widget class="QPushButton" name="pushButton_7">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
+             <widget class="QGroupBox" name="groupBox_14">
+              <property name="title">
+               <string/>
               </property>
-              <property name="maximumSize">
-               <size>
-                <width>16777215</width>
-                <height>40</height>
-               </size>
-              </property>
-              <property name="sizeIncrement">
-               <size>
-                <width>0</width>
-                <height>40</height>
-               </size>
-              </property>
-              <property name="styleSheet">
-               <string notr="true">QPushButton {
-    background-color: #4CAF50;
+              <layout class="QVBoxLayout" name="verticalLayout_4">
+               <item>
+                <widget class="QPushButton" name="pushButton_7">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>16777215</width>
+                   <height>40</height>
+                  </size>
+                 </property>
+                 <property name="sizeIncrement">
+                  <size>
+                   <width>0</width>
+                   <height>40</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QPushButton {
+    background-color: #FFA500; /* 橙色背景 */
     color: white;
     border: none;
     border-radius: 5px;
@@ -1098,43 +1242,108 @@ QPushButton:pressed {
 }
 
 QPushButton:hover {
-    background-color: #45a049;
+    background-color: #FF8C00; /* 鼠标悬浮时颜色 */
 }
 
 QPushButton:pressed {
-    background-color: #388E3C; /* 改变颜色，表示按下状态 */
-    border: 1px solid #2E7D32; /* 添加一个边框，提升立体感 */
+    background-color: #FF7F50; /* 按下状态时颜色 */
+    border: 1px solid #FF6347; /* 按下时的边框颜色，突出按下效果 */
 }
 </string>
-              </property>
-              <property name="text">
-               <string>手动模式A-&gt;B</string>
-              </property>
+                 </property>
+                 <property name="text">
+                  <string>手动模式A-&gt;B启动</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_6">
+                 <item>
+                  <spacer name="horizontalSpacer_5">
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>13</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="label_9">
+                   <property name="minimumSize">
+                    <size>
+                     <width>30</width>
+                     <height>30</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>30</width>
+                     <height>30</height>
+                    </size>
+                   </property>
+                   <property name="styleSheet">
+                    <string notr="true">QLabel {
+	border: none;
+	border-radius: 15px;
+	background-color: gray;
+}</string>
+                   </property>
+                   <property name="text">
+                    <string/>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="horizontalSpacer_6">
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>13</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                </layout>
+               </item>
+              </layout>
              </widget>
             </item>
             <item>
-             <widget class="QPushButton" name="pushButton_8">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
+             <widget class="QGroupBox" name="groupBox_15">
+              <property name="title">
+               <string/>
               </property>
-              <property name="maximumSize">
-               <size>
-                <width>16777215</width>
-                <height>40</height>
-               </size>
-              </property>
-              <property name="sizeIncrement">
-               <size>
-                <width>0</width>
-                <height>40</height>
-               </size>
-              </property>
-              <property name="styleSheet">
-               <string notr="true">QPushButton {
-    background-color: #4CAF50;
+              <layout class="QVBoxLayout" name="verticalLayout_5">
+               <item>
+                <widget class="QPushButton" name="pushButton_8">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>16777215</width>
+                   <height>40</height>
+                  </size>
+                 </property>
+                 <property name="sizeIncrement">
+                  <size>
+                   <width>0</width>
+                   <height>40</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QPushButton {
+    background-color: #FFA500; /* 橙色背景 */
     color: white;
     border: none;
     border-radius: 5px;
@@ -1142,43 +1351,108 @@ QPushButton:pressed {
 }
 
 QPushButton:hover {
-    background-color: #45a049;
+    background-color: #FF8C00; /* 鼠标悬浮时颜色 */
 }
 
 QPushButton:pressed {
-    background-color: #388E3C; /* 改变颜色，表示按下状态 */
-    border: 1px solid #2E7D32; /* 添加一个边框，提升立体感 */
+    background-color: #FF7F50; /* 按下状态时颜色 */
+    border: 1px solid #FF6347; /* 按下时的边框颜色，突出按下效果 */
 }
 </string>
-              </property>
-              <property name="text">
-               <string>手动模式B-&gt;A</string>
-              </property>
+                 </property>
+                 <property name="text">
+                  <string>手动模式B-&gt;A启动</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_10">
+                 <item>
+                  <spacer name="horizontalSpacer_7">
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>13</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="label_10">
+                   <property name="minimumSize">
+                    <size>
+                     <width>30</width>
+                     <height>30</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>30</width>
+                     <height>30</height>
+                    </size>
+                   </property>
+                   <property name="styleSheet">
+                    <string notr="true">QLabel {
+	border: none;
+	border-radius: 15px;
+	background-color: gray;
+}</string>
+                   </property>
+                   <property name="text">
+                    <string/>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="horizontalSpacer_8">
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>13</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                </layout>
+               </item>
+              </layout>
              </widget>
             </item>
             <item>
-             <widget class="QPushButton" name="pushButton_9">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
+             <widget class="QGroupBox" name="groupBox_16">
+              <property name="title">
+               <string/>
               </property>
-              <property name="maximumSize">
-               <size>
-                <width>16777215</width>
-                <height>40</height>
-               </size>
-              </property>
-              <property name="sizeIncrement">
-               <size>
-                <width>0</width>
-                <height>40</height>
-               </size>
-              </property>
-              <property name="styleSheet">
-               <string notr="true">QPushButton {
-    background-color: #4CAF50;
+              <layout class="QVBoxLayout" name="verticalLayout_6">
+               <item>
+                <widget class="QPushButton" name="pushButton_9">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>16777215</width>
+                   <height>40</height>
+                  </size>
+                 </property>
+                 <property name="sizeIncrement">
+                  <size>
+                   <width>0</width>
+                   <height>40</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QPushButton {
+    background-color: #F44336; /* 红色背景 */
     color: white;
     border: none;
     border-radius: 5px;
@@ -1186,18 +1460,77 @@ QPushButton:pressed {
 }
 
 QPushButton:hover {
-    background-color: #45a049;
+    background-color: #E53935; /* 鼠标悬浮时颜色稍微变暗 */
 }
 
 QPushButton:pressed {
-    background-color: #388E3C; /* 改变颜色，表示按下状态 */
-    border: 1px solid #2E7D32; /* 添加一个边框，提升立体感 */
+    background-color: #D32F2F; /* 按下状态时颜色更暗 */
+    border: 1px solid #C62828; /* 按下时添加一个边框 */
 }
 </string>
-              </property>
-              <property name="text">
-               <string>关机</string>
-              </property>
+                 </property>
+                 <property name="text">
+                  <string>关机</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_12">
+                 <item>
+                  <spacer name="horizontalSpacer_9">
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>13</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="label_11">
+                   <property name="minimumSize">
+                    <size>
+                     <width>30</width>
+                     <height>30</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>30</width>
+                     <height>30</height>
+                    </size>
+                   </property>
+                   <property name="styleSheet">
+                    <string notr="true">QLabel {
+	border: none;
+	border-radius: 15px;
+	background-color: gray;
+}</string>
+                   </property>
+                   <property name="text">
+                    <string/>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="horizontalSpacer_10">
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>13</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                </layout>
+               </item>
+              </layout>
              </widget>
             </item>
            </layout>
@@ -1213,13 +1546,26 @@ QPushButton:pressed {
         </property>
         <property name="sizeHint" stdset="0">
          <size>
-          <width>168</width>
-          <height>20</height>
+          <width>48</width>
+          <height>373</height>
          </size>
         </property>
        </spacer>
       </item>
      </layout>
+    </item>
+    <item>
+     <spacer name="verticalSpacer">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>23</height>
+       </size>
+      </property>
+     </spacer>
     </item>
    </layout>
   </widget>
@@ -1229,7 +1575,12 @@ QPushButton:pressed {
   <customwidget>
    <class>MyComboBox</class>
    <extends>QComboBox</extends>
-   <header location="global">mycombobox.h</header>
+   <header>mycombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>MyLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>mylineedit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

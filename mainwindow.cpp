@@ -121,13 +121,17 @@ void MainWindow::init()
 
     runningStatusLabel->setMinimumWidth(150);
     ui->statusBar->addWidget(runningStatusLabel);
-    runningStatusLabel->setText(runningStatus.arg("未知"));
+
     //加载配置文件
     loadConfig();
     // 创建定时器，用于在一段时间后重置按键计数
     resetTimer = new QTimer(this);
     resetTimer->setInterval(2000);  // 0.5秒内按两次空格才算有效
     connect(resetTimer, &QTimer::timeout, this, &MainWindow::resetKeyPressCount);
+\
+    //初始化模式
+    timingDataBuf[3] = -1;
+    refresh();
 }
 
 void MainWindow::refreshPort()
@@ -191,13 +195,63 @@ void MainWindow::manualReadCMDBuild(char startHigh, char startLow, char numHigh,
 
 void MainWindow::refresh()
 {
+     qint16 ac = timingDataBuf[22];
+    if(timingDataBuf[3] == 0)
+    {
+        runningStatusLabel->setText(runningStatus.arg("自动模式"));
+        runningStatusLabel->setStyleSheet("QLabel { background-color : #4CAF50; color : white; }");
+        ui->label_8->setStyleSheet(    "QLabel {"
+                                   "    border: none;"
+                                   "    border-radius: 15px;"
+                                   "    background-color: #4CAF50;"
+                                   "}");
+    }
+    else if(timingDataBuf[3] == 4)
+    {
+        runningStatusLabel->setText(runningStatus.arg("手动模式"));
+        runningStatusLabel->setStyleSheet("QLabel { background-color : #FFA500; color : white; }");
+        if(ac < 0)
+        {
+            ui->label_9->setStyleSheet(    "QLabel {"
+                                       "    border: none;"
+                                       "    border-radius: 15px;"
+                                       "    background-color: #FFA500;"
+                                       "}");
+        }
+        if(ac > 0)
+        {
+            ui->label_10->setStyleSheet(    "QLabel {"
+                                       "    border: none;"
+                                       "    border-radius: 15px;"
+                                       "    background-color: #FFA500;"
+                                       "}");
+        }
+
+
+
+    }
+    else if(timingDataBuf[3] == 1 || timingDataBuf[3] == 5)
+    {
+        runningStatusLabel->setText(runningStatus.arg("关闭"));
+        runningStatusLabel->setStyleSheet("QLabel { background-color : #F44336; color : white; }");
+        ui->label_11->setStyleSheet(    "QLabel {"
+                                    "    border: none;"
+                                    "    border-radius: 15px;"
+                                    "    background-color: #F44336;"
+                                    "}");
+    }
+    else
+    {
+        runningStatusLabel->setText(runningStatus.arg("未知"));
+        runningStatusLabel->setStyleSheet("QLabel { background-color : #696969; color : white; }");
+    }
     //A->B, A欠压或者B过压
-    if(timingDataBuf[2] == 7 && (auv * 10 >= timingDataBuf[20] || bov * 10 <= timingDataBuf[21]))
+    if(timingDataBuf[2] == 7 && (timingDataBuf[16] >= timingDataBuf[20] || timingDataBuf[15] <= timingDataBuf[21]))
     {
         //自动模式，下发B->A
         if(timingDataBuf[3] == 0)
         {
-            manualWriteOneCMDBuild(static_cast<char>(0x00), 0x02, static_cast<char>(0x00), 0x05);
+            setBtoA();
             cycleNum++;
         }
         //手动模式，手动停止
@@ -207,12 +261,12 @@ void MainWindow::refresh()
         }
     }
     //B->A，B欠压或者A过压
-    if(timingDataBuf[2] == 5 && (buv * 10 >= timingDataBuf[21] || aov * 10 <= timingDataBuf[20]))
+    if(timingDataBuf[2] == 5 && (timingDataBuf[17] >= timingDataBuf[21] || timingDataBuf[14] <= timingDataBuf[20]))
     {
         //自动模式，下发A->B
         if(timingDataBuf[3] == 0)
         {
-            manualWriteOneCMDBuild(static_cast<char>(0x00), 0x02, static_cast<char>(0x00), 0x07);
+            setAtoB();
             cycleNum++;
         }
         //手动模式，手动停止
@@ -224,30 +278,22 @@ void MainWindow::refresh()
     //实时电压
     ui->d20->setText(QString::number(static_cast<float>(timingDataBuf[20]) / 10, 'f', 1));
     ui->d21->setText(QString::number(static_cast<float>(timingDataBuf[21]) / 10, 'f', 1));
+    ui->d14->setText(QString::number(static_cast<float>(timingDataBuf[14]) / 10, 'f', 1));
+    ui->d15->setText(QString::number(static_cast<float>(timingDataBuf[15]) / 10, 'f', 1));
+    ui->d16->setText(QString::number(static_cast<float>(timingDataBuf[16]) / 10, 'f', 1));
+    ui->d17->setText(QString::number(static_cast<float>(timingDataBuf[17]) / 10, 'f', 1));
     //电流方向，循环次数刷新
-    if(timingDataBuf[2] == 7)
+    if(ac < 0)
     {
         ui->label_24->setText(displayInfo.arg("A->B").arg(cycleNum));
     }
-    else if(timingDataBuf[2] == 5)
+    else if(ac > 0)
     {
         ui->label_24->setText(displayInfo.arg("B->A").arg(cycleNum));
     }
     else
     {
         ui->label_24->setText(displayInfo.arg("无").arg(cycleNum));
-    }
-    if(timingDataBuf[3] == 1)
-    {
-        runningStatusLabel->setText(runningStatus.arg("自动模式"));
-    }
-    else if(timingDataBuf[3] == 4)
-    {
-        runningStatusLabel->setText(runningStatus.arg("手动模式"));
-    }
-    else
-    {
-        runningStatusLabel->setText(runningStatus.arg("关闭"));
     }
 }
 
@@ -313,75 +359,17 @@ void MainWindow::loadConfig()
     //不存在则初始化
     if(!configFile.exists())
     {
-        settings.setValue("AOV", 0);
-        settings.setValue("AUV", 0);
-        settings.setValue("BOV", 0);
-        settings.setValue("BUV", 0);
-        settings.setValue("AUTO_OR_MANUAL", 0);
         settings.setValue("CYCLE_NUM", 0);
     }
     //加载配置
     else
     {
-        aov = settings.value("AOV").toFloat();
-        auv = settings.value("AUV").toFloat();
-        bov = settings.value("BOV").toFloat();
-        buv = settings.value("BUV").toFloat();
         cycleNum = settings.value("CYCLE_NUM").toInt();
-        autoOrManual = settings.value("AUTO_OR_MANUAL").toInt();
     }
-    ui->aov->setText(QString::number(aov));
-    ui->bov->setText(QString::number(bov));
-    ui->auv->setText(QString::number(auv));
-    ui->buv->setText(QString::number(buv));
     ui->label_24->setText(displayInfo.arg("无").arg(cycleNum));
 }
 
-void MainWindow::AOVUpdate()
-{
-    aov = ui->aov->text().toInt();
-    QString configFileName = "config.ini";
-    QString iniFilePath = QDir::currentPath() + "/" + configFileName;
-    QFile configFile(iniFilePath);
-    QSettings settings(iniFilePath, QSettings::IniFormat);
-    settings.beginGroup("CONFIG");
-    settings.setValue("AOV", aov);
-}
-
-void MainWindow::BOVUpdate()
-{
-    bov = ui->bov->text().toInt();
-    QString configFileName = "config.ini";
-    QString iniFilePath = QDir::currentPath() + "/" + configFileName;
-    QFile configFile(iniFilePath);
-    QSettings settings(iniFilePath, QSettings::IniFormat);
-    settings.beginGroup("CONFIG");
-    settings.setValue("BOV", bov);
-}
-
-void MainWindow::AUVUpdate()
-{
-    auv = ui->auv->text().toInt();
-    QString configFileName = "config.ini";
-    QString iniFilePath = QDir::currentPath() + "/" + configFileName;
-    QFile configFile(iniFilePath);
-    QSettings settings(iniFilePath, QSettings::IniFormat);
-    settings.beginGroup("CONFIG");
-    settings.setValue("AUV", auv);
-}
-
-void MainWindow::BUVUpdate()
-{
-    buv = ui->buv->text().toInt();
-    QString configFileName = "config.ini";
-    QString iniFilePath = QDir::currentPath() + "/" + configFileName;
-    QFile configFile(iniFilePath);
-    QSettings settings(iniFilePath, QSettings::IniFormat);
-    settings.beginGroup("CONFIG");
-    settings.setValue("BUV", buv);
-}
-
-void MainWindow::manualWriteOneCMDBuild(char startHigh, char startLow, char valueHigh, char valueLow)
+void MainWindow::manualWriteOneCMDBuild(char startHigh, char startLow, char valueHigh, char valueLow, quint8 secFlag)
 {
     if(manualFlag == 1)
     {
@@ -389,7 +377,14 @@ void MainWindow::manualWriteOneCMDBuild(char startHigh, char startLow, char valu
         return;
     }
     manualSendDataBuf.clear();
-    manualFlag = 1;
+    if(secFlag == 0)
+    {
+       manualFlag = 1;
+    }
+    else
+    {
+        manualFlag = 2;
+    }
     manualSendDataBuf.append(MODULE);
     manualSendDataBuf.append(WRITE_ONE_CMD);
     manualSendDataBuf.append(startHigh);
@@ -402,7 +397,7 @@ void MainWindow::manualWriteOneCMDBuild(char startHigh, char startLow, char valu
     manualSendDataBuf.append(crcArray[1]);
 }
 
-void MainWindow::manualWriteMultipleCMDBuild(QByteArray buf)
+void MainWindow::manualWriteMultipleCMDBuild(QByteArray buf, quint8 secFlag)
 {
 
     if(manualFlag == 1)
@@ -411,7 +406,14 @@ void MainWindow::manualWriteMultipleCMDBuild(QByteArray buf)
         return;
     }
     manualSendDataBuf.clear();
-    manualFlag = 1;
+    if(secFlag == 0)
+    {
+        manualFlag = 1;
+    }
+    else
+    {
+        manualFlag = 2;
+    }
     manualSendDataBuf.append(MODULE);
     manualSendDataBuf.append(WRITE_MULTIPLE_CMD);
     manualSendDataBuf.append(buf);
@@ -419,6 +421,75 @@ void MainWindow::manualWriteMultipleCMDBuild(QByteArray buf)
     //crC
     manualSendDataBuf.append(crcArray[0]);
     manualSendDataBuf.append(crcArray[1]);
+}
+
+void MainWindow::setAtoB()
+{
+    //设置A的输出电压为欠压的0.9,B的输出电压为过压的1.1
+    int aoutputv = timingDataBuf[16] * 0.9;
+    int boutputv = timingDataBuf[15] * 1.1;
+    if(connFlag == 0)
+    {
+        QMessageBox::information(this, tr("提示"), tr("先建立连接!"));
+        return;
+    }
+    QByteArray buf;
+        //起始地址
+    buf.append(static_cast<char>(0x00));
+    buf.append(0x0C);
+    //字数
+    buf.append(static_cast<char>(0x00));
+    buf.append(0x02);
+    //字节数
+    buf.append(0x04);
+    //写入值A
+    buf.append(static_cast<char>(aoutputv >> 8));
+    buf.append(static_cast<char>(aoutputv & 0xFF));
+    //写入值B
+    buf.append(static_cast<char>(boutputv >> 8));
+    buf.append(static_cast<char>(boutputv & 0xFF));
+    manualWriteMultipleCMDBuild(buf);
+}
+
+void MainWindow::setBtoA()
+{
+    //设置A的输出电压为过压的1.1,B的输出电压为欠压的0.9
+    int aoutputv = timingDataBuf[14] * 1.1;
+    int boutputv = timingDataBuf[17] * 0.9;
+    if(connFlag == 0)
+    {
+        QMessageBox::information(this, tr("提示"), tr("先建立连接!"));
+        return;
+    }
+    QByteArray buf;
+        //起始地址
+    buf.append(static_cast<char>(0x00));
+    buf.append(0x0C);
+    //字数
+    buf.append(static_cast<char>(0x00));
+    buf.append(0x02);
+    //字节数
+    buf.append(0x04);
+    //写入值A
+    buf.append(static_cast<char>(aoutputv >> 8));
+    buf.append(static_cast<char>(aoutputv & 0xFF));
+    //写入值B
+    buf.append(static_cast<char>(boutputv >> 8));
+    buf.append(static_cast<char>(boutputv & 0xFF));
+    manualWriteMultipleCMDBuild(buf);
+}
+
+void MainWindow::secondCMDSend()
+{
+    switch (secCmdType) {
+    case 1:
+        setAtoB();
+        break;
+    case 2:
+        setBtoA();
+    default:
+        break;
+    }
 }
 
 void MainWindow::sendPortData(QByteArray data)
@@ -453,8 +524,15 @@ void MainWindow::onSendTimerTimeout()
     //说明串口空闲，看看有没有手动的命令要下发
     if(waitMessageRemaingTime == 0)
     {
+        //说明有二次手动命令
+        if(manualFlag == 2)
+        {
+            sendPortData();
+            manualFlag = 0;
+            secondCMDSend();
+        }
         //说明有手动命令要下发
-        if(manualFlag == 1)
+        else if(manualFlag == 1)
         {
             //手动命令下发
             sendPortData();
@@ -796,53 +874,6 @@ void MainWindow::on_pushButton_6_clicked()
 }
 
 
-void MainWindow::on_aov_editingFinished()
-{
-    AOVUpdate();
-}
-
-
-void MainWindow::on_aov_returnPressed()
-{
-    AOVUpdate();
-}
-
-
-void MainWindow::on_auv_editingFinished()
-{
-    AUVUpdate();
-}
-
-
-void MainWindow::on_auv_returnPressed()
-{
-    AUVUpdate();
-}
-
-
-void MainWindow::on_bov_editingFinished()
-{
-    BOVUpdate();
-}
-
-
-void MainWindow::on_bov_returnPressed()
-{
-    BOVUpdate();
-}
-
-
-void MainWindow::on_buv_editingFinished()
-{
-    BUVUpdate();
-}
-
-
-void MainWindow::on_buv_returnPressed()
-{
-    BUVUpdate();
-}
-
 //自动模式
 void MainWindow::on_pushButton_clicked()
 {
@@ -856,30 +887,20 @@ void MainWindow::on_pushButton_clicked()
         QMessageBox::information(this, tr("提示"), tr("当前已经是自动模式!"));
         return;
     }
-    QByteArray buf;
-        //起始地址
-    buf.append(static_cast<char>(0x00));
-    buf.append(0x02);
-    //字数
-    buf.append(static_cast<char>(0x00));
-    buf.append(0x02);
-    //字节数
-    buf.append(0x04);
-    //写入值.
-    if(timingDataBuf[20] <= auv * 10 || timingDataBuf[21] >= bov * 10)
+    //判断初始化流向
+    if((timingDataBuf[20] - timingDataBuf[16]) * (timingDataBuf[15] - timingDataBuf[17]) > (timingDataBuf[21] - timingDataBuf[17]) * (timingDataBuf[14] - timingDataBuf[16]))
     {
-        buf.append(static_cast<char>(0x00));
-        buf.append(static_cast<char>(0x05));
+        //A更接近过压
+        secCmdType = 1;
     }
     else
     {
-        buf.append(static_cast<char>(0x00));
-        buf.append(static_cast<char>(0x07));
+        //B更接近过压
+        secCmdType = 2;
     }
-    //写入值,停止控制变换字
-    buf.append(static_cast<char>(0x00));
-    buf.append(static_cast<char>(0x00));
-    manualWriteMultipleCMDBuild(buf);
+    //先发自动模式，
+    manualWriteOneCMDBuild(static_cast<char>(0x00), static_cast<char>(0x03), static_cast<char>(0x00), static_cast<char>(0x00), 1);
+
 }
 
 //手动模式A->B
@@ -895,32 +916,19 @@ void MainWindow::on_pushButton_7_clicked()
         QMessageBox::information(this, tr("提示"), tr("当前已经是手动模式A->B!"));
         return;
     }
-    if(auv * 10 >= timingDataBuf[20])
+    if(timingDataBuf[16] >= timingDataBuf[20])
     {
         QMessageBox::information(this, tr("提示"), tr("A侧电流欠压，不满足下发条件"));
         return;
     }
-    if(bov * 10 <= timingDataBuf[21])
+    if(timingDataBuf[15] <= timingDataBuf[21])
     {
         QMessageBox::information(this, tr("提示"), tr("B侧电流过压，不满足下发条件"));
         return;
     }
-    QByteArray buf;
-        //起始地址
-    buf.append(static_cast<char>(0x00));
-    buf.append(0x02);
-    //字数
-    buf.append(static_cast<char>(0x00));
-    buf.append(0x02);
-    //字节数
-    buf.append(0x04);
-    //写入值.
-    buf.append(static_cast<char>(0x00));
-    buf.append(static_cast<char>(0x07));
-    //写入值,停止控制变换字
-    buf.append(static_cast<char>(0x00));
-    buf.append(static_cast<char>(0x00));
-    manualWriteMultipleCMDBuild(buf);
+    secCmdType = 1;
+    //手动模式，
+    manualWriteOneCMDBuild(static_cast<char>(0x00), static_cast<char>(0x03), static_cast<char>(0x00), static_cast<char>(0x04), 1);
 }
 
 //手动B->A
@@ -931,37 +939,24 @@ void MainWindow::on_pushButton_8_clicked()
         QMessageBox::information(this, tr("提示"), tr("请先建立连接!"));
         return;
     }
-    if(timingDataBuf[3] == 4 && timingDataBuf[2] == 5)
+    if(timingDataBuf[3] == 4 && timingDataBuf[2] == 7)
     {
-        QMessageBox::information(this, tr("提示"), tr("当前已经是手动模式B->A!"));
+        QMessageBox::information(this, tr("提示"), tr("当前已经是手动模式A->B!"));
         return;
     }
-    if(buv * 10 >= timingDataBuf[21])
+    if(timingDataBuf[16] >= timingDataBuf[20])
     {
-        QMessageBox::information(this, tr("提示"), tr("B侧电流欠压，不满足下发条件"));
+        QMessageBox::information(this, tr("提示"), tr("A侧电流欠压，不满足下发条件"));
         return;
     }
-    if(aov * 10 <= timingDataBuf[20])
+    if(timingDataBuf[15] <= timingDataBuf[21])
     {
-        QMessageBox::information(this, tr("提示"), tr("A侧电流过压，不满足下发条件"));
+        QMessageBox::information(this, tr("提示"), tr("B侧电流过压，不满足下发条件"));
         return;
     }
-    QByteArray buf;
-        //起始地址
-    buf.append(static_cast<char>(0x00));
-    buf.append(0x02);
-    //字数
-    buf.append(static_cast<char>(0x00));
-    buf.append(0x02);
-    //字节数
-    buf.append(0x04);
-    //写入值.
-    buf.append(static_cast<char>(0x00));
-    buf.append(static_cast<char>(0x05));
-    //写入值,停止控制变换字
-    buf.append(static_cast<char>(0x00));
-    buf.append(static_cast<char>(0x00));
-    manualWriteMultipleCMDBuild(buf);
+    secCmdType = 2;
+    //手动模式，
+     manualWriteOneCMDBuild(static_cast<char>(0x00), static_cast<char>(0x03), static_cast<char>(0x00), static_cast<char>(0x04), 1);
 }
 
 //手动关闭
@@ -984,6 +979,24 @@ void MainWindow::resetKeyPressCount()
 {
     spaceKeyPressCount = 0;
     resetTimer->stop();  // 停止定时器
+}
+
+void MainWindow::onEditingFinished()
+{
+    if(connFlag == 0)
+    {
+        QMessageBox::information(this, tr("提示"), tr("请先建立连接!"));
+        return;
+    }
+    // 获取触发此信号的对象
+    QLineEdit* senderLineEdit = qobject_cast<QLineEdit*>(sender());
+    if (senderLineEdit) {
+        // 打印对象名称
+        qDebug() << "当前的 QLineEdit 对象名称是：" << senderLineEdit->objectName();
+        quint8 addrLow = senderLineEdit->objectName().mid(1).toInt();
+        quint16 value = senderLineEdit->text().toFloat() * 10;
+        mainwindow->manualWriteOneCMDBuild(static_cast<char>(0), addrLow, value >> 8, value & 0xFF);
+    }
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *event)
