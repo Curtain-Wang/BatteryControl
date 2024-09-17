@@ -3,6 +3,7 @@
 class QByteArray;
 class QString;
 class MainWindow;
+extern int deviceType;
 extern const int DATA_REFRESH_CYCLE;
 extern int dataRefreshRemaingTime;
 extern int dataRefreshStep;
@@ -25,9 +26,18 @@ extern int timingDataBuf[];
 extern int connFlag;
 extern const int BR;
 extern int cycleNum;
-extern QString displayInfo;
+extern QString displayInfo1;
+extern QString displayInfo2;
+extern int chargeTime;
 extern QString connStatus;
 extern QString runningStatus;
 extern int editAddrLow;
 extern MainWindow* mainwindow;
+extern int ATurnHighV;
+extern int ATurnLowV;
+extern int BTurnHighV;
+extern int BTurnLowV;
+extern QString companyName;
+//被编辑的lineEdit名称
+extern QString lineEditName;
 #endif // GLOBALPARAM_H

@@ -22,6 +22,8 @@ MainWindow::MainWindow(QWidget *parent)
     , serialPort(new QSerialPort(this))
     , connectStatusLabel(new QLabel(this))
     , runningStatusLabel(new QLabel(this))
+    , companyNameLabel(new QLabel(this))
+    , companyImageLabel(new QLabel(this))
 {
     ui->setupUi(this);
     mainwindow = this;
@@ -97,11 +99,6 @@ void MainWindow::timerUpDate()
 
 void MainWindow::init()
 {
-    //时间显示
-    // timer1 = new QTimer(this);
-    // connect(timer1, &QTimer::timeout, this, &MainWindow::timerUpDate);
-    // timer1->setInterval(1000);
-    // timer1->start();
     //发送数据
     sendTimer = new QTimer(this);
     connect(sendTimer, &QTimer::timeout, this, &MainWindow::onSendTimerTimeout);
@@ -118,19 +115,31 @@ void MainWindow::init()
     ui->statusBar->addWidget(connectStatusLabel);
     connectStatusLabel->setText(connStatus.arg("未连接"));
     connectStatusLabel->setStyleSheet("QLabel { background-color : red; color : white; }");
-
+    ui->statusBar->addWidget(connectStatusLabel);
     runningStatusLabel->setMinimumWidth(150);
     ui->statusBar->addWidget(runningStatusLabel);
+    QPixmap pixmap(":/icons/images/companyName.png");  // 加载图片
+    companyImageLabel->setPixmap(pixmap);
+    companyImageLabel->setFixedSize(80, 20);
+    companyImageLabel->setScaledContents(true);
+    ui->statusBar->addPermanentWidget(companyImageLabel);
+    companyNameLabel->setText(companyName);
+    companyNameLabel->setMinimumWidth(350);
+    ui->statusBar->addPermanentWidget(companyNameLabel);
 
     //加载配置文件
     loadConfig();
     // 创建定时器，用于在一段时间后重置按键计数
     resetTimer = new QTimer(this);
-    resetTimer->setInterval(2000);  // 0.5秒内按两次空格才算有效
+    resetTimer->setInterval(2000);  // 2秒内按两次空格才算有效
     connect(resetTimer, &QTimer::timeout, this, &MainWindow::resetKeyPressCount);
-\
+
     //初始化模式
     timingDataBuf[3] = -1;
+    //充电时间计数
+    chargeTimeCountTimer = new QTimer(this);
+    chargeTimeCountTimer->setInterval(1000);
+    connect(chargeTimeCountTimer, &QTimer::timeout, this, &MainWindow::chargeTimeCountAdd);
     refresh();
 }
 
@@ -195,59 +204,96 @@ void MainWindow::manualReadCMDBuild(char startHigh, char startLow, char numHigh,
 
 void MainWindow::refresh()
 {
-     qint16 ac = timingDataBuf[22];
-    if(timingDataBuf[3] == 0)
+    refreshRunningStatusInfo();
+    //翻转电压初始化
+    if(ATurnHighV == 0 && timingDataBuf[14] != 0)
     {
-        runningStatusLabel->setText(runningStatus.arg("自动模式"));
-        runningStatusLabel->setStyleSheet("QLabel { background-color : #4CAF50; color : white; }");
-        ui->label_8->setStyleSheet(    "QLabel {"
-                                   "    border: none;"
-                                   "    border-radius: 15px;"
-                                   "    background-color: #4CAF50;"
-                                   "}");
-    }
-    else if(timingDataBuf[3] == 4)
-    {
-        runningStatusLabel->setText(runningStatus.arg("手动模式"));
-        runningStatusLabel->setStyleSheet("QLabel { background-color : #FFA500; color : white; }");
-        if(ac < 0)
+        QString configFileName = "config.ini";
+        QString iniFilePath = QDir::currentPath() + "/" + configFileName;
+        QFile configFile(iniFilePath);
+        QSettings settings(iniFilePath, QSettings::IniFormat);
+        settings.setValue("A_TURN_HIGH_V", static_cast<int>(timingDataBuf[14] * 0.9));
+        settings.setValue("A_TURN_LOW_V", static_cast<int>(timingDataBuf[16] * 1.1));
+        settings.setValue("B_TURN_HIGH_V", static_cast<int>(timingDataBuf[15] * 0.9));
+        settings.setValue("B_TURN_LOW_V", static_cast<int>(timingDataBuf[17] * 1.1));
+        if(isCreated(1))
         {
-            ui->label_9->setStyleSheet(    "QLabel {"
-                                       "    border: none;"
-                                       "    border-radius: 15px;"
-                                       "    background-color: #FFA500;"
-                                       "}");
+            tform1->displayInfo(QString("翻转高压初始化: %1").arg(timingDataBuf[14] * 0.9));
         }
-        if(ac > 0)
-        {
-            ui->label_10->setStyleSheet(    "QLabel {"
-                                       "    border: none;"
-                                       "    border-radius: 15px;"
-                                       "    background-color: #FFA500;"
-                                       "}");
-        }
-
-
-
+        ATurnHighV = timingDataBuf[14] * 0.9;
+        ATurnLowV = timingDataBuf[16] * 1.1;
+        BTurnHighV = timingDataBuf[15] * 0.9;
+        BTurnLowV = timingDataBuf[17] * 1.1;
     }
-    else if(timingDataBuf[3] == 1 || timingDataBuf[3] == 5)
+    //刷新翻转电压
+    ui->lineEditAHigh->setText(QString::number(static_cast<float>(ATurnHighV) / 10, 'f', 1));
+    ui->lineEditBHigh->setText(QString::number(static_cast<float>(BTurnHighV) / 10, 'f', 1));
+    ui->lineEditALow->setText(QString::number(static_cast<float>(ATurnLowV) / 10, 'f', 1));
+    ui->lineEditBLow->setText(QString::number(static_cast<float>(BTurnLowV) / 10, 'f', 1));
+    //实时电压
+    ui->d20->setText(QString::number(static_cast<float>(timingDataBuf[20]) / 10, 'f', 1));
+    ui->d21->setText(QString::number(static_cast<float>(timingDataBuf[21]) / 10, 'f', 1));
+    //实时电流
+    if(deviceType == 0 || deviceType == 1)
     {
-        runningStatusLabel->setText(runningStatus.arg("关闭"));
-        runningStatusLabel->setStyleSheet("QLabel { background-color : #F44336; color : white; }");
-        ui->label_11->setStyleSheet(    "QLabel {"
-                                    "    border: none;"
-                                    "    border-radius: 15px;"
-                                    "    background-color: #F44336;"
-                                    "}");
+        qint16 value = timingDataBuf[22];
+        ui->d22->setText(QString::number(static_cast<float>(value) / 100, 'f', 2));
+        value = timingDataBuf[23];
+        ui->d23->setText(QString::number(static_cast<float>(value) / 100, 'f', 2));
     }
     else
     {
-        runningStatusLabel->setText(runningStatus.arg("未知"));
-        runningStatusLabel->setStyleSheet("QLabel { background-color : #696969; color : white; }");
+        qint16 value = timingDataBuf[22];
+        ui->d22->setText(QString::number(static_cast<float>(value) / 10, 'f', 1));
+        value = timingDataBuf[23];
+        ui->d23->setText(QString::number(static_cast<float>(value) / 10, 'f', 1));
     }
-    //A->B, A欠压或者B过压
-    if(timingDataBuf[2] == 7 && (timingDataBuf[16] >= timingDataBuf[20] || timingDataBuf[15] <= timingDataBuf[21]))
+    //电流方向，循环次数刷新
+    ui->label_25->setText(displayInfo2.arg(cycleNum));
+    qint16 ac = timingDataBuf[22];
+    //手动/自动模式
+    if(timingDataBuf[3] == 0 || timingDataBuf[3] == 4)
     {
+        if(ac < 0)
+        {
+            ui->label_24->setText(displayInfo1.arg("A->B").arg(chargeTime / 3600).arg((chargeTime % 3600) / 60).arg(chargeTime % 60));
+            if(!chargeTimeCountTimer->isActive())
+            {
+                chargeTimeCountTimer->start();
+            }
+        }
+        else if(ac > 0)
+        {
+            ui->label_24->setText(displayInfo1.arg("B->A").arg(chargeTime / 3600).arg((chargeTime % 3600) / 60).arg(chargeTime % 60));
+            if(!chargeTimeCountTimer->isActive())
+            {
+                chargeTimeCountTimer->start();
+            }
+        }
+        else
+        {
+            ui->label_24->setText(displayInfo1.arg("无").arg(0).arg(0).arg(0));
+            if(chargeTimeCountTimer->isActive())
+            {
+                chargeTimeCountTimer->stop();
+            }
+        }
+    }
+    else
+    {
+        ui->label_24->setText(displayInfo1.arg("无").arg(0).arg(0).arg(0));
+        if(chargeTimeCountTimer->isActive())
+        {
+            chargeTimeCountTimer->stop();
+        }
+    }
+
+    //A->B, A实时电压小于翻转低压或者B大于翻转高压
+    if(ac < 0 && (timingDataBuf[20] <= ATurnLowV || timingDataBuf[21] >= BTurnHighV))
+    {
+        qDebug() << "触发翻转";
+        //翻转充电时间重置
+        chargeTime = 0;
         //自动模式，下发B->A
         if(timingDataBuf[3] == 0)
         {
@@ -260,9 +306,12 @@ void MainWindow::refresh()
             manualWriteOneCMDBuild(static_cast<char>(0x00), 0x03, static_cast<char>(0x00), 0x05);
         }
     }
-    //B->A，B欠压或者A过压
-    if(timingDataBuf[2] == 5 && (timingDataBuf[17] >= timingDataBuf[21] || timingDataBuf[14] <= timingDataBuf[20]))
+    //B->A，B实时电压小于翻转低压或者A大于翻转高压
+    if(ac > 0 && (timingDataBuf[21] <= BTurnLowV || timingDataBuf[20] >= ATurnHighV))
     {
+        qDebug() << "触发翻转";
+        //翻转充电时间重置
+        chargeTime = 0;
         //自动模式，下发A->B
         if(timingDataBuf[3] == 0)
         {
@@ -274,26 +323,6 @@ void MainWindow::refresh()
         {
             manualWriteOneCMDBuild(static_cast<char>(0x00), 0x03, static_cast<char>(0x00), 0x05);
         }
-    }
-    //实时电压
-    ui->d20->setText(QString::number(static_cast<float>(timingDataBuf[20]) / 10, 'f', 1));
-    ui->d21->setText(QString::number(static_cast<float>(timingDataBuf[21]) / 10, 'f', 1));
-    ui->d14->setText(QString::number(static_cast<float>(timingDataBuf[14]) / 10, 'f', 1));
-    ui->d15->setText(QString::number(static_cast<float>(timingDataBuf[15]) / 10, 'f', 1));
-    ui->d16->setText(QString::number(static_cast<float>(timingDataBuf[16]) / 10, 'f', 1));
-    ui->d17->setText(QString::number(static_cast<float>(timingDataBuf[17]) / 10, 'f', 1));
-    //电流方向，循环次数刷新
-    if(ac < 0)
-    {
-        ui->label_24->setText(displayInfo.arg("A->B").arg(cycleNum));
-    }
-    else if(ac > 0)
-    {
-        ui->label_24->setText(displayInfo.arg("B->A").arg(cycleNum));
-    }
-    else
-    {
-        ui->label_24->setText(displayInfo.arg("无").arg(cycleNum));
     }
 }
 
@@ -340,6 +369,93 @@ void MainWindow::refresh(int num)
     }
 }
 
+void MainWindow::refreshRunningStatusInfo()
+{
+    if(timingDataBuf[3] == 0)
+    {
+        runningStatusLabel->setText(runningStatus.arg("自动模式"));
+        runningStatusLabel->setStyleSheet("QLabel { background-color : #4CAF50; color : white; }");
+        ui->label_8->setStyleSheet(    "QLabel {"
+                                   "    border: none;"
+                                   "    border-radius: 15px;"
+                                   "    background-color: #4CAF50;"
+                                   "}");
+        ui->label_9->setStyleSheet(    "QLabel {"
+                                   "    border: none;"
+                                   "    border-radius: 15px;"
+                                   "    background-color: gray;"
+                                   "}");
+        ui->label_11->setStyleSheet(    "QLabel {"
+                                    "    border: none;"
+                                    "    border-radius: 15px;"
+                                    "    background-color: gray;"
+                                    "}");
+    }
+    else if(timingDataBuf[3] == 4)
+    {
+        runningStatusLabel->setText(runningStatus.arg("手动模式"));
+        runningStatusLabel->setStyleSheet("QLabel { background-color : #FFA500; color : white; }");
+        ui->label_8->setStyleSheet(    "QLabel {"
+                                   "    border: none;"
+                                   "    border-radius: 15px;"
+                                   "    background-color: gray;"
+                                   "}");
+        ui->label_9->setStyleSheet(    "QLabel {"
+                                   "    border: none;"
+                                   "    border-radius: 15px;"
+                                   "    background-color: #FFA500;"
+                                   "}");
+        ui->label_11->setStyleSheet(    "QLabel {"
+                                    "    border: none;"
+                                    "    border-radius: 15px;"
+                                    "    background-color: gray;"
+                                    "}");
+
+
+
+    }
+    else if(timingDataBuf[3] == 1 || timingDataBuf[3] == 5)
+    {
+        runningStatusLabel->setText(runningStatus.arg("关机"));
+        runningStatusLabel->setStyleSheet("QLabel { background-color : #F44336; color : white; }");
+        ui->label_8->setStyleSheet(    "QLabel {"
+                                   "    border: none;"
+                                   "    border-radius: 15px;"
+                                   "    background-color: gray;"
+                                   "}");
+        ui->label_9->setStyleSheet(    "QLabel {"
+                                   "    border: none;"
+                                   "    border-radius: 15px;"
+                                   "    background-color: gray;"
+                                   "}");
+        ui->label_11->setStyleSheet(    "QLabel {"
+                                    "    border: none;"
+                                    "    border-radius: 15px;"
+                                    "    background-color: #F44336;"
+                                    "}");
+    }
+    else
+    {
+        runningStatusLabel->setText(runningStatus.arg("未知"));
+        runningStatusLabel->setStyleSheet("QLabel { background-color : #696969; color : white; }");
+        ui->label_8->setStyleSheet(    "QLabel {"
+                                   "    border: none;"
+                                   "    border-radius: 15px;"
+                                   "    background-color: gray;"
+                                   "}");
+        ui->label_9->setStyleSheet(    "QLabel {"
+                                   "    border: none;"
+                                   "    border-radius: 15px;"
+                                   "    background-color: gray;"
+                                   "}");
+        ui->label_11->setStyleSheet(    "QLabel {"
+                                    "    border: none;"
+                                    "    border-radius: 15px;"
+                                    "    background-color: gray;"
+                                    "}");
+    }
+}
+
 void MainWindow::refreshAll()
 {
     refresh();
@@ -355,18 +471,24 @@ void MainWindow::loadConfig()
     QString iniFilePath = QDir::currentPath() + "/" + configFileName;
     QFile configFile(iniFilePath);
     QSettings settings(iniFilePath, QSettings::IniFormat);
-    settings.beginGroup("CONFIG");
     //不存在则初始化
     if(!configFile.exists())
     {
         settings.setValue("CYCLE_NUM", 0);
+        settings.setValue("A_TURN_HIGH_V", 0);
+        settings.setValue("A_TURN_LOW_V", 0);
+        settings.setValue("B_TURN_HIGH_V", 0);
+        settings.setValue("B_TURN_LOW_V", 0);
     }
     //加载配置
     else
     {
         cycleNum = settings.value("CYCLE_NUM").toInt();
+        ATurnHighV = settings.value("A_TURN_HIGH_V").toInt();
+        ATurnLowV = settings.value("A_TURN_LOW_V").toInt();
+        BTurnHighV = settings.value("B_TURN_HIGH_V").toInt();
+        BTurnLowV = settings.value("B_TURN_LOW_V").toInt();
     }
-    ui->label_24->setText(displayInfo.arg("无").arg(cycleNum));
 }
 
 void MainWindow::manualWriteOneCMDBuild(char startHigh, char startLow, char valueHigh, char valueLow, quint8 secFlag)
@@ -425,9 +547,7 @@ void MainWindow::manualWriteMultipleCMDBuild(QByteArray buf, quint8 secFlag)
 
 void MainWindow::setAtoB()
 {
-    //设置A的输出电压为欠压的0.9,B的输出电压为过压的1.1
-    int aoutputv = timingDataBuf[16] * 0.9;
-    int boutputv = timingDataBuf[15] * 1.1;
+    //设置A的输出电压翻转低压,B的输出电压为翻转高压
     if(connFlag == 0)
     {
         QMessageBox::information(this, tr("提示"), tr("先建立连接!"));
@@ -443,19 +563,17 @@ void MainWindow::setAtoB()
     //字节数
     buf.append(0x04);
     //写入值A
-    buf.append(static_cast<char>(aoutputv >> 8));
-    buf.append(static_cast<char>(aoutputv & 0xFF));
+    buf.append(static_cast<char>(ATurnLowV >> 8));
+    buf.append(static_cast<char>(ATurnLowV & 0xFF));
     //写入值B
-    buf.append(static_cast<char>(boutputv >> 8));
-    buf.append(static_cast<char>(boutputv & 0xFF));
+    buf.append(static_cast<char>(BTurnHighV >> 8));
+    buf.append(static_cast<char>(BTurnHighV & 0xFF));
     manualWriteMultipleCMDBuild(buf);
 }
 
 void MainWindow::setBtoA()
 {
-    //设置A的输出电压为过压的1.1,B的输出电压为欠压的0.9
-    int aoutputv = timingDataBuf[14] * 1.1;
-    int boutputv = timingDataBuf[17] * 0.9;
+    //设置A翻转高压,B翻转低压
     if(connFlag == 0)
     {
         QMessageBox::information(this, tr("提示"), tr("先建立连接!"));
@@ -471,11 +589,11 @@ void MainWindow::setBtoA()
     //字节数
     buf.append(0x04);
     //写入值A
-    buf.append(static_cast<char>(aoutputv >> 8));
-    buf.append(static_cast<char>(aoutputv & 0xFF));
+    buf.append(static_cast<char>(ATurnHighV >> 8));
+    buf.append(static_cast<char>(ATurnHighV & 0xFF));
     //写入值B
-    buf.append(static_cast<char>(boutputv >> 8));
-    buf.append(static_cast<char>(boutputv & 0xFF));
+    buf.append(static_cast<char>(BTurnLowV >> 8));
+    buf.append(static_cast<char>(BTurnLowV & 0xFF));
     manualWriteMultipleCMDBuild(buf);
 }
 
@@ -761,10 +879,6 @@ bool MainWindow::receiveDataCRCCheck(const QByteArray &data)
     {
         tform1->displayInfo("待校验的下位机数据：" + data.toHex());
     }
-    qDebug() << "cal crc low: " << crcResultArray[0];
-    qDebug() << "cal crc high: " << crcResultArray[1];
-    qDebug() << "data[data.size() - 2]: " << data[data.size() - 2];
-    qDebug() << "data[data.size() - 1]: " << data[data.size() - 1];
     return crcResultArray[0] == data[data.size() - 2] && crcResultArray[1] == data[data.size() - 1];
 }
 
@@ -775,16 +889,9 @@ void MainWindow::dealMessage(const QByteArray &data)
     {
         //更新缓存
         QByteArray dataBuf = data.mid(3, data.size() - 5);
-        qDebug() << "dataBuf: " << dataBuf.toHex();
         for(int i = 0; i < dataBuf.size(); i = i + 2)
         {
             timingDataBuf[i / 2] = static_cast<quint8>(dataBuf.at(i)) * 256 + static_cast<quint8>(dataBuf.at(i + 1));
-            if(i == 40)
-            {
-                qDebug() << "40 : " << static_cast<quint8>(dataBuf.at(i));
-                qDebug() << "41 : " << static_cast<quint8>(dataBuf.at(i + 1));
-                qDebug() << "第二十： " << timingDataBuf[i / 2];
-            }
         }
         refreshAll();
     }
@@ -903,7 +1010,7 @@ void MainWindow::on_pushButton_clicked()
 
 }
 
-//手动模式A->B
+//手动模式
 void MainWindow::on_pushButton_7_clicked()
 {
     if(connFlag == 0)
@@ -911,52 +1018,13 @@ void MainWindow::on_pushButton_7_clicked()
         QMessageBox::information(this, tr("提示"), tr("请先建立连接!"));
         return;
     }
-    if(timingDataBuf[3] == 4 && timingDataBuf[2] == 7)
+    if(timingDataBuf[3] == 4)
     {
-        QMessageBox::information(this, tr("提示"), tr("当前已经是手动模式A->B!"));
+        QMessageBox::information(this, tr("提示"), tr("当前已经是手动模式!"));
         return;
     }
-    if(timingDataBuf[16] >= timingDataBuf[20])
-    {
-        QMessageBox::information(this, tr("提示"), tr("A侧电流欠压，不满足下发条件"));
-        return;
-    }
-    if(timingDataBuf[15] <= timingDataBuf[21])
-    {
-        QMessageBox::information(this, tr("提示"), tr("B侧电流过压，不满足下发条件"));
-        return;
-    }
-    secCmdType = 1;
     //手动模式，
-    manualWriteOneCMDBuild(static_cast<char>(0x00), static_cast<char>(0x03), static_cast<char>(0x00), static_cast<char>(0x04), 1);
-}
-
-//手动B->A
-void MainWindow::on_pushButton_8_clicked()
-{
-    if(connFlag == 0)
-    {
-        QMessageBox::information(this, tr("提示"), tr("请先建立连接!"));
-        return;
-    }
-    if(timingDataBuf[3] == 4 && timingDataBuf[2] == 7)
-    {
-        QMessageBox::information(this, tr("提示"), tr("当前已经是手动模式A->B!"));
-        return;
-    }
-    if(timingDataBuf[16] >= timingDataBuf[20])
-    {
-        QMessageBox::information(this, tr("提示"), tr("A侧电流欠压，不满足下发条件"));
-        return;
-    }
-    if(timingDataBuf[15] <= timingDataBuf[21])
-    {
-        QMessageBox::information(this, tr("提示"), tr("B侧电流过压，不满足下发条件"));
-        return;
-    }
-    secCmdType = 2;
-    //手动模式，
-     manualWriteOneCMDBuild(static_cast<char>(0x00), static_cast<char>(0x03), static_cast<char>(0x00), static_cast<char>(0x04), 1);
+    manualWriteOneCMDBuild(static_cast<char>(0x00), static_cast<char>(0x03), static_cast<char>(0x00), static_cast<char>(0x04));
 }
 
 //手动关闭
@@ -1026,3 +1094,21 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 
     QMainWindow::keyPressEvent(event);  // 保留默认的按键处理
 }
+
+void MainWindow::on_comboBox_3_currentIndexChanged(int index)
+{
+    deviceType = index;
+}
+
+void MainWindow::chargeTimeCountAdd()
+{
+    chargeTime++;
+}
+
+
+void MainWindow::on_pushButton_10_clicked()
+{
+    cycleNum = 0;
+    ui->label_25->setText(displayInfo2.arg(cycleNum));
+}
+

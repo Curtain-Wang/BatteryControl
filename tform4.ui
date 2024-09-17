@@ -6,12 +6,19 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>507</width>
-    <height>352</height>
+    <width>540</width>
+    <height>365</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>实时参数</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QLabel {
+    font-size: 15px;
+    color: #555555;
+    text-align: center;
+}</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
@@ -55,7 +62,8 @@
               <property name="font">
                <font>
                 <family>Microsoft YaHei</family>
-                <bold>true</bold>
+                <pointsize>-1</pointsize>
+                <bold>false</bold>
                </font>
               </property>
               <property name="text">
@@ -99,6 +107,29 @@
               </property>
              </widget>
             </item>
+            <item>
+             <widget class="QLabel" name="label_8">
+              <property name="maximumSize">
+               <size>
+                <width>35</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <family>Microsoft YaHei</family>
+                <pointsize>-1</pointsize>
+                <bold>false</bold>
+               </font>
+              </property>
+              <property name="text">
+               <string>V</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
            </layout>
           </widget>
          </item>
@@ -119,11 +150,12 @@
               <property name="font">
                <font>
                 <family>Microsoft YaHei</family>
-                <bold>true</bold>
+                <pointsize>-1</pointsize>
+                <bold>false</bold>
                </font>
               </property>
               <property name="text">
-               <string>A侧实时输出电流</string>
+               <string>A侧实时电流</string>
               </property>
              </widget>
             </item>
@@ -163,6 +195,29 @@
               </property>
              </widget>
             </item>
+            <item>
+             <widget class="QLabel" name="label_9">
+              <property name="maximumSize">
+               <size>
+                <width>35</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <family>Microsoft YaHei</family>
+                <pointsize>-1</pointsize>
+                <bold>false</bold>
+               </font>
+              </property>
+              <property name="text">
+               <string>A</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
            </layout>
           </widget>
          </item>
@@ -183,11 +238,12 @@
               <property name="font">
                <font>
                 <family>Microsoft YaHei</family>
-                <bold>true</bold>
+                <pointsize>-1</pointsize>
+                <bold>false</bold>
                </font>
               </property>
               <property name="text">
-               <string>A侧输出功率(KW)</string>
+               <string>A侧输出功率</string>
               </property>
              </widget>
             </item>
@@ -227,6 +283,29 @@
               </property>
              </widget>
             </item>
+            <item>
+             <widget class="QLabel" name="label_15">
+              <property name="maximumSize">
+               <size>
+                <width>35</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <family>Microsoft YaHei</family>
+                <pointsize>-1</pointsize>
+                <bold>false</bold>
+               </font>
+              </property>
+              <property name="text">
+               <string>KW</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
            </layout>
           </widget>
          </item>
@@ -247,11 +326,12 @@
               <property name="font">
                <font>
                 <family>Microsoft YaHei</family>
-                <bold>true</bold>
+                <pointsize>-1</pointsize>
+                <bold>false</bold>
                </font>
               </property>
               <property name="text">
-               <string>A侧输出电能(KWh)</string>
+               <string>A侧输出电能</string>
               </property>
              </widget>
             </item>
@@ -291,6 +371,29 @@
               </property>
              </widget>
             </item>
+            <item>
+             <widget class="QLabel" name="label_16">
+              <property name="maximumSize">
+               <size>
+                <width>35</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <family>Microsoft YaHei</family>
+                <pointsize>-1</pointsize>
+                <bold>false</bold>
+               </font>
+              </property>
+              <property name="text">
+               <string>KWh</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
            </layout>
           </widget>
          </item>
@@ -311,7 +414,8 @@
               <property name="font">
                <font>
                 <family>Microsoft YaHei</family>
-                <bold>true</bold>
+                <pointsize>-1</pointsize>
+                <bold>false</bold>
                </font>
               </property>
               <property name="text">
@@ -355,6 +459,29 @@
               </property>
              </widget>
             </item>
+            <item>
+             <widget class="QLabel" name="label_17">
+              <property name="maximumSize">
+               <size>
+                <width>35</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <family>Microsoft YaHei</family>
+                <pointsize>-1</pointsize>
+                <bold>false</bold>
+               </font>
+              </property>
+              <property name="text">
+               <string>℃</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
            </layout>
           </widget>
          </item>
@@ -390,7 +517,8 @@
               <property name="font">
                <font>
                 <family>Microsoft YaHei</family>
-                <bold>true</bold>
+                <pointsize>-1</pointsize>
+                <bold>false</bold>
                </font>
               </property>
               <property name="text">
@@ -434,6 +562,29 @@
               </property>
              </widget>
             </item>
+            <item>
+             <widget class="QLabel" name="label_18">
+              <property name="maximumSize">
+               <size>
+                <width>35</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <family>Microsoft YaHei</family>
+                <pointsize>-1</pointsize>
+                <bold>false</bold>
+               </font>
+              </property>
+              <property name="text">
+               <string>V</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
            </layout>
           </widget>
          </item>
@@ -454,11 +605,12 @@
               <property name="font">
                <font>
                 <family>Microsoft YaHei</family>
-                <bold>true</bold>
+                <pointsize>-1</pointsize>
+                <bold>false</bold>
                </font>
               </property>
               <property name="text">
-               <string>B侧实时输出电流</string>
+               <string>B侧实时电流</string>
               </property>
              </widget>
             </item>
@@ -498,6 +650,29 @@
               </property>
              </widget>
             </item>
+            <item>
+             <widget class="QLabel" name="label_19">
+              <property name="maximumSize">
+               <size>
+                <width>35</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <family>Microsoft YaHei</family>
+                <pointsize>-1</pointsize>
+                <bold>false</bold>
+               </font>
+              </property>
+              <property name="text">
+               <string>A</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
            </layout>
           </widget>
          </item>
@@ -518,11 +693,12 @@
               <property name="font">
                <font>
                 <family>Microsoft YaHei</family>
-                <bold>true</bold>
+                <pointsize>-1</pointsize>
+                <bold>false</bold>
                </font>
               </property>
               <property name="text">
-               <string>B侧输出功率(KW)</string>
+               <string>B侧输出功率</string>
               </property>
              </widget>
             </item>
@@ -562,6 +738,29 @@
               </property>
              </widget>
             </item>
+            <item>
+             <widget class="QLabel" name="label_20">
+              <property name="maximumSize">
+               <size>
+                <width>35</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <family>Microsoft YaHei</family>
+                <pointsize>-1</pointsize>
+                <bold>false</bold>
+               </font>
+              </property>
+              <property name="text">
+               <string>KW</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
            </layout>
           </widget>
          </item>
@@ -582,11 +781,12 @@
               <property name="font">
                <font>
                 <family>Microsoft YaHei</family>
-                <bold>true</bold>
+                <pointsize>-1</pointsize>
+                <bold>false</bold>
                </font>
               </property>
               <property name="text">
-               <string>B侧输出电能(KWh)</string>
+               <string>B侧输出电能</string>
               </property>
              </widget>
             </item>
@@ -626,6 +826,29 @@
               </property>
              </widget>
             </item>
+            <item>
+             <widget class="QLabel" name="label_21">
+              <property name="maximumSize">
+               <size>
+                <width>35</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <family>Microsoft YaHei</family>
+                <pointsize>-1</pointsize>
+                <bold>false</bold>
+               </font>
+              </property>
+              <property name="text">
+               <string>KWh</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
            </layout>
           </widget>
          </item>
@@ -646,7 +869,8 @@
               <property name="font">
                <font>
                 <family>Microsoft YaHei</family>
-                <bold>true</bold>
+                <pointsize>-1</pointsize>
+                <bold>false</bold>
                </font>
               </property>
               <property name="text">
@@ -687,6 +911,29 @@
               </property>
               <property name="readOnly">
                <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_22">
+              <property name="maximumSize">
+               <size>
+                <width>32</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <family>Microsoft YaHei</family>
+                <pointsize>-1</pointsize>
+                <bold>false</bold>
+               </font>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
               </property>
              </widget>
             </item>

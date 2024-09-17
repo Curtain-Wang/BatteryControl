@@ -36,6 +36,7 @@ public:
     void sendGetAllDataCMD();
     void refresh();
     void refresh(int num);
+    void refreshRunningStatusInfo();
     void refreshAll();
     void loadConfig();
     void manualReadCMDBuild(char startHigh, char startLow, char numHigh, char numLow);
@@ -62,13 +63,17 @@ private slots:
 
     void on_pushButton_7_clicked();
 
-    void on_pushButton_8_clicked();
-
     void on_pushButton_9_clicked();
 
     void resetKeyPressCount();  // 重置空格键按下计数
 
     void onEditingFinished();
+
+    void on_comboBox_3_currentIndexChanged(int index);
+
+    void chargeTimeCountAdd();
+
+    void on_pushButton_10_clicked();
 
 private:
     Ui::MainWindow *ui;
@@ -82,8 +87,11 @@ private:
     QTimer* timer1 = nullptr;
     QTimer* sendTimer = nullptr;
     QTimer* receiveTimer = nullptr;
+    QTimer* chargeTimeCountTimer = nullptr;
     QLabel* connectStatusLabel;
     QLabel* runningStatusLabel;
+    QLabel* companyNameLabel;
+    QLabel* companyImageLabel;
     int dataRefreshStep = 1;
     int spaceKeyPressCount = 0; // 空格键按下次数
     QTimer *resetTimer;     // 用于重置按键计数的定时器

@@ -15,9 +15,11 @@ public:
     explicit TForm5(QWidget *parent = nullptr);
     ~TForm5();
     void refresh();
-    void connectAll();
-private slots:
-    void onEditingFinished();
+    // void connectAll();
+// private slots:
+//     void onEditingFinished();
+//     void on_lineEditAHigh_editingFinished();
+
 private:
     Ui::TForm5 *ui;
 };

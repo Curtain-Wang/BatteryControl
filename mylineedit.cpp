@@ -23,10 +23,18 @@ void MyLineEdit::mousePressEvent(QMouseEvent *event)
     emit clicked();
 
     // 你可以在这里添加更多点击处理逻辑
-    qDebug() << "LineEdit clicked!";
+    qDebug() << objectName()<< "LineEdit clicked!";
 
-    // editAddrLow = objectName().mid(1).toInt();
-    editAddrLow = objectName().mid(1).toInt();
+    if(objectName() == "lineEditAHigh" || objectName() == "lineEditALow"
+        || objectName() == "lineEditBHigh" || objectName() == "lineEditBLow")
+    {
+        editAddrLow = -1;
+        lineEditName = objectName();
+    }
+    else
+    {
+        editAddrLow = objectName().mid(1).toInt();
+    }
     if(tform7 == nullptr)
     {
         tform7 = new TForm7(this);

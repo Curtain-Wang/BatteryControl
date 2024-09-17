@@ -13,9 +13,11 @@ class TForm7 : public QWidget
 public:
     explicit TForm7(QWidget *parent = nullptr);
     ~TForm7();
-
+    void updateTurnV(quint8 type, quint16 value);
 private slots:
-    void on_lineEdit_editingFinished();
+    // void on_lineEdit_editingFinished();
+
+    void on_lineEdit_returnPressed();
 
 private:
     Ui::TForm7 *ui;
