@@ -127,6 +127,21 @@ void MainWindow::init()
     companyNameLabel->setMinimumWidth(350);
     ui->statusBar->addPermanentWidget(companyNameLabel);
 
+    QPixmap pixmapA(":/icons/images/A.png");  // 加载图片
+    ui->labelA->setPixmap(pixmapA);
+    ui->labelA->setFixedSize(40, 40);
+    ui->labelA->setScaledContents(true);
+
+    QPixmap pixmapB(":/icons/images/B.png");  // 加载图片
+    ui->labelB->setPixmap(pixmapB);
+    ui->labelB->setFixedSize(40, 40);
+    ui->labelB->setScaledContents(true);
+
+    QPixmap pixmapArrow(":/icons/images/x.png");  // 加载图片
+    ui->labelArrow->setPixmap(pixmapArrow);
+    ui->labelArrow->setFixedSize(40, 40);
+    ui->labelArrow->setScaledContents(true);
+
     //加载配置文件
     loadConfig();
     // 创建定时器，用于在一段时间后重置按键计数
@@ -208,18 +223,6 @@ void MainWindow::refresh()
     //翻转电压初始化
     if(ATurnHighV == 0 && timingDataBuf[14] != 0)
     {
-        QString configFileName = "config.ini";
-        QString iniFilePath = QDir::currentPath() + "/" + configFileName;
-        QFile configFile(iniFilePath);
-        QSettings settings(iniFilePath, QSettings::IniFormat);
-        settings.setValue("A_TURN_HIGH_V", static_cast<int>(timingDataBuf[14] * 0.9));
-        settings.setValue("A_TURN_LOW_V", static_cast<int>(timingDataBuf[16] * 1.1));
-        settings.setValue("B_TURN_HIGH_V", static_cast<int>(timingDataBuf[15] * 0.9));
-        settings.setValue("B_TURN_LOW_V", static_cast<int>(timingDataBuf[17] * 1.1));
-        if(isCreated(1))
-        {
-            tform1->displayInfo(QString("翻转高压初始化: %1").arg(timingDataBuf[14] * 0.9));
-        }
         ATurnHighV = timingDataBuf[14] * 0.9;
         ATurnLowV = timingDataBuf[16] * 1.1;
         BTurnHighV = timingDataBuf[15] * 0.9;
@@ -233,6 +236,14 @@ void MainWindow::refresh()
     //实时电压
     ui->d20->setText(QString::number(static_cast<float>(timingDataBuf[20]) / 10, 'f', 1));
     ui->d21->setText(QString::number(static_cast<float>(timingDataBuf[21]) / 10, 'f', 1));
+    //设置仪表盘
+    ui->tPScaleA->setHighest(ATurnHighV <= 0 ? 60 : static_cast<double>(ATurnHighV) / 10);
+    ui->tPScaleA->setLowest(static_cast<double>(ATurnLowV) / 10);
+    ui->tPScaleA->setLevel(static_cast<double>(timingDataBuf[20]) / 10);
+
+    ui->tPScaleB->setHighest(BTurnHighV <= 0 ? 60 :  static_cast<double>(BTurnHighV) / 10);
+    ui->tPScaleB->setLowest(static_cast<double>(BTurnLowV) / 10);
+    ui->tPScaleB->setLevel(static_cast<double>(timingDataBuf[21]) / 10);
     //实时电流
     if(deviceType == 0 || deviceType == 1)
     {
@@ -256,7 +267,11 @@ void MainWindow::refresh()
     {
         if(ac < 0)
         {
-            ui->label_24->setText(displayInfo1.arg("A->B").arg(chargeTime / 3600).arg((chargeTime % 3600) / 60).arg(chargeTime % 60));
+            ui->label_24->setText(displayInfo1.arg(chargeTime / 3600).arg((chargeTime % 3600) / 60).arg(chargeTime % 60));
+            QPixmap pixmapArrow(":/icons/images/right.png");  // 加载图片
+            ui->labelArrow->setPixmap(pixmapArrow);
+            ui->labelArrow->setFixedSize(40, 40);
+            ui->labelArrow->setScaledContents(true);
             if(!chargeTimeCountTimer->isActive())
             {
                 chargeTimeCountTimer->start();
@@ -264,7 +279,11 @@ void MainWindow::refresh()
         }
         else if(ac > 0)
         {
-            ui->label_24->setText(displayInfo1.arg("B->A").arg(chargeTime / 3600).arg((chargeTime % 3600) / 60).arg(chargeTime % 60));
+            ui->label_24->setText(displayInfo1.arg(chargeTime / 3600).arg((chargeTime % 3600) / 60).arg(chargeTime % 60));
+            QPixmap pixmapArrow(":/icons/images/left.png");  // 加载图片
+            ui->labelArrow->setPixmap(pixmapArrow);
+            ui->labelArrow->setFixedSize(40, 40);
+            ui->labelArrow->setScaledContents(true);
             if(!chargeTimeCountTimer->isActive())
             {
                 chargeTimeCountTimer->start();
@@ -272,7 +291,11 @@ void MainWindow::refresh()
         }
         else
         {
-            ui->label_24->setText(displayInfo1.arg("无").arg(0).arg(0).arg(0));
+            ui->label_24->setText(displayInfo1.arg(0).arg(0).arg(0));
+            QPixmap pixmapArrow(":/icons/images/x.png");  // 加载图片
+            ui->labelArrow->setPixmap(pixmapArrow);
+            ui->labelArrow->setFixedSize(40, 40);
+            ui->labelArrow->setScaledContents(true);
             if(chargeTimeCountTimer->isActive())
             {
                 chargeTimeCountTimer->stop();
@@ -281,7 +304,11 @@ void MainWindow::refresh()
     }
     else
     {
-        ui->label_24->setText(displayInfo1.arg("无").arg(0).arg(0).arg(0));
+        ui->label_24->setText(displayInfo1.arg(0).arg(0).arg(0));
+        QPixmap pixmapArrow(":/icons/images/x.png");  // 加载图片
+        ui->labelArrow->setPixmap(pixmapArrow);
+        ui->labelArrow->setFixedSize(40, 40);
+        ui->labelArrow->setScaledContents(true);
         if(chargeTimeCountTimer->isActive())
         {
             chargeTimeCountTimer->stop();
@@ -471,17 +498,8 @@ void MainWindow::loadConfig()
     QString iniFilePath = QDir::currentPath() + "/" + configFileName;
     QFile configFile(iniFilePath);
     QSettings settings(iniFilePath, QSettings::IniFormat);
-    //不存在则初始化
-    if(!configFile.exists())
-    {
-        settings.setValue("CYCLE_NUM", 0);
-        settings.setValue("A_TURN_HIGH_V", 0);
-        settings.setValue("A_TURN_LOW_V", 0);
-        settings.setValue("B_TURN_HIGH_V", 0);
-        settings.setValue("B_TURN_LOW_V", 0);
-    }
     //加载配置
-    else
+    if(configFile.exists())
     {
         cycleNum = settings.value("CYCLE_NUM").toInt();
         ATurnHighV = settings.value("A_TURN_HIGH_V").toInt();
@@ -671,7 +689,6 @@ void MainWindow::onReceiveTimerTimeout()
     {
         return;
     }
-
     cacheReceiveData();
     //当缓冲区的消息长度大于messageSize，那说明可能存在一条完整的响应
     while ((receiveEndIndex + 500 - receiveStartIndex) % 500 >= 6) {
@@ -887,6 +904,8 @@ void MainWindow::dealMessage(const QByteArray &data)
     //查询所有的命令
     if(data[1] == READ_CMD)
     {
+        //清空等待时间
+        waitMessageRemaingTime = 0;
         //更新缓存
         QByteArray dataBuf = data.mid(3, data.size() - 5);
         for(int i = 0; i < dataBuf.size(); i = i + 2)
@@ -895,13 +914,16 @@ void MainWindow::dealMessage(const QByteArray &data)
         }
         refreshAll();
     }
-    if(data[1] == WRITE_ONE_CMD)
+    else if(data[1] == WRITE_ONE_CMD)
     {
-        //写入命令返回，暂时没有处理逻辑
+        //写入命令返回，立刻回显
+        sendGetAllDataCMD();
+
     }
-    if(data[1] == WRITE_MULTIPLE_CMD)
+    else if(data[1] == WRITE_MULTIPLE_CMD)
     {
-        //多个写入命令返回，暂时没有处理逻辑
+        //多个写入命令返回，暂时没有处理逻辑、
+        waitMessageRemaingTime = 0;
     }
 }
 
@@ -1093,6 +1115,20 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
     }
 
     QMainWindow::keyPressEvent(event);  // 保留默认的按键处理
+}
+
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    //刷新配置
+    QString configFileName = "config.ini";
+    QString iniFilePath = QDir::currentPath() + "/" + configFileName;
+    QFile configFile(iniFilePath);
+    QSettings settings(iniFilePath, QSettings::IniFormat);
+    settings.setValue("A_TURN_HIGH_V", ATurnHighV);
+    settings.setValue("A_TURN_LOW_V", ATurnLowV);
+    settings.setValue("B_TURN_HIGH_V", BTurnHighV);
+    settings.setValue("B_TURN_LOW_V", BTurnLowV);
+    settings.setValue("CYCLE_NUM", cycleNum);
 }
 
 void MainWindow::on_comboBox_3_currentIndexChanged(int index)

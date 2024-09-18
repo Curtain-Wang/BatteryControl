@@ -100,6 +100,10 @@ private:
     // QWidget interface
 protected:
     virtual void keyPressEvent(QKeyEvent *event) override;
+
+    // QWidget interface
+protected:
+    void closeEvent(QCloseEvent *event);
 };
 
 #endif // MAINWINDOW_H

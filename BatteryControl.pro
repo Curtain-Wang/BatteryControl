@@ -52,3 +52,9 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 RESOURCES += \
     res.qrc
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/include/ -ltpscaleplugin
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/include/ -ltpscaleplugind
+
+INCLUDEPATH += $$PWD/include
+DEPENDPATH += $$PWD/include

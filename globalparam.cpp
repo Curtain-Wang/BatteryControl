@@ -24,7 +24,7 @@ QByteArray manualSendDataBuf;
 int connFlag = 0;
 int cycleNum = 0;
 const int BR = 19200;
-QString displayInfo1 = "电流方向：%1，此次充电时间：%2 h  %3 m  %4 s";
+QString displayInfo1 = "此次充电时间：%1 h  %2 m  %3 s";
 QString displayInfo2 = "翻转次数：%1";
 QString connStatus = "连接状态：%1";
 QString runningStatus = "运行模式：%1";

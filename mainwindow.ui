@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1045</width>
-    <height>678</height>
+    <height>746</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -66,7 +66,7 @@ QStatusBar {
 </string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout_7">
+   <layout class="QVBoxLayout" name="verticalLayout_11">
     <item>
      <widget class="QGroupBox" name="groupBox_33">
       <property name="minimumSize">
@@ -583,7 +583,7 @@ QPushButton:pressed {
      </spacer>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_14">
+     <layout class="QHBoxLayout" name="horizontalLayout_21">
       <item>
        <spacer name="horizontalSpacer">
         <property name="orientation">
@@ -591,8 +591,8 @@ QPushButton:pressed {
         </property>
         <property name="sizeHint" stdset="0">
          <size>
-          <width>58</width>
-          <height>373</height>
+          <width>48</width>
+          <height>20</height>
          </size>
         </property>
        </spacer>
@@ -602,7 +602,7 @@ QPushButton:pressed {
         <property name="minimumSize">
          <size>
           <width>731</width>
-          <height>0</height>
+          <height>571</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -614,9 +614,15 @@ QPushButton:pressed {
         <property name="title">
          <string/>
         </property>
-        <layout class="QVBoxLayout" name="verticalLayout_5">
+        <layout class="QVBoxLayout" name="verticalLayout_10">
          <item>
           <widget class="QGroupBox" name="groupBox_12">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>314</height>
+            </size>
+           </property>
            <property name="styleSheet">
             <string notr="true">QGroupBox {
     background-color: #f8f8f8;
@@ -627,7 +633,7 @@ QPushButton:pressed {
            <property name="title">
             <string/>
            </property>
-           <layout class="QHBoxLayout" name="horizontalLayout_11">
+           <layout class="QHBoxLayout" name="horizontalLayout_20">
             <item>
              <widget class="QGroupBox" name="groupBox_2">
               <property name="styleSheet">
@@ -640,7 +646,7 @@ QPushButton:pressed {
               <property name="title">
                <string/>
               </property>
-              <layout class="QVBoxLayout" name="verticalLayout">
+              <layout class="QVBoxLayout" name="verticalLayout_7">
                <item>
                 <widget class="QLabel" name="label">
                  <property name="font">
@@ -658,304 +664,369 @@ QPushButton:pressed {
                 </widget>
                </item>
                <item>
-                <widget class="QGroupBox" name="groupBox_3">
-                 <property name="styleSheet">
-                  <string notr="true">QGroupBox {
+                <layout class="QHBoxLayout" name="horizontalLayout_11">
+                 <item>
+                  <layout class="QVBoxLayout" name="verticalLayout_5">
+                   <item>
+                    <widget class="TPScale" name="tPScaleA">
+                     <property name="minimumSize">
+                      <size>
+                       <width>110</width>
+                       <height>200</height>
+                      </size>
+                     </property>
+                     <property name="highest">
+                      <double>60.000000000000000</double>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="label_27">
+                     <property name="minimumSize">
+                      <size>
+                       <width>0</width>
+                       <height>40</height>
+                      </size>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>16777215</width>
+                       <height>40</height>
+                      </size>
+                     </property>
+                     <property name="font">
+                      <font>
+                       <family>Microsoft YaHei</family>
+                       <pointsize>-1</pointsize>
+                      </font>
+                     </property>
+                     <property name="styleSheet">
+                      <string notr="true">QLabel#label_22 {
+    color: #555555;
+    background-color: #eeeeee;
+    padding: 10px;
+    border-radius: 5px;
+    font-family: &quot;Microsoft YaHei&quot;;
+    font-size: 15px;
+    text-align: center;
+}
+</string>
+                     </property>
+                     <property name="text">
+                      <string>实时电压</string>
+                     </property>
+                     <property name="alignment">
+                      <set>Qt::AlignCenter</set>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                 <item>
+                  <layout class="QVBoxLayout" name="verticalLayout">
+                   <item>
+                    <widget class="QGroupBox" name="groupBox_3">
+                     <property name="styleSheet">
+                      <string notr="true">QGroupBox {
     border: none;
 }
 </string>
-                 </property>
-                 <property name="title">
-                  <string/>
-                 </property>
-                 <layout class="QHBoxLayout" name="horizontalLayout">
-                  <item>
-                   <widget class="QLabel" name="label_2">
-                    <property name="minimumSize">
-                     <size>
-                      <width>90</width>
-                      <height>0</height>
-                     </size>
-                    </property>
-                    <property name="font">
-                     <font>
-                      <family>Microsoft YaHei</family>
-                      <pointsize>-1</pointsize>
-                     </font>
-                    </property>
-                    <property name="text">
-                     <string>翻转高压</string>
-                    </property>
-                    <property name="alignment">
-                     <set>Qt::AlignCenter</set>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLineEdit" name="lineEditAHigh">
-                    <property name="minimumSize">
-                     <size>
-                      <width>0</width>
-                      <height>30</height>
-                     </size>
-                    </property>
-                    <property name="styleSheet">
-                     <string notr="true">QLineEdit {
+                     </property>
+                     <property name="title">
+                      <string/>
+                     </property>
+                     <layout class="QHBoxLayout" name="horizontalLayout">
+                      <item>
+                       <widget class="QLabel" name="label_2">
+                        <property name="minimumSize">
+                         <size>
+                          <width>90</width>
+                          <height>0</height>
+                         </size>
+                        </property>
+                        <property name="font">
+                         <font>
+                          <family>Microsoft YaHei</family>
+                          <pointsize>-1</pointsize>
+                         </font>
+                        </property>
+                        <property name="text">
+                         <string>翻转高压</string>
+                        </property>
+                        <property name="alignment">
+                         <set>Qt::AlignCenter</set>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QLineEdit" name="lineEditAHigh">
+                        <property name="minimumSize">
+                         <size>
+                          <width>0</width>
+                          <height>30</height>
+                         </size>
+                        </property>
+                        <property name="styleSheet">
+                         <string notr="true">QLineEdit {
     border: 1px solid #bbbbbb;
     border-radius: 3px;
     padding: 5px;
     height: 20px; /* 控制输入框的高度 */
 }
 </string>
-                    </property>
-                    <property name="readOnly">
-                     <bool>true</bool>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLabel" name="label_3">
-                    <property name="font">
-                     <font>
-                      <family>Microsoft YaHei</family>
-                      <pointsize>-1</pointsize>
-                     </font>
-                    </property>
-                    <property name="text">
-                     <string>V</string>
-                    </property>
-                    <property name="alignment">
-                     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </widget>
-               </item>
-               <item>
-                <widget class="QGroupBox" name="groupBox_5">
-                 <property name="styleSheet">
-                  <string notr="true">QGroupBox {
+                        </property>
+                        <property name="readOnly">
+                         <bool>true</bool>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QLabel" name="label_3">
+                        <property name="font">
+                         <font>
+                          <family>Microsoft YaHei</family>
+                          <pointsize>-1</pointsize>
+                         </font>
+                        </property>
+                        <property name="text">
+                         <string>V</string>
+                        </property>
+                        <property name="alignment">
+                         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QGroupBox" name="groupBox_5">
+                     <property name="styleSheet">
+                      <string notr="true">QGroupBox {
     border: none;
 }
 </string>
-                 </property>
-                 <property name="title">
-                  <string/>
-                 </property>
-                 <layout class="QHBoxLayout" name="horizontalLayout_3">
-                  <item>
-                   <widget class="QLabel" name="label_6">
-                    <property name="minimumSize">
-                     <size>
-                      <width>90</width>
-                      <height>0</height>
-                     </size>
-                    </property>
-                    <property name="font">
-                     <font>
-                      <family>Microsoft YaHei</family>
-                      <pointsize>-1</pointsize>
-                     </font>
-                    </property>
-                    <property name="text">
-                     <string>翻转低压</string>
-                    </property>
-                    <property name="alignment">
-                     <set>Qt::AlignCenter</set>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLineEdit" name="lineEditALow">
-                    <property name="minimumSize">
-                     <size>
-                      <width>0</width>
-                      <height>30</height>
-                     </size>
-                    </property>
-                    <property name="styleSheet">
-                     <string notr="true">QLineEdit {
+                     </property>
+                     <property name="title">
+                      <string/>
+                     </property>
+                     <layout class="QHBoxLayout" name="horizontalLayout_3">
+                      <item>
+                       <widget class="QLabel" name="label_6">
+                        <property name="minimumSize">
+                         <size>
+                          <width>90</width>
+                          <height>0</height>
+                         </size>
+                        </property>
+                        <property name="font">
+                         <font>
+                          <family>Microsoft YaHei</family>
+                          <pointsize>-1</pointsize>
+                         </font>
+                        </property>
+                        <property name="text">
+                         <string>翻转低压</string>
+                        </property>
+                        <property name="alignment">
+                         <set>Qt::AlignCenter</set>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QLineEdit" name="lineEditALow">
+                        <property name="minimumSize">
+                         <size>
+                          <width>0</width>
+                          <height>30</height>
+                         </size>
+                        </property>
+                        <property name="styleSheet">
+                         <string notr="true">QLineEdit {
     border: 1px solid #bbbbbb;
     border-radius: 3px;
     padding: 5px;
     height: 20px; /* 控制输入框的高度 */
 }
 </string>
-                    </property>
-                    <property name="readOnly">
-                     <bool>true</bool>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLabel" name="label_7">
-                    <property name="font">
-                     <font>
-                      <family>Microsoft YaHei</family>
-                      <pointsize>-1</pointsize>
-                     </font>
-                    </property>
-                    <property name="text">
-                     <string>V</string>
-                    </property>
-                    <property name="alignment">
-                     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </widget>
-               </item>
-               <item>
-                <widget class="QGroupBox" name="groupBox_4">
-                 <property name="styleSheet">
-                  <string notr="true">QGroupBox {
+                        </property>
+                        <property name="readOnly">
+                         <bool>true</bool>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QLabel" name="label_7">
+                        <property name="font">
+                         <font>
+                          <family>Microsoft YaHei</family>
+                          <pointsize>-1</pointsize>
+                         </font>
+                        </property>
+                        <property name="text">
+                         <string>V</string>
+                        </property>
+                        <property name="alignment">
+                         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QGroupBox" name="groupBox_4">
+                     <property name="styleSheet">
+                      <string notr="true">QGroupBox {
     border: none;
 }
 </string>
-                 </property>
-                 <property name="title">
-                  <string/>
-                 </property>
-                 <layout class="QHBoxLayout" name="horizontalLayout_2">
-                  <item>
-                   <widget class="QLabel" name="label_4">
-                    <property name="minimumSize">
-                     <size>
-                      <width>90</width>
-                      <height>0</height>
-                     </size>
-                    </property>
-                    <property name="font">
-                     <font>
-                      <family>Microsoft YaHei</family>
-                      <pointsize>-1</pointsize>
-                     </font>
-                    </property>
-                    <property name="text">
-                     <string>实时电压</string>
-                    </property>
-                    <property name="alignment">
-                     <set>Qt::AlignCenter</set>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLineEdit" name="d20">
-                    <property name="minimumSize">
-                     <size>
-                      <width>0</width>
-                      <height>30</height>
-                     </size>
-                    </property>
-                    <property name="styleSheet">
-                     <string notr="true">QLineEdit {
+                     </property>
+                     <property name="title">
+                      <string/>
+                     </property>
+                     <layout class="QHBoxLayout" name="horizontalLayout_2">
+                      <item>
+                       <widget class="QLabel" name="label_4">
+                        <property name="minimumSize">
+                         <size>
+                          <width>90</width>
+                          <height>0</height>
+                         </size>
+                        </property>
+                        <property name="font">
+                         <font>
+                          <family>Microsoft YaHei</family>
+                          <pointsize>-1</pointsize>
+                         </font>
+                        </property>
+                        <property name="text">
+                         <string>实时电压</string>
+                        </property>
+                        <property name="alignment">
+                         <set>Qt::AlignCenter</set>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QLineEdit" name="d20">
+                        <property name="minimumSize">
+                         <size>
+                          <width>0</width>
+                          <height>30</height>
+                         </size>
+                        </property>
+                        <property name="styleSheet">
+                         <string notr="true">QLineEdit {
     border: 1px solid #bbbbbb;
     border-radius: 3px;
     padding: 5px;
     height: 20px; /* 控制输入框的高度 */
 }
 </string>
-                    </property>
-                    <property name="readOnly">
-                     <bool>true</bool>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLabel" name="label_5">
-                    <property name="font">
-                     <font>
-                      <family>Microsoft YaHei</family>
-                      <pointsize>-1</pointsize>
-                     </font>
-                    </property>
-                    <property name="text">
-                     <string>V</string>
-                    </property>
-                    <property name="alignment">
-                     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </widget>
-               </item>
-               <item>
-                <widget class="QGroupBox" name="groupBox_8">
-                 <property name="styleSheet">
-                  <string notr="true">QGroupBox {
+                        </property>
+                        <property name="readOnly">
+                         <bool>true</bool>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QLabel" name="label_5">
+                        <property name="font">
+                         <font>
+                          <family>Microsoft YaHei</family>
+                          <pointsize>-1</pointsize>
+                         </font>
+                        </property>
+                        <property name="text">
+                         <string>V</string>
+                        </property>
+                        <property name="alignment">
+                         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QGroupBox" name="groupBox_8">
+                     <property name="styleSheet">
+                      <string notr="true">QGroupBox {
     border: none;
 }
 </string>
-                 </property>
-                 <property name="title">
-                  <string/>
-                 </property>
-                 <layout class="QHBoxLayout" name="horizontalLayout_10">
-                  <item>
-                   <widget class="QLabel" name="label_10">
-                    <property name="minimumSize">
-                     <size>
-                      <width>90</width>
-                      <height>0</height>
-                     </size>
-                    </property>
-                    <property name="font">
-                     <font>
-                      <family>Microsoft YaHei</family>
-                      <pointsize>-1</pointsize>
-                     </font>
-                    </property>
-                    <property name="text">
-                     <string>实时电流</string>
-                    </property>
-                    <property name="alignment">
-                     <set>Qt::AlignCenter</set>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLineEdit" name="d22">
-                    <property name="minimumSize">
-                     <size>
-                      <width>0</width>
-                      <height>30</height>
-                     </size>
-                    </property>
-                    <property name="styleSheet">
-                     <string notr="true">QLineEdit {
+                     </property>
+                     <property name="title">
+                      <string/>
+                     </property>
+                     <layout class="QHBoxLayout" name="horizontalLayout_10">
+                      <item>
+                       <widget class="QLabel" name="label_10">
+                        <property name="minimumSize">
+                         <size>
+                          <width>90</width>
+                          <height>0</height>
+                         </size>
+                        </property>
+                        <property name="font">
+                         <font>
+                          <family>Microsoft YaHei</family>
+                          <pointsize>-1</pointsize>
+                         </font>
+                        </property>
+                        <property name="text">
+                         <string>实时电流</string>
+                        </property>
+                        <property name="alignment">
+                         <set>Qt::AlignCenter</set>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QLineEdit" name="d22">
+                        <property name="minimumSize">
+                         <size>
+                          <width>0</width>
+                          <height>30</height>
+                         </size>
+                        </property>
+                        <property name="styleSheet">
+                         <string notr="true">QLineEdit {
     border: 1px solid #bbbbbb;
     border-radius: 3px;
     padding: 5px;
     height: 20px; /* 控制输入框的高度 */
 }
 </string>
-                    </property>
-                    <property name="readOnly">
-                     <bool>true</bool>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLabel" name="label_12">
-                    <property name="font">
-                     <font>
-                      <family>Microsoft YaHei</family>
-                      <pointsize>-1</pointsize>
-                     </font>
-                    </property>
-                    <property name="text">
-                     <string>A</string>
-                    </property>
-                    <property name="alignment">
-                     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </widget>
+                        </property>
+                        <property name="readOnly">
+                         <bool>true</bool>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QLabel" name="label_12">
+                        <property name="font">
+                         <font>
+                          <family>Microsoft YaHei</family>
+                          <pointsize>-1</pointsize>
+                         </font>
+                        </property>
+                        <property name="text">
+                         <string>A</string>
+                        </property>
+                        <property name="alignment">
+                         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
                </item>
               </layout>
              </widget>
@@ -972,7 +1043,7 @@ QPushButton:pressed {
               <property name="title">
                <string/>
               </property>
-              <layout class="QVBoxLayout" name="verticalLayout_2">
+              <layout class="QVBoxLayout" name="verticalLayout_9">
                <item>
                 <widget class="QLabel" name="label_15">
                  <property name="font">
@@ -990,333 +1061,348 @@ QPushButton:pressed {
                 </widget>
                </item>
                <item>
-                <widget class="QGroupBox" name="groupBox_9">
-                 <property name="styleSheet">
-                  <string notr="true">QGroupBox {
+                <layout class="QHBoxLayout" name="horizontalLayout_19">
+                 <item>
+                  <layout class="QVBoxLayout" name="verticalLayout_2">
+                   <item>
+                    <widget class="QGroupBox" name="groupBox_9">
+                     <property name="styleSheet">
+                      <string notr="true">QGroupBox {
     border: none;
 }
 </string>
-                 </property>
-                 <property name="title">
-                  <string/>
-                 </property>
-                 <layout class="QHBoxLayout" name="horizontalLayout_7">
-                  <item>
-                   <widget class="QLabel" name="label_16">
-                    <property name="minimumSize">
-                     <size>
-                      <width>90</width>
-                      <height>0</height>
-                     </size>
-                    </property>
-                    <property name="font">
-                     <font>
-                      <family>Microsoft YaHei</family>
-                      <pointsize>-1</pointsize>
-                     </font>
-                    </property>
-                    <property name="text">
-                     <string>翻转高压</string>
-                    </property>
-                    <property name="alignment">
-                     <set>Qt::AlignCenter</set>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLineEdit" name="lineEditBHigh">
-                    <property name="minimumSize">
-                     <size>
-                      <width>0</width>
-                      <height>30</height>
-                     </size>
-                    </property>
-                    <property name="styleSheet">
-                     <string notr="true">QLineEdit {
+                     </property>
+                     <property name="title">
+                      <string/>
+                     </property>
+                     <layout class="QHBoxLayout" name="horizontalLayout_7">
+                      <item>
+                       <widget class="QLabel" name="label_16">
+                        <property name="minimumSize">
+                         <size>
+                          <width>90</width>
+                          <height>0</height>
+                         </size>
+                        </property>
+                        <property name="font">
+                         <font>
+                          <family>Microsoft YaHei</family>
+                          <pointsize>-1</pointsize>
+                         </font>
+                        </property>
+                        <property name="text">
+                         <string>翻转高压</string>
+                        </property>
+                        <property name="alignment">
+                         <set>Qt::AlignCenter</set>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QLineEdit" name="lineEditBHigh">
+                        <property name="minimumSize">
+                         <size>
+                          <width>0</width>
+                          <height>30</height>
+                         </size>
+                        </property>
+                        <property name="styleSheet">
+                         <string notr="true">QLineEdit {
     border: 1px solid #bbbbbb;
     border-radius: 3px;
     padding: 5px;
     height: 20px; /* 控制输入框的高度 */
 }
 </string>
-                    </property>
-                    <property name="readOnly">
-                     <bool>true</bool>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLabel" name="label_17">
-                    <property name="font">
-                     <font>
-                      <family>Microsoft YaHei</family>
-                      <pointsize>-1</pointsize>
-                     </font>
-                    </property>
-                    <property name="text">
-                     <string>V</string>
-                    </property>
-                    <property name="alignment">
-                     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </widget>
-               </item>
-               <item>
-                <widget class="QGroupBox" name="groupBox_11">
-                 <property name="styleSheet">
-                  <string notr="true">QGroupBox {
+                        </property>
+                        <property name="readOnly">
+                         <bool>true</bool>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QLabel" name="label_17">
+                        <property name="font">
+                         <font>
+                          <family>Microsoft YaHei</family>
+                          <pointsize>-1</pointsize>
+                         </font>
+                        </property>
+                        <property name="text">
+                         <string>V</string>
+                        </property>
+                        <property name="alignment">
+                         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QGroupBox" name="groupBox_11">
+                     <property name="styleSheet">
+                      <string notr="true">QGroupBox {
     border: none;
 }
 </string>
-                 </property>
-                 <property name="title">
-                  <string/>
-                 </property>
-                 <layout class="QHBoxLayout" name="horizontalLayout_9">
-                  <item>
-                   <widget class="QLabel" name="label_20">
-                    <property name="minimumSize">
-                     <size>
-                      <width>90</width>
-                      <height>0</height>
-                     </size>
-                    </property>
-                    <property name="font">
-                     <font>
-                      <family>Microsoft YaHei</family>
-                      <pointsize>-1</pointsize>
-                     </font>
-                    </property>
-                    <property name="text">
-                     <string>翻转低压</string>
-                    </property>
-                    <property name="alignment">
-                     <set>Qt::AlignCenter</set>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLineEdit" name="lineEditBLow">
-                    <property name="minimumSize">
-                     <size>
-                      <width>0</width>
-                      <height>30</height>
-                     </size>
-                    </property>
-                    <property name="styleSheet">
-                     <string notr="true">QLineEdit {
+                     </property>
+                     <property name="title">
+                      <string/>
+                     </property>
+                     <layout class="QHBoxLayout" name="horizontalLayout_9">
+                      <item>
+                       <widget class="QLabel" name="label_20">
+                        <property name="minimumSize">
+                         <size>
+                          <width>90</width>
+                          <height>0</height>
+                         </size>
+                        </property>
+                        <property name="font">
+                         <font>
+                          <family>Microsoft YaHei</family>
+                          <pointsize>-1</pointsize>
+                         </font>
+                        </property>
+                        <property name="text">
+                         <string>翻转低压</string>
+                        </property>
+                        <property name="alignment">
+                         <set>Qt::AlignCenter</set>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QLineEdit" name="lineEditBLow">
+                        <property name="minimumSize">
+                         <size>
+                          <width>0</width>
+                          <height>30</height>
+                         </size>
+                        </property>
+                        <property name="styleSheet">
+                         <string notr="true">QLineEdit {
     border: 1px solid #bbbbbb;
     border-radius: 3px;
     padding: 5px;
     height: 20px; /* 控制输入框的高度 */
 }
 </string>
-                    </property>
-                    <property name="readOnly">
-                     <bool>true</bool>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLabel" name="label_21">
-                    <property name="font">
-                     <font>
-                      <family>Microsoft YaHei</family>
-                      <pointsize>-1</pointsize>
-                     </font>
-                    </property>
-                    <property name="text">
-                     <string>V</string>
-                    </property>
-                    <property name="alignment">
-                     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </widget>
-               </item>
-               <item>
-                <widget class="QGroupBox" name="groupBox_10">
-                 <property name="styleSheet">
-                  <string notr="true">QGroupBox {
+                        </property>
+                        <property name="readOnly">
+                         <bool>true</bool>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QLabel" name="label_21">
+                        <property name="font">
+                         <font>
+                          <family>Microsoft YaHei</family>
+                          <pointsize>-1</pointsize>
+                         </font>
+                        </property>
+                        <property name="text">
+                         <string>V</string>
+                        </property>
+                        <property name="alignment">
+                         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QGroupBox" name="groupBox_10">
+                     <property name="styleSheet">
+                      <string notr="true">QGroupBox {
     border: none;
 }
 </string>
-                 </property>
-                 <property name="title">
-                  <string/>
-                 </property>
-                 <layout class="QHBoxLayout" name="horizontalLayout_8">
-                  <item>
-                   <widget class="QLabel" name="label_18">
-                    <property name="minimumSize">
-                     <size>
-                      <width>90</width>
-                      <height>0</height>
-                     </size>
-                    </property>
-                    <property name="font">
-                     <font>
-                      <family>Microsoft YaHei</family>
-                      <pointsize>-1</pointsize>
-                     </font>
-                    </property>
-                    <property name="text">
-                     <string>实时电压</string>
-                    </property>
-                    <property name="alignment">
-                     <set>Qt::AlignCenter</set>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLineEdit" name="d21">
-                    <property name="minimumSize">
-                     <size>
-                      <width>0</width>
-                      <height>30</height>
-                     </size>
-                    </property>
-                    <property name="styleSheet">
-                     <string notr="true">QLineEdit {
+                     </property>
+                     <property name="title">
+                      <string/>
+                     </property>
+                     <layout class="QHBoxLayout" name="horizontalLayout_8">
+                      <item>
+                       <widget class="QLabel" name="label_18">
+                        <property name="minimumSize">
+                         <size>
+                          <width>90</width>
+                          <height>0</height>
+                         </size>
+                        </property>
+                        <property name="font">
+                         <font>
+                          <family>Microsoft YaHei</family>
+                          <pointsize>-1</pointsize>
+                         </font>
+                        </property>
+                        <property name="text">
+                         <string>实时电压</string>
+                        </property>
+                        <property name="alignment">
+                         <set>Qt::AlignCenter</set>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QLineEdit" name="d21">
+                        <property name="minimumSize">
+                         <size>
+                          <width>0</width>
+                          <height>30</height>
+                         </size>
+                        </property>
+                        <property name="styleSheet">
+                         <string notr="true">QLineEdit {
     border: 1px solid #bbbbbb;
     border-radius: 3px;
     padding: 5px;
     height: 20px; /* 控制输入框的高度 */
 }
 </string>
-                    </property>
-                    <property name="readOnly">
-                     <bool>true</bool>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLabel" name="label_19">
-                    <property name="font">
-                     <font>
-                      <family>Microsoft YaHei</family>
-                      <pointsize>-1</pointsize>
-                     </font>
-                    </property>
-                    <property name="text">
-                     <string>V</string>
-                    </property>
-                    <property name="alignment">
-                     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </widget>
-               </item>
-               <item>
-                <widget class="QGroupBox" name="groupBox_15">
-                 <property name="styleSheet">
-                  <string notr="true">QGroupBox {
+                        </property>
+                        <property name="readOnly">
+                         <bool>true</bool>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QLabel" name="label_19">
+                        <property name="font">
+                         <font>
+                          <family>Microsoft YaHei</family>
+                          <pointsize>-1</pointsize>
+                         </font>
+                        </property>
+                        <property name="text">
+                         <string>V</string>
+                        </property>
+                        <property name="alignment">
+                         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QGroupBox" name="groupBox_15">
+                     <property name="styleSheet">
+                      <string notr="true">QGroupBox {
     border: none;
 }
 </string>
-                 </property>
-                 <property name="title">
-                  <string/>
-                 </property>
-                 <layout class="QHBoxLayout" name="horizontalLayout_15">
-                  <item>
-                   <widget class="QLabel" name="label_22">
-                    <property name="minimumSize">
-                     <size>
-                      <width>90</width>
-                      <height>0</height>
-                     </size>
-                    </property>
-                    <property name="font">
-                     <font>
-                      <family>Microsoft YaHei</family>
-                      <pointsize>-1</pointsize>
-                     </font>
-                    </property>
-                    <property name="text">
-                     <string>实时电流</string>
-                    </property>
-                    <property name="alignment">
-                     <set>Qt::AlignCenter</set>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLineEdit" name="d23">
-                    <property name="minimumSize">
-                     <size>
-                      <width>0</width>
-                      <height>30</height>
-                     </size>
-                    </property>
-                    <property name="styleSheet">
-                     <string notr="true">QLineEdit {
+                     </property>
+                     <property name="title">
+                      <string/>
+                     </property>
+                     <layout class="QHBoxLayout" name="horizontalLayout_15">
+                      <item>
+                       <widget class="QLabel" name="label_22">
+                        <property name="minimumSize">
+                         <size>
+                          <width>90</width>
+                          <height>0</height>
+                         </size>
+                        </property>
+                        <property name="font">
+                         <font>
+                          <family>Microsoft YaHei</family>
+                          <pointsize>-1</pointsize>
+                         </font>
+                        </property>
+                        <property name="text">
+                         <string>实时电流</string>
+                        </property>
+                        <property name="alignment">
+                         <set>Qt::AlignCenter</set>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QLineEdit" name="d23">
+                        <property name="minimumSize">
+                         <size>
+                          <width>0</width>
+                          <height>30</height>
+                         </size>
+                        </property>
+                        <property name="styleSheet">
+                         <string notr="true">QLineEdit {
     border: 1px solid #bbbbbb;
     border-radius: 3px;
     padding: 5px;
     height: 20px; /* 控制输入框的高度 */
 }
 </string>
-                    </property>
-                    <property name="readOnly">
-                     <bool>true</bool>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLabel" name="label_23">
-                    <property name="font">
-                     <font>
-                      <family>Microsoft YaHei</family>
-                      <pointsize>-1</pointsize>
-                     </font>
-                    </property>
-                    <property name="text">
-                     <string>A</string>
-                    </property>
-                    <property name="alignment">
-                     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </widget>
-               </item>
-              </layout>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="label_24">
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>40</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>40</height>
-            </size>
-           </property>
-           <property name="font">
-            <font>
-             <family>Microsoft YaHei</family>
-             <pointsize>-1</pointsize>
-            </font>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">QLabel#label_22 {
+                        </property>
+                        <property name="readOnly">
+                         <bool>true</bool>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QLabel" name="label_23">
+                        <property name="font">
+                         <font>
+                          <family>Microsoft YaHei</family>
+                          <pointsize>-1</pointsize>
+                         </font>
+                        </property>
+                        <property name="text">
+                         <string>A</string>
+                        </property>
+                        <property name="alignment">
+                         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                 <item>
+                  <layout class="QVBoxLayout" name="verticalLayout_8">
+                   <item>
+                    <widget class="TPScale" name="tPScaleB">
+                     <property name="minimumSize">
+                      <size>
+                       <width>110</width>
+                       <height>200</height>
+                      </size>
+                     </property>
+                     <property name="highest">
+                      <double>60.000000000000000</double>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="label_28">
+                     <property name="minimumSize">
+                      <size>
+                       <width>0</width>
+                       <height>40</height>
+                      </size>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>16777215</width>
+                       <height>40</height>
+                      </size>
+                     </property>
+                     <property name="font">
+                      <font>
+                       <family>Microsoft YaHei</family>
+                       <pointsize>-1</pointsize>
+                      </font>
+                     </property>
+                     <property name="styleSheet">
+                      <string notr="true">QLabel#label_22 {
     color: #555555;
     background-color: #eeeeee;
     padding: 10px;
@@ -1326,13 +1412,266 @@ QPushButton:pressed {
     text-align: center;
 }
 </string>
+                     </property>
+                     <property name="text">
+                      <string>实时电压</string>
+                     </property>
+                     <property name="alignment">
+                      <set>Qt::AlignCenter</set>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="QGroupBox" name="groupBox_18">
+           <property name="title">
+            <string/>
            </property>
-           <property name="text">
-            <string>电流方向：A-&gt;B，此次充电时间：0h0m0s</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
-           </property>
+           <layout class="QHBoxLayout" name="horizontalLayout_18">
+            <item>
+             <spacer name="horizontalSpacer_11">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>201</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_17">
+              <item>
+               <widget class="QLabel" name="label_26">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>40</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>16777215</width>
+                  <height>40</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <family>Microsoft YaHei</family>
+                  <pointsize>-1</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QLabel#label_22 {
+    color: #555555;
+    background-color: #eeeeee;
+    padding: 10px;
+    border-radius: 5px;
+    font-family: &quot;Microsoft YaHei&quot;;
+    font-size: 15px;
+    text-align: center;
+}
+</string>
+                </property>
+                <property name="text">
+                 <string>电流方向：</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_14">
+                <item>
+                 <widget class="QLabel" name="labelA">
+                  <property name="minimumSize">
+                   <size>
+                    <width>40</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <family>Microsoft YaHei</family>
+                    <pointsize>-1</pointsize>
+                   </font>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">QLabel#label_22 {
+    color: #555555;
+    background-color: #eeeeee;
+    padding: 10px;
+    border-radius: 5px;
+    font-family: &quot;Microsoft YaHei&quot;;
+    font-size: 15px;
+    text-align: center;
+}
+</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignCenter</set>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="labelArrow">
+                  <property name="minimumSize">
+                   <size>
+                    <width>40</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <family>Microsoft YaHei</family>
+                    <pointsize>-1</pointsize>
+                   </font>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">QLabel#label_22 {
+    color: #555555;
+    background-color: #eeeeee;
+    padding: 10px;
+    border-radius: 5px;
+    font-family: &quot;Microsoft YaHei&quot;;
+    font-size: 15px;
+    text-align: center;
+}
+</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignCenter</set>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="labelB">
+                  <property name="minimumSize">
+                   <size>
+                    <width>40</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <family>Microsoft YaHei</family>
+                    <pointsize>-1</pointsize>
+                   </font>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">QLabel#label_22 {
+    color: #555555;
+    background-color: #eeeeee;
+    padding: 10px;
+    border-radius: 5px;
+    font-family: &quot;Microsoft YaHei&quot;;
+    font-size: 15px;
+    text-align: center;
+}
+</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignCenter</set>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_24">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <family>Microsoft YaHei</family>
+                <pointsize>-1</pointsize>
+               </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QLabel#label_22 {
+    color: #555555;
+    background-color: #eeeeee;
+    padding: 10px;
+    border-radius: 5px;
+    font-family: &quot;Microsoft YaHei&quot;;
+    font-size: 15px;
+    text-align: center;
+}
+</string>
+              </property>
+              <property name="text">
+               <string>此次充电时间：0 h  0 m  0 s</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_12">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>200</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
           </widget>
          </item>
          <item>
@@ -1387,7 +1726,7 @@ QPushButton:pressed {
 </string>
               </property>
               <property name="text">
-               <string>充电次数: 0</string>
+               <string>翻转次数: 0</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
@@ -1404,7 +1743,7 @@ QPushButton:pressed {
               </property>
               <property name="minimumSize">
                <size>
-                <width>80</width>
+                <width>70</width>
                 <height>0</height>
                </size>
               </property>
@@ -1428,20 +1767,20 @@ QPushButton:pressed {
               </property>
               <property name="styleSheet">
                <string notr="true">QPushButton {
-    background-color: #F44336; /* 红色背景 */
-    color: white;
+    background-color: #B0BEC5; /* 柔和的灰色背景 */
+    color: black;
     border: none;
     border-radius: 5px;
     font-size: 12px;
 }
 
 QPushButton:hover {
-    background-color: #E53935; /* 鼠标悬浮时颜色稍微变暗 */
+    background-color: #90A4AE; /* 鼠标悬浮时颜色稍微变暗 */
 }
 
 QPushButton:pressed {
-    background-color: #D32F2F; /* 按下状态时颜色更暗 */
-    border: 1px solid #C62828; /* 按下时添加一个边框 */
+    background-color: #78909C; /* 按下状态时颜色更暗 */
+    border: 1px solid #607D8B; /* 按下时添加一个边框 */
 }
 </string>
               </property>
@@ -1471,7 +1810,7 @@ QPushButton:pressed {
            <property name="minimumSize">
             <size>
              <width>0</width>
-             <height>80</height>
+             <height>111</height>
             </size>
            </property>
            <property name="maximumSize">
@@ -1831,7 +2170,7 @@ QPushButton:pressed {
         <property name="sizeHint" stdset="0">
          <size>
           <width>48</width>
-          <height>373</height>
+          <height>20</height>
          </size>
         </property>
        </spacer>
@@ -1857,9 +2196,14 @@ QPushButton:pressed {
  </widget>
  <customwidgets>
   <customwidget>
+   <class>TPScale</class>
+   <extends>QWidget</extends>
+   <header>tpscale.h</header>
+  </customwidget>
+  <customwidget>
    <class>MyComboBox</class>
    <extends>QComboBox</extends>
-   <header location="global">mycombobox.h</header>
+   <header>mycombobox.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

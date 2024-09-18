@@ -3,5 +3,10 @@
         <file>images/arrow_down.png</file>
         <file>images/battery_control_icon.ico</file>
         <file>images/companyName.png</file>
+        <file>images/A.png</file>
+        <file>images/B.png</file>
+        <file>images/left.png</file>
+        <file>images/right.png</file>
+        <file>images/x.png</file>
     </qresource>
 </RCC>
