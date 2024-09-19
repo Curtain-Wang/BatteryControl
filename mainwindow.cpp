@@ -16,6 +16,7 @@
 #include <QSettings>
 #include <QDir>
 #include <QKeyEvent>
+#include <QMutexLocker>
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -99,16 +100,11 @@ void MainWindow::timerUpDate()
 
 void MainWindow::init()
 {
-    //发送数据
-    sendTimer = new QTimer(this);
-    connect(sendTimer, &QTimer::timeout, this, &MainWindow::onSendTimerTimeout);
-    sendTimer->setInterval(100);
-    sendTimer->start();
-    //接收数据
-    receiveTimer = new QTimer(this);
-    connect(receiveTimer, &QTimer::timeout, this, &MainWindow::onReceiveTimerTimeout);
-    receiveTimer->setInterval(10);
-    receiveTimer->start();
+    //定时刷新数据
+    dataRefreshTimer = new QTimer(this);
+    connect(dataRefreshTimer, &QTimer::timeout, this, &MainWindow::onDataRefreshTimerTimeout);
+    dataRefreshTimer->setInterval(DATA_REFRESH_CYCLE);
+
     refreshPort();
     //状态栏
     connectStatusLabel->setMinimumWidth(150);
@@ -176,12 +172,11 @@ void MainWindow::refreshPort()
     }
 }
 
-void MainWindow::sendGetAllDataCMD()
+void MainWindow::addGetAllDataCMD()
 {
     QByteArray buf;
     buf.append(MODULE);
     buf.append(READ_CMD);
-
     //起始地址
     buf.append(static_cast<char>(0x00));
     buf.append(static_cast<char>(0x00));
@@ -192,29 +187,23 @@ void MainWindow::sendGetAllDataCMD()
     //crC
     buf.append(crcArray[0]);
     buf.append(crcArray[1]);
-    sendPortData(buf);
-    dataRefreshRemaingTime = DATA_REFRESH_CYCLE;
+    enqueueCommand(buf);
 }
 
 void MainWindow::manualReadCMDBuild(char startHigh, char startLow, char numHigh, char numLow)
 {
-    if(manualFlag == 1)
-    {
-        QMessageBox::information(this, "冲突", "当前有其他手动命令在发送, 请稍后再试!");
-        return;
-    }
-    manualSendDataBuf.clear();
-    manualFlag = 1;
-    manualSendDataBuf.append(MODULE);
-    manualSendDataBuf.append(READ_CMD);
-    manualSendDataBuf.append(startHigh);
-    manualSendDataBuf.append(startLow);
-    manualSendDataBuf.append(numHigh);
-    manualSendDataBuf.append(numLow);
-    QByteArray crcArray = calculateCRCArray(manualSendDataBuf, 6);
+    QByteArray buf;
+    buf.append(MODULE);
+    buf.append(READ_CMD);
+    buf.append(startHigh);
+    buf.append(startLow);
+    buf.append(numHigh);
+    buf.append(numLow);
+    QByteArray crcArray = calculateCRCArray(buf, buf.size());
     //crC
-    manualSendDataBuf.append(crcArray[0]);
-    manualSendDataBuf.append(crcArray[1]);
+    buf.append(crcArray[0]);
+    buf.append(crcArray[1]);
+    enqueueCommand(buf);
 }
 
 void MainWindow::refresh()
@@ -511,56 +500,31 @@ void MainWindow::loadConfig()
 
 void MainWindow::manualWriteOneCMDBuild(char startHigh, char startLow, char valueHigh, char valueLow, quint8 secFlag)
 {
-    if(manualFlag == 1)
-    {
-        QMessageBox::information(this, "冲突", "当前有其他手动命令在发送, 请稍后再试!");
-        return;
-    }
-    manualSendDataBuf.clear();
-    if(secFlag == 0)
-    {
-       manualFlag = 1;
-    }
-    else
-    {
-        manualFlag = 2;
-    }
-    manualSendDataBuf.append(MODULE);
-    manualSendDataBuf.append(WRITE_ONE_CMD);
-    manualSendDataBuf.append(startHigh);
-    manualSendDataBuf.append(startLow);
-    manualSendDataBuf.append(valueHigh);
-    manualSendDataBuf.append(valueLow);
-    QByteArray crcArray = calculateCRCArray(manualSendDataBuf, 6);
+    QByteArray buf;
+    buf.append(MODULE);
+    buf.append(WRITE_ONE_CMD);
+    buf.append(startHigh);
+    buf.append(startLow);
+    buf.append(valueHigh);
+    buf.append(valueLow);
+    QByteArray crcArray = calculateCRCArray(buf, buf.size());
     //crC
-    manualSendDataBuf.append(crcArray[0]);
-    manualSendDataBuf.append(crcArray[1]);
+    buf.append(crcArray[0]);
+    buf.append(crcArray[1]);
+    enqueueCommand(buf);
 }
 
-void MainWindow::manualWriteMultipleCMDBuild(QByteArray buf, quint8 secFlag)
+void MainWindow::manualWriteMultipleCMDBuild(QByteArray bodyBuf, quint8 secFlag)
 {
-
-    if(manualFlag == 1)
-    {
-        QMessageBox::information(this, "冲突", "当前有其他手动命令在发送, 请稍后再试!");
-        return;
-    }
-    manualSendDataBuf.clear();
-    if(secFlag == 0)
-    {
-        manualFlag = 1;
-    }
-    else
-    {
-        manualFlag = 2;
-    }
-    manualSendDataBuf.append(MODULE);
-    manualSendDataBuf.append(WRITE_MULTIPLE_CMD);
-    manualSendDataBuf.append(buf);
-    QByteArray crcArray = calculateCRCArray(manualSendDataBuf, 2 + buf.size());
+    QByteArray buf;
+    buf.append(MODULE);
+    buf.append(WRITE_MULTIPLE_CMD);
+    buf.append(bodyBuf);
+    QByteArray crcArray = calculateCRCArray(buf, buf.size());
     //crC
-    manualSendDataBuf.append(crcArray[0]);
-    manualSendDataBuf.append(crcArray[1]);
+    buf.append(crcArray[0]);
+    buf.append(crcArray[1]);
+    enqueueCommand(buf);
 }
 
 void MainWindow::setAtoB()
@@ -628,67 +592,41 @@ void MainWindow::secondCMDSend()
     }
 }
 
-void MainWindow::sendPortData(QByteArray data)
+//将命令加入队列
+void MainWindow::enqueueCommand(const QByteArray &command)
 {
-    if(data == nullptr)
+    QMutexLocker locker(&queueMutex);
+    commandQueue.enqueue(command);
+    //超时定时器未运行说明当前串口空闲，可执行队列里面的下一个指令
+    if(!timeoutTimer->isActive())
     {
-        sendSerialData(manualSendDataBuf);
-    }
-    else
-    {
-        sendSerialData(data);
-    }
-    //设置等待时间
-    waitMessageRemaingTime = 20;
-}
-
-void MainWindow::onSendTimerTimeout()
-{
-    if(connFlag == 0)
-    {
-        return;
-    }
-    if(waitMessageRemaingTime > 0)
-    {
-        waitMessageRemaingTime--;
-    }
-    if(dataRefreshRemaingTime > 0)
-    {
-        dataRefreshRemaingTime--;
-    }
-
-    //说明串口空闲，看看有没有手动的命令要下发
-    if(waitMessageRemaingTime == 0)
-    {
-        //说明有二次手动命令
-        if(manualFlag == 2)
-        {
-            sendPortData();
-            manualFlag = 0;
-            secondCMDSend();
-        }
-        //说明有手动命令要下发
-        else if(manualFlag == 1)
-        {
-            //手动命令下发
-            sendPortData();
-            manualFlag = 0;
-        }
-        //说明没有手动命令要下发，就判断是否到了刷新时间
-        else if(dataRefreshRemaingTime <= 0)
-        {
-            sendGetAllDataCMD();
-        }
+        processNextCommand();
     }
 }
 
-void MainWindow::onReceiveTimerTimeout()
+void MainWindow::clearQueueCommand()
 {
+    QMutexLocker locker(&queueMutex);
+    commandQueue.clear();
+}
 
-    if(connFlag == 0)
+//处理队列中的下一个命令
+void MainWindow::processNextCommand()
+{
+    QMutexLocker locker(&queueMutex);
+    if (!commandQueue.isEmpty())
     {
-        return;
+        currentCommand = commandQueue.dequeue();
+        sendSerialData(currentCommand);  // 发送当前命令
+        qDebug() << "Sent command:" << currentCommand;
+        // 启动超时计时器
+        timeoutTimer->start(timeoutDuration);
     }
+}
+
+//处理收到消息的数据
+void MainWindow::handleReadyRead()
+{
     cacheReceiveData();
     //当缓冲区的消息长度大于messageSize，那说明可能存在一条完整的响应
     while ((receiveEndIndex + 500 - receiveStartIndex) % 500 >= 6) {
@@ -727,6 +665,9 @@ void MainWindow::onReceiveTimerTimeout()
         //判断是否是一个完整的消息
         if(receiveDataCRCCheck(buf))
         {
+            // 停止超时计时器
+            timeoutTimer->stop();
+            retryCount = 0;  // 重置重试次数
             //首先更新接收缓冲区的开始坐标
             if(isCreated(1))
             {
@@ -743,6 +684,32 @@ void MainWindow::onReceiveTimerTimeout()
             receiveStartIndex = (receiveStartIndex + 1) % 500;
             continue;
         }
+    }
+}
+
+//超时处理
+void MainWindow::handleTimeout()
+{
+    timeoutTimer->stop();
+    if (retryCount < maxRetries) {
+        // 如果超时且重试次数未达上限，则重发当前指令
+        retryCount++;
+        qDebug() << "Retrying current command, attempt:" << retryCount;
+        sendSerialData(currentCommand);  // 重新发送当前命令
+        timeoutTimer->start(timeoutDuration);  // 重新启动超时计时器
+    } else {
+        // 达到重试次数上限，放弃当前命令
+        qDebug() << "Max retries reached, discarding current command.";
+        retryCount = 0;
+        processNextCommand();  // 继续处理下一个命令
+    }
+}
+
+void MainWindow::onDataRefreshTimerTimeout()
+{
+    if(connFlag == 1)
+    {
+        addGetAllDataCMD();
     }
 }
 
@@ -904,8 +871,6 @@ void MainWindow::dealMessage(const QByteArray &data)
     //查询所有的命令
     if(data[1] == READ_CMD)
     {
-        //清空等待时间
-        waitMessageRemaingTime = 0;
         //更新缓存
         QByteArray dataBuf = data.mid(3, data.size() - 5);
         for(int i = 0; i < dataBuf.size(); i = i + 2)
@@ -917,13 +882,12 @@ void MainWindow::dealMessage(const QByteArray &data)
     else if(data[1] == WRITE_ONE_CMD)
     {
         //写入命令返回，立刻回显
-        sendGetAllDataCMD();
+        addGetAllDataCMD();
 
     }
     else if(data[1] == WRITE_MULTIPLE_CMD)
     {
         //多个写入命令返回，暂时没有处理逻辑、
-        waitMessageRemaingTime = 0;
     }
 }
 
@@ -951,6 +915,18 @@ void MainWindow::on_connBtn_clicked()
             connFlag = 0;
             connectStatusLabel->setText(connStatus.arg("未连接"));
             connectStatusLabel->setStyleSheet("QLabel { background-color : red; color : white; }");
+            //清空指令队列
+            clearQueueCommand();
+            //停止数据刷新定时器
+            if(dataRefreshTimer->isActive())
+            {
+                dataRefreshTimer->stop();
+            }
+            //停止超时定时器
+            if(timeoutTimer->isActive())
+            {
+                timeoutTimer->stop();
+            }
             return;
         }
         //连接成功
@@ -961,6 +937,11 @@ void MainWindow::on_connBtn_clicked()
             connectStatusLabel->setText(connStatus.arg("已连接"));
             connectStatusLabel->setStyleSheet("QLabel { background-color : green; color : white; }");
             ui->connBtn->setText("断开连接");
+            //开启数据刷新定时器
+            if(!dataRefreshTimer->isActive())
+            {
+                dataRefreshTimer->start();
+            }
         }
     }
     else if(ui->connBtn->text() == "断开连接")
@@ -975,6 +956,18 @@ void MainWindow::on_connBtn_clicked()
         connectStatusLabel->setText(connStatus.arg("未连接"));
         connectStatusLabel->setStyleSheet("QLabel { background-color : red; color : white; }");
         ui->connBtn->setText("建立连接");
+        //清空指令队列
+        clearQueueCommand();
+        //停止数据刷新定时器
+        if(dataRefreshTimer->isActive())
+        {
+            dataRefreshTimer->stop();
+        }
+        //停止超时定时器
+        if(timeoutTimer->isActive())
+        {
+            timeoutTimer->stop();
+        }
     }
 }
 

@@ -4,7 +4,7 @@
 #include "mainwindow.h"
 //设备信号，0：5KW，1：30KW，2：130KW
 int deviceType = 0;
-const int DATA_REFRESH_CYCLE = 20;
+const int DATA_REFRESH_CYCLE = 2000;
 int dataRefreshRemaingTime = 0;
 int dataRefreshStep = 1;
 int waitMessageRemaingTime = 0;
