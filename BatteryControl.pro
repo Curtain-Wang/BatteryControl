@@ -9,6 +9,7 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    asynclogger.cpp \
     globalparam.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -23,6 +24,7 @@ SOURCES += \
     tform7.cpp
 
 HEADERS += \
+    asynclogger.h \
     globalparam.h \
     mainwindow.h \
     mycombobox.h \

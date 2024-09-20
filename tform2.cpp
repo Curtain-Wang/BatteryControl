@@ -1,6 +1,5 @@
 #include "tform2.h"
 #include "ui_tform2.h"
-#include "mainwindow.h"
 #include <QMessageBox>
 #include "globalparam.h"
 #include <QRegularExpression>

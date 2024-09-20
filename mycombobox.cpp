@@ -1,5 +1,4 @@
 #include "MyComboBox.h"
-#include <QDebug>
 #include <QSerialPort>
 #include <QSerialPortInfo>
 MyComboBox::MyComboBox(QWidget *parent) : QComboBox(parent)
@@ -13,8 +12,6 @@ void MyComboBox::showPopup()
     QComboBox::showPopup();
 
     refreshPort();
-    // 处理下拉框点击事件
-    qDebug() << "QComboBox clicked!";
 }
 
 void MyComboBox::refreshPort()

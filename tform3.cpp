@@ -2,7 +2,6 @@
 #include "ui_tform3.h"
 #include <QTimer>
 #include <QRegularExpression>
-#include <mainwindow.h>
 #include <QMessageBox>
 #include "globalparam.h"
 TForm3::TForm3(QWidget *parent)

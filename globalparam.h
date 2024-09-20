@@ -1,8 +1,8 @@
 #ifndef GLOBALPARAM_H
 #define GLOBALPARAM_H
+#include "mainwindow.h"
 class QByteArray;
 class QString;
-class MainWindow;
 extern int deviceType;
 extern const int DATA_REFRESH_CYCLE;
 extern int dataRefreshRemaingTime;

@@ -3,7 +3,6 @@
 
 #include <QWidget>
 class QLineEdit;
-class MainWindow;
 namespace Ui {
 class TForm3;
 }

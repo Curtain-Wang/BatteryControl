@@ -1,7 +1,6 @@
 #include "tform6.h"
 #include "ui_tform6.h"
 #include "globalparam.h"
-#include "mainwindow.h"
 #include <QMessageBox>
 TForm6::TForm6(QWidget *parent)
     : QWidget(parent)

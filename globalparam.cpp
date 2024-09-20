@@ -1,7 +1,4 @@
 #include "globalparam.h"
-#include <QByteArray>
-#include <QString>
-#include "mainwindow.h"
 //设备信号，0：5KW，1：30KW，2：130KW
 int deviceType = 0;
 const int DATA_REFRESH_CYCLE = 2000;

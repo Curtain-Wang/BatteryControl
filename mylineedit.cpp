@@ -1,5 +1,4 @@
 #include "MyLineEdit.h"
-#include <QDebug>
 #include "globalparam.h"
 #include "tform7.h"
 MyLineEdit::MyLineEdit(QWidget *parent) : QLineEdit(parent)
@@ -21,9 +20,6 @@ void MyLineEdit::mousePressEvent(QMouseEvent *event)
 
     // 触发自定义的 clicked 信号
     emit clicked();
-
-    // 你可以在这里添加更多点击处理逻辑
-    qDebug() << objectName()<< "LineEdit clicked!";
 
     if(objectName() == "lineEditAHigh" || objectName() == "lineEditALow"
         || objectName() == "lineEditBHigh" || objectName() == "lineEditBLow")

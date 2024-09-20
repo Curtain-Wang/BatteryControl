@@ -126,23 +126,7 @@ QLineEdit[readOnly=&quot;true&quot;] {
             </widget>
            </item>
            <item row="1" column="1">
-            <widget class="QLineEdit" name="d53">
-             <property name="minimumSize">
-              <size>
-               <width>80</width>
-               <height>35</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>80</width>
-               <height>35</height>
-              </size>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="2">
-            <widget class="QLineEdit" name="d61">
+            <widget class="MyLineEdit" name="d53">
              <property name="minimumSize">
               <size>
                <width>80</width>
@@ -156,7 +140,26 @@ QLineEdit[readOnly=&quot;true&quot;] {
               </size>
              </property>
              <property name="readOnly">
-              <bool>false</bool>
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="2">
+            <widget class="MyLineEdit" name="d61">
+             <property name="minimumSize">
+              <size>
+               <width>80</width>
+               <height>35</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>80</width>
+               <height>35</height>
+              </size>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
              </property>
             </widget>
            </item>
@@ -177,7 +180,7 @@ QLineEdit[readOnly=&quot;true&quot;] {
             </widget>
            </item>
            <item row="2" column="1">
-            <widget class="QLineEdit" name="d52">
+            <widget class="MyLineEdit" name="d52">
              <property name="minimumSize">
               <size>
                <width>80</width>
@@ -189,11 +192,14 @@ QLineEdit[readOnly=&quot;true&quot;] {
                <width>80</width>
                <height>35</height>
               </size>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
              </property>
             </widget>
            </item>
            <item row="2" column="2">
-            <widget class="QLineEdit" name="d60">
+            <widget class="MyLineEdit" name="d60">
              <property name="minimumSize">
               <size>
                <width>80</width>
@@ -205,6 +211,9 @@ QLineEdit[readOnly=&quot;true&quot;] {
                <width>80</width>
                <height>35</height>
               </size>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
              </property>
             </widget>
            </item>
@@ -358,23 +367,7 @@ QLineEdit[readOnly=&quot;true&quot;] {
             </widget>
            </item>
            <item row="1" column="1">
-            <widget class="QLineEdit" name="d49">
-             <property name="minimumSize">
-              <size>
-               <width>80</width>
-               <height>35</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>80</width>
-               <height>35</height>
-              </size>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="2">
-            <widget class="QLineEdit" name="d57">
+            <widget class="MyLineEdit" name="d49">
              <property name="minimumSize">
               <size>
                <width>80</width>
@@ -388,7 +381,26 @@ QLineEdit[readOnly=&quot;true&quot;] {
               </size>
              </property>
              <property name="readOnly">
-              <bool>false</bool>
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="2">
+            <widget class="MyLineEdit" name="d57">
+             <property name="minimumSize">
+              <size>
+               <width>80</width>
+               <height>35</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>80</width>
+               <height>35</height>
+              </size>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
              </property>
             </widget>
            </item>
@@ -409,7 +421,7 @@ QLineEdit[readOnly=&quot;true&quot;] {
             </widget>
            </item>
            <item row="2" column="1">
-            <widget class="QLineEdit" name="d48">
+            <widget class="MyLineEdit" name="d48">
              <property name="minimumSize">
               <size>
                <width>80</width>
@@ -421,11 +433,14 @@ QLineEdit[readOnly=&quot;true&quot;] {
                <width>80</width>
                <height>35</height>
               </size>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
              </property>
             </widget>
            </item>
            <item row="2" column="2">
-            <widget class="QLineEdit" name="d56">
+            <widget class="MyLineEdit" name="d56">
              <property name="minimumSize">
               <size>
                <width>80</width>
@@ -437,6 +452,9 @@ QLineEdit[readOnly=&quot;true&quot;] {
                <width>80</width>
                <height>35</height>
               </size>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
              </property>
             </widget>
            </item>
@@ -612,6 +630,13 @@ QLineEdit[readOnly=&quot;true&quot;] {
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>MyLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>mylineedit.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

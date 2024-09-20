@@ -2,7 +2,6 @@
 #include "ui_tform7.h"
 #include "globalparam.h"
 #include <QMessageBox>
-#include "mainwindow.h"
 #include <QDir>
 #include <QSettings>
 TForm7::TForm7(QWidget *parent)

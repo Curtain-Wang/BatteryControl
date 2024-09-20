@@ -1,7 +1,6 @@
 #include "tform5.h"
 #include "ui_tform5.h"
 #include "globalparam.h"
-#include "mainwindow.h"
 #include <QMessageBox>
 TForm5::TForm5(QWidget *parent)
     : QWidget(parent)
@@ -12,8 +11,6 @@ TForm5::TForm5(QWidget *parent)
     setWindowFlags(Qt::Window | Qt::WindowTitleHint | Qt::WindowCloseButtonHint);
     setWindowIcon(QIcon(":/icons/images/battery_control_icon.ico"));
     refresh();
-    // connectAll();
-    // qDebug() << "parent 的类型是：" << parent->metaObject()->className();
 }
 
 TForm5::~TForm5()
@@ -49,30 +46,3 @@ void TForm5::refresh()
     ui->lineEditALow->setText(QString::number(static_cast<float>(ATurnLowV) / 10, 'f', 1));
     ui->lineEditBLow->setText(QString::number(static_cast<float>(BTurnLowV) / 10, 'f', 1));
 }
-
-// void TForm5::connectAll()
-// {
-//     QVector<QLineEdit*> lineEdits = {ui->d14, ui->d15, ui->d16, ui->d17, ui->d18, ui->d19, ui->d25, ui->d26, ui->d27, ui->d28};
-//     for (int i = 0; i < lineEdits.size(); ++i) {
-//         // connect(lineEdits[i], &QLineEdit::editingFinished, this, &TForm5::onEditingFinished);
-//         connect(lineEdits[i], &QLineEdit::returnPressed, this, &TForm5::onEditingFinished);
-//     }
-// }
-
-// void TForm5::onEditingFinished()
-// {
-//     if(connFlag == 0)
-//     {
-//         QMessageBox::information(this, tr("提示"), tr("请先建立连接!"));
-//         return;
-//     }
-//     // 获取触发此信号的对象
-//     QLineEdit* senderLineEdit = qobject_cast<QLineEdit*>(sender());
-//     if (senderLineEdit) {
-//         // 打印对象名称
-//         qDebug() << "当前的 QLineEdit 对象名称是：" << senderLineEdit->objectName();
-//         quint8 addrLow = senderLineEdit->objectName().mid(1).toInt();
-//         quint16 value = senderLineEdit->text().toFloat() * 10;
-//         mainwindow->manualWriteOneCMDBuild(static_cast<char>(0), addrLow, value >> 8, value & 0xFF);
-//     }
-// }

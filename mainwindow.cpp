@@ -104,6 +104,9 @@ void MainWindow::init()
     dataRefreshTimer = new QTimer(this);
     connect(dataRefreshTimer, &QTimer::timeout, this, &MainWindow::onDataRefreshTimerTimeout);
     dataRefreshTimer->setInterval(DATA_REFRESH_CYCLE);
+    //超时定时器
+    timeoutTimer = new QTimer(this);
+    connect(timeoutTimer, &QTimer::timeout, this, &MainWindow::handleTimeout);
 
     refreshPort();
     //状态栏
@@ -307,7 +310,6 @@ void MainWindow::refresh()
     //A->B, A实时电压小于翻转低压或者B大于翻转高压
     if(ac < 0 && (timingDataBuf[20] <= ATurnLowV || timingDataBuf[21] >= BTurnHighV))
     {
-        qDebug() << "触发翻转";
         //翻转充电时间重置
         chargeTime = 0;
         //自动模式，下发B->A
@@ -325,7 +327,6 @@ void MainWindow::refresh()
     //B->A，B实时电压小于翻转低压或者A大于翻转高压
     if(ac > 0 && (timingDataBuf[21] <= BTurnLowV || timingDataBuf[20] >= ATurnHighV))
     {
-        qDebug() << "触发翻转";
         //翻转充电时间重置
         chargeTime = 0;
         //自动模式，下发A->B
@@ -595,8 +596,10 @@ void MainWindow::secondCMDSend()
 //将命令加入队列
 void MainWindow::enqueueCommand(const QByteArray &command)
 {
-    QMutexLocker locker(&queueMutex);
-    commandQueue.enqueue(command);
+    {
+        QMutexLocker locker(&queueMutex);
+        commandQueue.enqueue(command);
+    }
     //超时定时器未运行说明当前串口空闲，可执行队列里面的下一个指令
     if(!timeoutTimer->isActive())
     {
@@ -618,7 +621,6 @@ void MainWindow::processNextCommand()
     {
         currentCommand = commandQueue.dequeue();
         sendSerialData(currentCommand);  // 发送当前命令
-        qDebug() << "Sent command:" << currentCommand;
         // 启动超时计时器
         timeoutTimer->start(timeoutDuration);
     }
@@ -694,12 +696,12 @@ void MainWindow::handleTimeout()
     if (retryCount < maxRetries) {
         // 如果超时且重试次数未达上限，则重发当前指令
         retryCount++;
-        qDebug() << "Retrying current command, attempt:" << retryCount;
+        qWarning() << "Retrying current command: " << currentCommand.toHex() <<  ", attempt:" << retryCount;
         sendSerialData(currentCommand);  // 重新发送当前命令
         timeoutTimer->start(timeoutDuration);  // 重新启动超时计时器
     } else {
         // 达到重试次数上限，放弃当前命令
-        qDebug() << "Max retries reached, discarding current command.";
+        qCritical() << "Max retries reached, discarding current command: " << currentCommand.toHex();
         retryCount = 0;
         processNextCommand();  // 继续处理下一个命令
     }
@@ -1075,9 +1077,9 @@ void MainWindow::onEditingFinished()
     QLineEdit* senderLineEdit = qobject_cast<QLineEdit*>(sender());
     if (senderLineEdit) {
         // 打印对象名称
-        qDebug() << "当前的 QLineEdit 对象名称是：" << senderLineEdit->objectName();
         quint8 addrLow = senderLineEdit->objectName().mid(1).toInt();
         quint16 value = senderLineEdit->text().toFloat() * 10;
+        qInfo() << "edit lineEdit, name: " << senderLineEdit->objectName() << ", address: " << addrLow << ", value: " << value;
         mainwindow->manualWriteOneCMDBuild(static_cast<char>(0), addrLow, value >> 8, value & 0xFF);
     }
 }
