@@ -25,17 +25,17 @@ void TForm6::refresh()
     ui->d11->setText(QString::number(timingDataBuf[11]));
     ui->d32->setText(QString::number(timingDataBuf[32]));
     ui->d33->setText(QString::number(timingDataBuf[33]));
-    ui->d36_1->setText(QString::number(static_cast<float>(timingDataBuf[36]) / 10, 'f', 1));
-    ui->d37_1->setText(QString::number(static_cast<float>(timingDataBuf[37]) / 10, 'f', 1));
+    ui->d36->setText(QString::number(static_cast<float>(timingDataBuf[36]) / 10, 'f', 1));
+    ui->d37->setText(QString::number(static_cast<float>(timingDataBuf[37]) / 10, 'f', 1));
     ui->d64->setText(QString::number(timingDataBuf[64]));
 }
 
 void TForm6::connectAll()
 {
     connect(ui->d7, &QLineEdit::returnPressed, this, &TForm6::onEditingFinished);
-    connect(ui->d36_1, &QLineEdit::returnPressed, this, &TForm6::onEditingFinished);
+    connect(ui->d36, &QLineEdit::returnPressed, this, &TForm6::onEditingFinished);
     connect(ui->d11, &QLineEdit::returnPressed, this, &TForm6::onEditingFinished);
-    connect(ui->d37_1, &QLineEdit::returnPressed, this, &TForm6::onEditingFinished);
+    connect(ui->d37, &QLineEdit::returnPressed, this, &TForm6::onEditingFinished);
 }
 
 void TForm6::onEditingFinished()

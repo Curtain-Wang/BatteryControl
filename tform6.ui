@@ -52,7 +52,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="d11">
+          <widget class="MyLineEdit" name="d11">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -83,7 +83,7 @@
             <set>Qt::AlignCenter</set>
            </property>
            <property name="readOnly">
-            <bool>false</bool>
+            <bool>true</bool>
            </property>
           </widget>
          </item>
@@ -116,7 +116,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="d7">
+          <widget class="MyLineEdit" name="d7">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -145,6 +145,9 @@
            </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
+           </property>
+           <property name="readOnly">
+            <bool>true</bool>
            </property>
           </widget>
          </item>
@@ -256,7 +259,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="d37_1">
+          <widget class="MyLineEdit" name="d37">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -287,7 +290,7 @@
             <set>Qt::AlignCenter</set>
            </property>
            <property name="readOnly">
-            <bool>false</bool>
+            <bool>true</bool>
            </property>
           </widget>
          </item>
@@ -320,7 +323,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="d36_1">
+          <widget class="MyLineEdit" name="d36">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -351,7 +354,7 @@
             <set>Qt::AlignCenter</set>
            </property>
            <property name="readOnly">
-            <bool>false</bool>
+            <bool>true</bool>
            </property>
           </widget>
          </item>
@@ -489,6 +492,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>MyLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header location="global">mylineedit.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
