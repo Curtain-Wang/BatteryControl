@@ -104,6 +104,8 @@ void MainWindow::init()
     dataRefreshTimer = new QTimer(this);
     connect(dataRefreshTimer, &QTimer::timeout, this, &MainWindow::onDataRefreshTimerTimeout);
     dataRefreshTimer->setInterval(DATA_REFRESH_CYCLE);
+    //监听串口数据
+    connect(serialPort, &QSerialPort::readyRead, this, &MainWindow::handleReadyRead);
     //超时定时器
     timeoutTimer = new QTimer(this);
     connect(timeoutTimer, &QTimer::timeout, this, &MainWindow::handleTimeout);

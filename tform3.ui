@@ -292,7 +292,7 @@ QLineEdit[readOnly=&quot;true&quot;] {
            </font>
           </property>
           <property name="text">
-           <string>A压侧</string>
+           <string>A侧</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -634,7 +634,7 @@ QLineEdit[readOnly=&quot;true&quot;] {
   <customwidget>
    <class>MyLineEdit</class>
    <extends>QLineEdit</extends>
-   <header>mylineedit.h</header>
+   <header location="global">mylineedit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
