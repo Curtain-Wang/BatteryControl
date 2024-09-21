@@ -106,10 +106,10 @@ void TForm7::on_lineEdit_returnPressed()
 
                 }
             }
-            mainwindow->manualWriteOneCMDBuild(static_cast<char>(0), editAddrLow, value >> 8, value & 0xFF);
         }
-
+        mainwindow->manualWriteOneCMDBuild(static_cast<char>(0), editAddrLow, value >> 8, value & 0xFF);
     }
+    //修改翻转电压
     else
     {
         quint16 value = ui->lineEdit->text().toFloat() * 10;
