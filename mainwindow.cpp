@@ -879,7 +879,8 @@ void MainWindow::dealMessage(const QByteArray &data)
         QByteArray dataBuf = data.mid(3, data.size() - 5);
         for(int i = 0; i < dataBuf.size(); i = i + 2)
         {
-            timingDataBuf[i / 2] = static_cast<quint8>(dataBuf.at(i)) * 256 + static_cast<quint8>(dataBuf.at(i + 1));
+            timingDataBuf[i / 2] = static_cast<quint16>(dataBuf.at(i)) * 256 + static_cast<quint16>(dataBuf.at(i + 1));
+            qDebug() << "d" << i / 2 << ": " << timingDataBuf[i / 2];
         }
         refreshAll();
     }
