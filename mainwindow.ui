@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>DDC Control Panel V1.0（PN:20403-152）</string>
+   <string>DDC Control Panel V1.2（PN:20403-152）</string>
   </property>
   <property name="styleSheet">
    <string notr="true">QMainWindow {

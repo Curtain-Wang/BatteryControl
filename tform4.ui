@@ -248,7 +248,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="d34_1">
+             <widget class="QLineEdit" name="d34_2">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -703,7 +703,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="d35_1">
+             <widget class="QLineEdit" name="d35_2">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                 <horstretch>0</horstretch>
