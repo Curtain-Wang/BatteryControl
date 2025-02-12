@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 #include <QMainWindow>
+#include "zlgcan.h"
 class TForm1;
 class TForm2;
 class TForm3;
@@ -45,6 +46,13 @@ public:
     void setAtoB();
     void setBtoA();
     void secondCMDSend();
+    //CAN
+    bool initCAN();
+    void closeCAN();
+    quint32 generateCANId(quint8 module_id, quint8 command, quint8 frame_sequence, quint8 module_number);
+    void receiveCANData();
+    bool sendCANData(uint8_t module_id, uint8_t command, uint8_t frame_sequence, uint8_t module_number, uint8_t data[8]);
+    void decodeCANData(can_frame frame);
 private slots:
     void onSendTimerTimeout();
     void onReceiveTimerTimeout();
@@ -96,7 +104,10 @@ private:
     int spaceKeyPressCount = 0; // 空格键按下次数
     QTimer *resetTimer;     // 用于重置按键计数的定时器
     int step = 0;
-
+    //CAN相关
+    IProperty* property; //CAN属性
+    DEVICE_HANDLE dhandle;
+    CHANNEL_HANDLE chHandle;
     // QWidget interface
 protected:
     virtual void keyPressEvent(QKeyEvent *event) override;

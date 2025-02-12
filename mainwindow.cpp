@@ -519,7 +519,7 @@ void MainWindow::manualWriteOneCMDBuild(char startHigh, char startLow, char valu
     manualSendDataBuf.clear();
     if(secFlag == 0)
     {
-       manualFlag = 1;
+        manualFlag = 1;
     }
     else
     {
@@ -625,6 +625,141 @@ void MainWindow::secondCMDSend()
         setBtoA();
     default:
         break;
+    }
+}
+
+// 初始化 CAN
+bool MainWindow::initCAN() {
+    // 打开 USB-CAN 设备
+    dhandle = ZCAN_OpenDevice(ZCAN_USBCAN_2E_U, 0, 0);
+    if (INVALID_DEVICE_HANDLE == dhandle)
+    {
+        qDebug() << "打开设备失败";
+        return false;
+    }
+
+    property = GetIProperty(dhandle);
+    if (NULL == property)
+    {
+        qDebug() << "属性指针为空";
+        return false;
+    }
+
+    ZCAN_CHANNEL_INIT_CONFIG cfg;
+    memset(&cfg, 0, sizeof(cfg));
+    cfg.can_type = TYPE_CAN;
+    cfg.can.filter = 1;             // 过滤器类型，1表示开启过滤器
+    cfg.can.mode = 0x01;            // 设置为支持扩展帧模式（0x01 为支持扩展帧）
+    cfg.can.acc_code = 0x80000000;   // 接收过滤器的起始码，0x80000000 表示只接收特定的帧
+    cfg.can.acc_mask = 0xFFFFFFFF;   // 接收过滤器的掩码，0xFFFFFFFF 表示接收所有 ID
+    //设置波特率为250K bps
+    cfg.can.timing0 = 0x03;   // 设置 Timing0 (TQ，BRP 等配置)
+    cfg.can.timing1 = 0x1C;   // 设置 Timing1 (SJW，BS1 和 BS2 等配置)
+
+    //初始化CAN通道
+    chHandle = ZCAN_InitCAN(dhandle, 0, &cfg);
+    if (INVALID_CHANNEL_HANDLE == chHandle) {
+        qDebug() << "初始化通道失败";
+        ReleaseIProperty(property);
+        ZCAN_CloseDevice(dhandle);
+        return false;
+    }
+
+    // 启动 CAN 通道
+    if (ZCAN_StartCAN(chHandle) != STATUS_OK) {
+        qDebug() << "启动通道失败";
+        ReleaseIProperty(property);
+        ZCAN_CloseDevice(dhandle);
+        return false;
+    }
+    return true;
+}
+
+void MainWindow::closeCAN()
+{
+    ReleaseIProperty(property);
+    ZCAN_CloseDevice(dhandle);
+}
+
+// 根据给定的模块号、命令、帧序号等信息生成 CAN ID
+quint32 MainWindow::generateCANId(quint8 module_id, quint8 command, quint8 frame_sequence, quint8 module_number) {
+    uint32_t can_id = 0;
+    can_id |= (module_id & 0xFF);                   // 0-7位模块号
+    can_id |= ((command & 0xF) << 8);               // 8-11位命令
+    can_id |= (0x3 << 12);                          // 12-15位固定值0x3
+    can_id |= ((frame_sequence & 0xF) << 16);       // 16-19位帧序号
+    can_id |= (0xE << 20);                          // 20-23位固定值0xe
+    can_id |= (0x8 << 24);                          // 24-27位固定值0x8
+    can_id |= (0x1 << 28);                          // 28位固定值0x1
+    return can_id;
+}
+
+// 读取数据（接收数据帧）
+void MainWindow::receiveCANData()
+{
+    // 确保缓冲区有数据
+    UINT receiveNum = ZCAN_GetReceiveNum(chHandle, 0);  // 0 表示CAN类型
+    if (receiveNum == 0) {
+        qDebug() << "没有接收到数据";
+        return;
+    }
+
+    ZCAN_Receive_Data receiveData[10]; // 假设最多接收10条数据
+    int actualReceive = ZCAN_Receive(chHandle, receiveData, 10, 100); // 设置等待超时100ms
+    if (actualReceive <= 0) {
+        qDebug() << "接收数据失败或超时";
+        return;
+    }
+
+    // 遍历接收到的数据并解析
+    for (int i = 0; i < actualReceive; ++i) {
+        can_frame frame = receiveData[i].frame;
+        decodeCANData(frame);
+    }
+}
+
+// 发送数据（发送数据帧）
+bool MainWindow::sendCANData(uint8_t module_id, uint8_t command, uint8_t frame_sequence, uint8_t module_number, uint8_t data[8]) {
+    ZCAN_Transmit_Data frame;
+    memset(&frame, 0, sizeof(frame));
+
+    // 生成 CAN ID
+    frame.frame.can_id = generateCANId(module_id, command, frame_sequence, module_number);
+    frame.frame.can_dlc = 8;  // 数据长度，最多 8 字节
+
+    // 填充数据
+    memcpy(frame.frame.data, data, 8);
+
+    // 发送数据
+    if (ZCAN_Transmit(chHandle, &frame, 1) != 1) {
+        qDebug() << "发送数据失败，帧ID：0x" << QString::number(frame.frame.can_id, 16).toUpper();
+        return false;
+    }
+    qDebug() << "发送数据成功，帧 ID: 0x" << QString::number(frame.frame.can_id, 16).toUpper();
+    return true;
+}
+
+void MainWindow::decodeCANData(can_frame frame)
+{
+    qDebug() << "接收到数据帧，ID: " << QString::number(frame.can_id, 16);
+    // 检查帧ID是否符合我们定义的格式
+    int moduleId = (frame.can_id >> 8) & 0xFF; // 0-7位为模块号
+    int command = (frame.can_id >> 8) & 0xF;   // 8-11位为读写命令
+    qDebug() << "模块号: " << moduleId;
+    qDebug() << "命令: " << QString::number(command, 16);
+    // DCDC传过来的数据 (0x5)
+    if (command != 0x5) {
+        qDebug() << "收到脏数据, 帧ID: 0x" << QString::number(frame.can_id, 16).toUpper();
+        return;
+    }
+    switch(frame.can_id)
+    {
+    case 0x18E03501:
+        frame.data[0];//优先控制帧标志
+        frame.data[1];//DC/DC启动控制
+        break;
+    case 0x18E13501:
+
     }
 }
 

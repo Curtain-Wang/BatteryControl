@@ -58,3 +58,8 @@ else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/include/ -ltpscaleplugi
 
 INCLUDEPATH += $$PWD/include
 DEPENDPATH += $$PWD/include
+
+win32: LIBS += -L$$PWD/include/ -lzlgcan
+
+INCLUDEPATH += $$PWD/include
+DEPENDPATH += $$PWD/include
