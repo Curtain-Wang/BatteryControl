@@ -156,6 +156,7 @@ void MainWindow::init()
     chargeTimeCountTimer->setInterval(1000);
     connect(chargeTimeCountTimer, &QTimer::timeout, this, &MainWindow::chargeTimeCountAdd);
     refresh();
+    staticCanDataInit();
 }
 
 void MainWindow::refreshPort()
@@ -842,6 +843,70 @@ void MainWindow::decodeCANData(can_frame frame)
         timingDataBuf[60] = static_cast<quint8>(frame.data[6]) + static_cast<quint8>(frame.data[7]) * 256;
         break;
     }
+}
+
+void MainWindow::writeCanData(quint8 addr, char valueHigh, char valueLow)
+{
+    quint32 canId = canidHash.value(addr);
+    if(canId == 0)
+    {
+        QMessageBox::information(this, tr("提示"), QString("暂时不支持修改地址为%1的寄存器").arg(addr));
+        return;
+    }
+    can_frame frame = canFrameHash.value(canId);
+    if(frame.can_id != canId)
+    {
+        QMessageBox::information(this, tr("提示"), QString("没有找到canid为%1的can_frame").arg(QString::number(canId, 16)));
+        return;
+    }
+    frame.data[lowByteIndexHash.value(addr)] = valueLow;
+    frame.data[highByteIndexHash.value(addr)] = valueHigh;
+    quint32 writeCanId = writeCanidHash.value(addr);
+    sendCANData(writeCanId, frame.data);
+}
+
+void MainWindow::staticCanDataInit()
+{
+    //A侧(低压侧)最大输入电流
+    canidHash.insert(25, 0x18E43501);
+    lowByteIndexHash.insert(25, 0);
+    highByteIndexHash.insert(25, 1);
+    writeCanidHash.insert(25, 0x18E23A01);
+    //B侧(高压侧)最大输入电流
+    canidHash.insert(26, 0x18E43501);
+    lowByteIndexHash.insert(26, 4);
+    highByteIndexHash.insert(26, 5);
+    writeCanidHash.insert(26, 0x18E23A01);
+    //A侧(低压侧)最大输出电流
+    canidHash.insert(27, 0x18E43501);
+    lowByteIndexHash.insert(27, 2);
+    highByteIndexHash.insert(27, 3);
+    writeCanidHash.insert(27, 0x18E23A01);
+    //B侧(高压侧)最大输出电流
+    canidHash.insert(28, 0x18E43501);
+    lowByteIndexHash.insert(28, 6);
+    highByteIndexHash.insert(28, 7);
+    writeCanidHash.insert(28, 0x18E23A01);
+    //A侧过压保护电压
+    canidHash.insert(14, 0x18E53501);
+    lowByteIndexHash.insert(14, 4);
+    highByteIndexHash.insert(14, 5);
+    writeCanidHash.insert(14, 0x18E33A01);
+    //B侧过压保护电压
+    canidHash.insert(15, 0x18E53501);
+    lowByteIndexHash.insert(15, 6);
+    highByteIndexHash.insert(15, 7);
+    writeCanidHash.insert(15, 0x18E33A01);
+    //A侧欠压保护电压
+    canidHash.insert(16, 0x18E63501);
+    lowByteIndexHash.insert(16, 4);
+    highByteIndexHash.insert(16, 5);
+    writeCanidHash.insert(16, 0x18E43A01);
+    //B侧欠压保护电压
+    canidHash.insert(17, 0x18E63501);
+    lowByteIndexHash.insert(17, 6);
+    highByteIndexHash.insert(17, 7);
+    writeCanidHash.insert(17, 0x18E43A01);
 }
 
 void MainWindow::sendPortData(QByteArray data)

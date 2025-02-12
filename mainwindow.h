@@ -53,6 +53,8 @@ public:
     void receiveCANData();
     bool sendCANData(quint32 canId, uint8_t data[8]);
     void decodeCANData(can_frame frame);
+    void writeCanData(quint8 addr, char valueHigh, char valueLow);
+    void staticCanDataInit();
 private slots:
     void onSendTimerTimeout();
     void onReceiveTimerTimeout();
@@ -108,7 +110,17 @@ private:
     IProperty* property; //CAN属性
     DEVICE_HANDLE dhandle;
     CHANNEL_HANDLE chHandle;
+    //写数据的时候可以根据canid获取到can_frame
     QHash<canid_t, can_frame> canFrameHash;
+    //写数据的时候可以根据之前485的地址获取到读的canid
+    QHash<quint8, canid_t> canidHash;
+    //写数据的时候可以根据485地址获取到低Byte的索引
+    QHash<quint8, quint8> lowByteIndexHash;
+    //写数据的时候可以根据485地址获取到高Byte的索引
+    QHash<quint8, quint8> highByteIndexHash;
+    //写数据的时候可以根据485地址获取到写的canid
+    QHash<quint8, canid_t> writeCanidHash;
+
     // QWidget interface
 protected:
     virtual void keyPressEvent(QKeyEvent *event) override;
