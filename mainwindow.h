@@ -51,7 +51,7 @@ public:
     void closeCAN();
     quint32 generateCANId(quint8 module_id, quint8 command, quint8 frame_sequence, quint8 module_number);
     void receiveCANData();
-    bool sendCANData(uint8_t module_id, uint8_t command, uint8_t frame_sequence, uint8_t module_number, uint8_t data[8]);
+    bool sendCANData(quint32 canId, uint8_t data[8]);
     void decodeCANData(can_frame frame);
 private slots:
     void onSendTimerTimeout();
@@ -108,6 +108,7 @@ private:
     IProperty* property; //CAN属性
     DEVICE_HANDLE dhandle;
     CHANNEL_HANDLE chHandle;
+    QHash<canid_t, can_frame> canFrameHash;
     // QWidget interface
 protected:
     virtual void keyPressEvent(QKeyEvent *event) override;

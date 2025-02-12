@@ -719,12 +719,12 @@ void MainWindow::receiveCANData()
 }
 
 // 发送数据（发送数据帧）
-bool MainWindow::sendCANData(uint8_t module_id, uint8_t command, uint8_t frame_sequence, uint8_t module_number, uint8_t data[8]) {
+bool MainWindow::sendCANData(quint32 canId, uint8_t data[8]) {
     ZCAN_Transmit_Data frame;
     memset(&frame, 0, sizeof(frame));
 
     // 生成 CAN ID
-    frame.frame.can_id = generateCANId(module_id, command, frame_sequence, module_number);
+    frame.frame.can_id = canId;
     frame.frame.can_dlc = 8;  // 数据长度，最多 8 字节
 
     // 填充数据
@@ -752,6 +752,7 @@ void MainWindow::decodeCANData(can_frame frame)
         qDebug() << "收到脏数据, 帧ID: 0x" << QString::number(frame.can_id, 16).toUpper();
         return;
     }
+    canFrameHash.insert(frame.can_id, frame);
     switch(frame.can_id)
     {
     case 0x18E03501:
@@ -759,7 +760,87 @@ void MainWindow::decodeCANData(can_frame frame)
         frame.data[1];//DC/DC启动控制
         break;
     case 0x18E13501:
-
+        //低压侧实时电压
+        timingDataBuf[20] = static_cast<quint8>(frame.data[0]) + static_cast<quint8>(frame.data[1]) * 256;
+        //高压侧实时电压
+        timingDataBuf[21] = static_cast<quint8>(frame.data[2]) + static_cast<quint8>(frame.data[3]) * 256;
+        //低压侧实时工作电流
+        timingDataBuf[22] = static_cast<quint8>(frame.data[4]) + static_cast<quint8>(frame.data[5]) * 256;
+        //高压侧实时工作电流
+        timingDataBuf[23] = static_cast<quint8>(frame.data[6]) + static_cast<quint8>(frame.data[7]) * 256;
+        break;
+    case 0x18E23501:
+        //低压侧实时输出功率
+        timingDataBuf[34] = static_cast<quint8>(frame.data[0]) + static_cast<quint8>(frame.data[1]) * 256;
+        //高压侧实时输出功率
+        timingDataBuf[35] = static_cast<quint8>(frame.data[2]) + static_cast<quint8>(frame.data[3]) * 256;
+        //散热器温度
+        timingDataBuf[24] = static_cast<quint8>(frame.data[4]) + static_cast<quint8>(frame.data[5]) * 256;
+        break;
+    case 0x18E43501:
+        //低压侧最大输入电流
+        timingDataBuf[25] = static_cast<quint8>(frame.data[0]) + static_cast<quint8>(frame.data[1]) * 256;
+        //低压侧最大输出电流
+        timingDataBuf[27] = static_cast<quint8>(frame.data[2]) + static_cast<quint8>(frame.data[3]) * 256;
+        //高压侧最大输入电流
+        timingDataBuf[26] = static_cast<quint8>(frame.data[4]) + static_cast<quint8>(frame.data[5]) * 256;
+        //高压侧最大输出电流
+        timingDataBuf[28] = static_cast<quint8>(frame.data[6]) + static_cast<quint8>(frame.data[7]) * 256;
+        break;
+    case 0x18E53501:
+        //低压侧过压保护电压设置
+        timingDataBuf[14] = static_cast<quint8>(frame.data[4]) + static_cast<quint8>(frame.data[5]) * 256;
+        //高压侧过压保护电压设置
+        timingDataBuf[15] = static_cast<quint8>(frame.data[6]) + static_cast<quint8>(frame.data[7]) * 256;
+    case 0x18E63501:
+        //低压侧欠压保护电压设置
+        timingDataBuf[16] = static_cast<quint8>(frame.data[4]) + static_cast<quint8>(frame.data[5]) * 256;
+        //高压侧欠压保护电压设置
+        timingDataBuf[17] = static_cast<quint8>(frame.data[6]) + static_cast<quint8>(frame.data[7]) * 256;
+        break;
+    case 0x18E73501:
+        //累计上电小时数
+        timingDataBuf[64] = static_cast<quint8>(frame.data[2]) + static_cast<quint8>(frame.data[3]) * 256;
+        //累计变换时间，分钟部分
+        timingDataBuf[33] = static_cast<quint8>(frame.data[4]);
+        //累计变换时间，小时部分
+        timingDataBuf[32] = static_cast<quint8>(frame.data[6]) + static_cast<quint8>(frame.data[7]) * 256;
+    case 0x18EC3501:
+        //低压侧输出/输入功率设置
+        timingDataBuf[36] = static_cast<quint8>(frame.data[0]) + static_cast<quint8>(frame.data[1]) * 256;
+        //高压侧输出/输入功率设置
+        timingDataBuf[37] = static_cast<quint8>(frame.data[2]) + static_cast<quint8>(frame.data[3]) * 256;
+        break;
+    case 0x18E83501:
+        //低压侧累计输出电能低字
+        timingDataBuf[38] = static_cast<quint8>(frame.data[0]) + static_cast<quint8>(frame.data[1]) * 256;
+        //低压侧累计输出电能高字
+        timingDataBuf[39] = static_cast<quint8>(frame.data[2]) + static_cast<quint8>(frame.data[3]) * 256;
+        //高压侧累计输出电能，低字
+        timingDataBuf[40] = static_cast<quint8>(frame.data[4]) + static_cast<quint8>(frame.data[5]) * 256;
+        //高压侧累计输出电能，高字
+        timingDataBuf[41] = static_cast<quint8>(frame.data[6]) + static_cast<quint8>(frame.data[7]) * 256;
+        break;
+    case 0x18E93501:
+        //低压侧电压校正系数C
+        timingDataBuf[49] = static_cast<quint8>(frame.data[0]) + static_cast<quint8>(frame.data[1]) * 256;
+        //低压侧电压校正系数B
+        timingDataBuf[48] = static_cast<quint8>(frame.data[2]) + static_cast<quint8>(frame.data[3]) * 256;
+        //高压侧电压校正系数C
+        timingDataBuf[53] = static_cast<quint8>(frame.data[4]) + static_cast<quint8>(frame.data[5]) * 256;
+        //高压侧电压校正系数B
+        timingDataBuf[52] = static_cast<quint8>(frame.data[6]) + static_cast<quint8>(frame.data[7]) * 256;
+        break;
+    case 0x18EA3501:
+        //低压侧电流校正系数C
+        timingDataBuf[57] = static_cast<quint8>(frame.data[0]) + static_cast<quint8>(frame.data[1]) * 256;
+        //低压侧电流校正系数B
+        timingDataBuf[56] = static_cast<quint8>(frame.data[2]) + static_cast<quint8>(frame.data[3]) * 256;
+        //高压侧电流校正系数C
+        timingDataBuf[61] = static_cast<quint8>(frame.data[4]) + static_cast<quint8>(frame.data[5]) * 256;
+        //高压侧电流校正系数B
+        timingDataBuf[60] = static_cast<quint8>(frame.data[6]) + static_cast<quint8>(frame.data[7]) * 256;
+        break;
     }
 }
 
