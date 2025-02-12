@@ -89,108 +89,6 @@ QStatusBar {
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout_4">
        <item>
-        <widget class="QGroupBox" name="groupBox_35">
-         <property name="minimumSize">
-          <size>
-           <width>150</width>
-           <height>30</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>250</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">QGroupBox {
-    border: none
-}
-</string>
-         </property>
-         <property name="title">
-          <string/>
-         </property>
-         <layout class="QHBoxLayout" name="horizontalLayout_30">
-          <item>
-           <widget class="QLabel" name="label_30">
-            <property name="maximumSize">
-             <size>
-              <width>55</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="font">
-             <font>
-              <family>Microsoft YaHei</family>
-              <pointsize>-1</pointsize>
-              <bold>true</bold>
-             </font>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">QLabel {
-    font-size: 15px; /* 字体大小 */
-    font-weight: bold; /* 加粗 */
-    text-align: center; /* 文本居中 */
-}
-</string>
-            </property>
-            <property name="text">
-             <string>COMM</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="MyComboBox" name="comboBox_2">
-            <property name="minimumSize">
-             <size>
-              <width>100</width>
-              <height>30</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>150</width>
-              <height>30</height>
-             </size>
-            </property>
-            <property name="font">
-             <font>
-              <family>Microsoft YaHei</family>
-              <pointsize>-1</pointsize>
-             </font>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">QComboBox {
-    border: 1px solid #cccccc; /* 边框 */
-    border-radius: 5px;
-    background-color: #ffffff;
-}
-QComboBox::drop-down {
-    border-left: 1px solid #cccccc; /* 下拉按钮的边框 */
-    width: 30px;
-}
-QComboBox::down-arrow {
-    image: url(:/icons/images/arrow_down.png); /* 您可以替换为您自己的下拉箭头图标 */
-}
-</string>
-            </property>
-            <item>
-             <property name="text">
-              <string/>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string/>
-             </property>
-            </item>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item>
         <widget class="QGroupBox" name="groupBox_36">
          <property name="minimumSize">
           <size>
@@ -2199,11 +2097,6 @@ QPushButton:pressed {
    <class>TPScale</class>
    <extends>QWidget</extends>
    <header>tpscale.h</header>
-  </customwidget>
-  <customwidget>
-   <class>MyComboBox</class>
-   <extends>QComboBox</extends>
-   <header>mycombobox.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

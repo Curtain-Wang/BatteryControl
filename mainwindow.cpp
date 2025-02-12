@@ -103,11 +103,11 @@ void MainWindow::init()
     sendTimer = new QTimer(this);
     connect(sendTimer, &QTimer::timeout, this, &MainWindow::onSendTimerTimeout);
     sendTimer->setInterval(100);
-    sendTimer->start();
+    // sendTimer->start();
     //接收数据
     receiveTimer = new QTimer(this);
     connect(receiveTimer, &QTimer::timeout, this, &MainWindow::onReceiveTimerTimeout);
-    receiveTimer->setInterval(10);
+    receiveTimer->setInterval(100);
     receiveTimer->start();
     refreshPort();
     //状态栏
@@ -701,7 +701,6 @@ void MainWindow::receiveCANData()
     // 确保缓冲区有数据
     UINT receiveNum = ZCAN_GetReceiveNum(chHandle, 0);  // 0 表示CAN类型
     if (receiveNum == 0) {
-        qDebug() << "没有接收到数据";
         return;
     }
 
@@ -970,61 +969,7 @@ void MainWindow::onReceiveTimerTimeout()
     {
         return;
     }
-    cacheReceiveData();
-    //当缓冲区的消息长度大于messageSize，那说明可能存在一条完整的响应
-    while ((receiveEndIndex + 500 - receiveStartIndex) % 500 >= 6) {
-        int module = static_cast<uint8_t>(receiveDataBuf[receiveStartIndex]);
-        int cmd = static_cast<uint8_t>(receiveDataBuf[(receiveStartIndex + 1) % 500]);
-        //没有匹配到开始
-        if(module != MODULE || (cmd != 3 && cmd != 6 && cmd != 16))
-        {
-            //更新开始点
-            receiveStartIndex = (receiveStartIndex + 1) % 500;
-            continue;
-        }
-        //匹配到开始,再匹配下长度是否符合
-        int messageSize = 0;
-        if(cmd == 3)
-        {
-            messageSize = static_cast<uint8_t>(receiveDataBuf[(receiveStartIndex + 2) % 500]) + 5;
-        }
-        if(cmd == 6)
-        {
-            messageSize = 8;
-        }
-        if(cmd == 16)
-        {
-            messageSize = 16;
-        }
-        if((receiveEndIndex + 500 - receiveStartIndex) % 500 < messageSize){
-            //消息还没接收完整，等下一次定时去接,不更新开始点
-            break;
-        }
-        //构建消息
-        QByteArray buf;
-        for (int var = 0; var < messageSize; var++) {
-            buf.append(receiveDataBuf[(receiveStartIndex + var) % 500]);
-        }
-        //判断是否是一个完整的消息
-        if(receiveDataCRCCheck(buf))
-        {
-            //首先更新接收缓冲区的开始坐标
-            if(isCreated(1))
-            {
-                tform1->displayInfo("串口上传上来且验证通过的一条消息：" + buf.toHex());
-            }
-            receiveStartIndex = (receiveStartIndex + messageSize) % 500;
-            dealMessage(buf);
-            break;
-        }
-        //crc校验失败
-        else
-        {
-            //更新开始点
-            receiveStartIndex = (receiveStartIndex + 1) % 500;
-            continue;
-        }
-    }
+    receiveCANData();
 }
 
 void MainWindow::on_pushButton_5_clicked()
@@ -1213,32 +1158,10 @@ void MainWindow::on_connBtn_clicked()
 {
     if(ui->connBtn->text() == "建立连接")
     {
-        if(ui->comboBox_2->currentIndex() == -1)
-        {
-            QMessageBox::information(this, tr("提示"),
-                                     tr("请选择串口!"));
-            return;
-        }
-        serialPort->setBaudRate(BR);
-        serialPort->setPortName(ui->comboBox_2->currentText());
-        serialPort->setDataBits(QSerialPort::Data8);
-        serialPort->setStopBits(QSerialPort::OneStop);
-        serialPort->setParity(QSerialPort::EvenParity);
-        //连接失败
-        if(!serialPort->open(QIODevice::ReadWrite))
-        {
-            QMessageBox::information(this, tr("错误"),
-                                     tr("无法启动串口通讯！！！"));
-            connFlag = 0;
-            connectStatusLabel->setText(connStatus.arg("未连接"));
-            connectStatusLabel->setStyleSheet("QLabel { background-color : red; color : white; }");
-            return;
-        }
         //连接成功
-        else
+        if(initCAN())
         {
             connFlag = 1;
-            ui->comboBox_2->setEnabled(false);
             connectStatusLabel->setText(connStatus.arg("已连接"));
             connectStatusLabel->setStyleSheet("QLabel { background-color : green; color : white; }");
             ui->connBtn->setText("断开连接");
@@ -1246,13 +1169,8 @@ void MainWindow::on_connBtn_clicked()
     }
     else if(ui->connBtn->text() == "断开连接")
     {
-        if(!serialPort->isOpen())
-        {
-            return;
-        }
-        serialPort->close();
+        closeCAN();
         connFlag = 0;
-        ui->comboBox_2->setEnabled(true);
         connectStatusLabel->setText(connStatus.arg("未连接"));
         connectStatusLabel->setStyleSheet("QLabel { background-color : red; color : white; }");
         ui->connBtn->setText("建立连接");
