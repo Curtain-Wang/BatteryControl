@@ -63,3 +63,5 @@ win32: LIBS += -L$$PWD/include/ -lzlgcan
 
 INCLUDEPATH += $$PWD/include
 DEPENDPATH += $$PWD/include
+QMAKE_PROJECT_DEPTH = 0
+
