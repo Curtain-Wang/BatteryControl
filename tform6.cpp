@@ -26,17 +26,17 @@ void TForm6::refresh()
     ui->d11->setText(QString::number(timingDataBuf[11]));
     ui->d32->setText(QString::number(timingDataBuf[32]));
     ui->d33->setText(QString::number(timingDataBuf[33]));
-    ui->d36_2->setText(QString::number(static_cast<float>(timingDataBuf[36]) / 100, 'f', 1));
-    ui->d37_2->setText(QString::number(static_cast<float>(timingDataBuf[37]) / 100, 'f', 1));
+    ui->d36_1->setText(QString::number(static_cast<float>(timingDataBuf[36]) / 10, 'f', 1));
+    ui->d37_1->setText(QString::number(static_cast<float>(timingDataBuf[37]) / 10, 'f', 1));
     ui->d64->setText(QString::number(timingDataBuf[64]));
 }
 
 void TForm6::connectAll()
 {
     connect(ui->d7, &QLineEdit::returnPressed, this, &TForm6::onEditingFinished);
-    connect(ui->d36_2, &QLineEdit::returnPressed, this, &TForm6::onEditingFinished);
+    connect(ui->d36_1, &QLineEdit::returnPressed, this, &TForm6::onEditingFinished);
     connect(ui->d11, &QLineEdit::returnPressed, this, &TForm6::onEditingFinished);
-    connect(ui->d37_2, &QLineEdit::returnPressed, this, &TForm6::onEditingFinished);
+    connect(ui->d37_1, &QLineEdit::returnPressed, this, &TForm6::onEditingFinished);
 }
 
 void TForm6::onEditingFinished()
@@ -50,10 +50,10 @@ void TForm6::onEditingFinished()
     if (senderLineEdit) {
         // 打印对象名称
         qDebug() << "当前的 QLineEdit 对象名称是：" << senderLineEdit->objectName();
-        if(senderLineEdit->objectName() == "d36_2" || senderLineEdit->objectName() == "d37_2")
+        if(senderLineEdit->objectName() == "d36_1" || senderLineEdit->objectName() == "d37_1")
         {
             quint8 addrLow = senderLineEdit->objectName().mid(1).toInt();
-            quint16 value = senderLineEdit->text().toFloat() * 100;
+            quint16 value = senderLineEdit->text().toFloat() * 10;
             mainwindow->manualWriteOneCMDBuild(static_cast<char>(0), addrLow, value >> 8, value & 0xFF);
         }
         if(senderLineEdit->objectName() == "d7" || senderLineEdit->objectName() == "d11")
