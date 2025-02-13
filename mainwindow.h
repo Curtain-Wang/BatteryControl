@@ -53,7 +53,7 @@ public:
     void receiveCANData();
     bool sendCANData(quint32 canId, uint8_t data[8]);
     void decodeCANData(can_frame frame);
-    void writeCanData(quint8 addr, char valueHigh, char valueLow);
+    void writeCanData(quint8 addr, char valueLow, char valueHigh);
     void staticCanDataInit();
 private slots:
     void onSendTimerTimeout();
@@ -115,9 +115,9 @@ private:
     //写数据的时候可以根据之前485的地址获取到读的canid
     QHash<quint8, canid_t> canidHash;
     //写数据的时候可以根据485地址获取到低Byte的索引
-    QHash<quint8, quint8> lowByteIndexHash;
+    QHash<quint8, qint8> lowByteIndexHash;
     //写数据的时候可以根据485地址获取到高Byte的索引
-    QHash<quint8, quint8> highByteIndexHash;
+    QHash<quint8, qint8> highByteIndexHash;
     //写数据的时候可以根据485地址获取到写的canid
     QHash<quint8, canid_t> writeCanidHash;
 

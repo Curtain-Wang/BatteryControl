@@ -161,20 +161,20 @@ void MainWindow::init()
 
 void MainWindow::refreshPort()
 {
-    //清空combox中已经有的串口名
-    ui->comboBox_2->clear();
-    // 获取系统中所有可用串口
-    QList<QSerialPortInfo> portList = QSerialPortInfo::availablePorts();
+    // //清空combox中已经有的串口名
+    // ui->comboBox_2->clear();
+    // // 获取系统中所有可用串口
+    // QList<QSerialPortInfo> portList = QSerialPortInfo::availablePorts();
 
-    // 按串口名升序排序
-    std::sort(portList.begin(), portList.end(), [](const QSerialPortInfo &a, const QSerialPortInfo &b) {
-        return a.portName() < b.portName();
-    });
+    // // 按串口名升序排序
+    // std::sort(portList.begin(), portList.end(), [](const QSerialPortInfo &a, const QSerialPortInfo &b) {
+    //     return a.portName() < b.portName();
+    // });
 
-    // 遍历可用串口，将串口名添加到 comboBox中
-    for (const QSerialPortInfo &portInfo : portList) {
-        ui->comboBox_2->addItem(portInfo.portName());
-    }
+    // // 遍历可用串口，将串口名添加到 comboBox中
+    // for (const QSerialPortInfo &portInfo : portList) {
+    //     ui->comboBox_2->addItem(portInfo.portName());
+    // }
 }
 
 void MainWindow::sendGetAllDataCMD()
@@ -572,22 +572,25 @@ void MainWindow::setAtoB()
         QMessageBox::information(this, tr("提示"), tr("先建立连接!"));
         return;
     }
-    QByteArray buf;
-        //起始地址
-    buf.append(static_cast<char>(0x00));
-    buf.append(0x0C);
-    //字数
-    buf.append(static_cast<char>(0x00));
-    buf.append(0x02);
-    //字节数
-    buf.append(0x04);
-    //写入值A
-    buf.append(static_cast<char>(ATurnLowV >> 8));
-    buf.append(static_cast<char>(ATurnLowV & 0xFF));
-    //写入值B
-    buf.append(static_cast<char>(BTurnHighV >> 8));
-    buf.append(static_cast<char>(BTurnHighV & 0xFF));
-    manualWriteMultipleCMDBuild(buf);
+    // QByteArray buf;
+    //     //起始地址
+    // buf.append(static_cast<char>(0x00));
+    // buf.append(0x0C);
+    // //字数
+    // buf.append(static_cast<char>(0x00));
+    // buf.append(0x02);
+    // //字节数
+    // buf.append(0x04);
+    // //写入值A
+    // buf.append(static_cast<char>(ATurnLowV >> 8));
+    // buf.append(static_cast<char>(ATurnLowV & 0xFF));
+    // //写入值B
+    // buf.append(static_cast<char>(BTurnHighV >> 8));
+    // buf.append(static_cast<char>(BTurnHighV & 0xFF));
+    // manualWriteMultipleCMDBuild(buf);
+    //设置低压侧输出电压、高压侧输出电压
+    writeCanData(0x0c, ATurnLowV & 0xFF, ATurnLowV >> 8);
+    writeCanData(0x0d, BTurnHighV & 0xFF, BTurnHighV >> 8);
 }
 
 void MainWindow::setBtoA()
@@ -598,22 +601,24 @@ void MainWindow::setBtoA()
         QMessageBox::information(this, tr("提示"), tr("先建立连接!"));
         return;
     }
-    QByteArray buf;
-        //起始地址
-    buf.append(static_cast<char>(0x00));
-    buf.append(0x0C);
-    //字数
-    buf.append(static_cast<char>(0x00));
-    buf.append(0x02);
-    //字节数
-    buf.append(0x04);
-    //写入值A
-    buf.append(static_cast<char>(ATurnHighV >> 8));
-    buf.append(static_cast<char>(ATurnHighV & 0xFF));
-    //写入值B
-    buf.append(static_cast<char>(BTurnLowV >> 8));
-    buf.append(static_cast<char>(BTurnLowV & 0xFF));
-    manualWriteMultipleCMDBuild(buf);
+    // QByteArray buf;
+    //     //起始地址
+    // buf.append(static_cast<char>(0x00));
+    // buf.append(0x0C);
+    // //字数
+    // buf.append(static_cast<char>(0x00));
+    // buf.append(0x02);
+    // //字节数
+    // buf.append(0x04);
+    // //写入值A
+    // buf.append(static_cast<char>(ATurnHighV >> 8));
+    // buf.append(static_cast<char>(ATurnHighV & 0xFF));
+    // //写入值B
+    // buf.append(static_cast<char>(BTurnLowV >> 8));
+    // buf.append(static_cast<char>(BTurnLowV & 0xFF));
+    // manualWriteMultipleCMDBuild(buf);
+    writeCanData(0x0c, ATurnHighV & 0xFF, ATurnHighV >> 8);
+    writeCanData(0x0d, BTurnLowV & 0xFF, BTurnLowV >> 8);
 }
 
 void MainWindow::secondCMDSend()
@@ -776,7 +781,16 @@ void MainWindow::decodeCANData(can_frame frame)
         timingDataBuf[35] = static_cast<quint8>(frame.data[2]) + static_cast<quint8>(frame.data[3]) * 256;
         //散热器温度
         timingDataBuf[24] = static_cast<quint8>(frame.data[4]) + static_cast<quint8>(frame.data[5]) * 256;
+        //故障寄存器
+        timingDataBuf[5] = static_cast<quint8>(frame.data[6]) + static_cast<quint8>(frame.data[7]) * 256;
         break;
+    case 0x18E33501:
+        //停止变换控制字
+        timingDataBuf[3] = static_cast<quint8>(frame.data[4]);
+        //严格单向选择寄存器
+        timingDataBuf[7] = static_cast<quint8>(frame.data[5]);
+        //反向充电限压使能
+        timingDataBuf[11] = static_cast<quint8>(frame.data[3]);
     case 0x18E43501:
         //低压侧最大输入电流
         timingDataBuf[25] = static_cast<quint8>(frame.data[0]) + static_cast<quint8>(frame.data[1]) * 256;
@@ -844,7 +858,7 @@ void MainWindow::decodeCANData(can_frame frame)
     }
 }
 
-void MainWindow::writeCanData(quint8 addr, char valueHigh, char valueLow)
+void MainWindow::writeCanData(quint8 addr, char valueLow, char valueHigh)
 {
     quint32 canId = canidHash.value(addr);
     if(canId == 0)
@@ -859,7 +873,11 @@ void MainWindow::writeCanData(quint8 addr, char valueHigh, char valueLow)
         return;
     }
     frame.data[lowByteIndexHash.value(addr)] = valueLow;
-    frame.data[highByteIndexHash.value(addr)] = valueHigh;
+    //不一定有两个字节
+    if(highByteIndexHash.value(addr) != -1)
+    {
+        frame.data[highByteIndexHash.value(addr)] = valueHigh;
+    }
     quint32 writeCanId = writeCanidHash.value(addr);
     sendCANData(writeCanId, frame.data);
 }
@@ -906,6 +924,22 @@ void MainWindow::staticCanDataInit()
     lowByteIndexHash.insert(17, 6);
     highByteIndexHash.insert(17, 7);
     writeCanidHash.insert(17, 0x18E43A01);
+    //停止变换控制字
+    canidHash.insert(3, 0x18E33501);
+    lowByteIndexHash.insert(3, 4);
+    highByteIndexHash.insert(3, -1);
+    writeCanidHash.insert(3, 0x18E13A01);
+    //A侧输出电压
+    canidHash.insert(0x0c, 0x18E63501);
+    lowByteIndexHash.insert(0x0c, 0);
+    highByteIndexHash.insert(0x0c, 1);
+    writeCanidHash.insert(0x0c, 0x18E43A01);
+    //B侧输出电压
+    canidHash.insert(0x0d, 0x18E63501);
+    lowByteIndexHash.insert(0x0d, 2);
+    highByteIndexHash.insert(0x0d, 3);
+    writeCanidHash.insert(0x0d, 0x18E43A01);
+
 }
 
 void MainWindow::sendPortData(QByteArray data)
@@ -1226,9 +1260,13 @@ void MainWindow::on_pushButton_clicked()
         //B更接近过压
         secCmdType = 2;
     }
-    //先发自动模式，
-    manualWriteOneCMDBuild(static_cast<char>(0x00), static_cast<char>(0x03), static_cast<char>(0x00), static_cast<char>(0x00), 1);
-
+    //先发自动模式，设置停止变换控制字为0
+   // manualWriteOneCMDBuild(static_cast<char>(0x00), static_cast<char>(0x03), static_cast<char>(0x00), static_cast<char>(0x00), 1);
+    writeCanData(3, 0, 0);
+    //状态切换
+    QTimer::singleShot(500, this, [this](){
+        secondCMDSend();
+    });
 }
 
 //手动模式
@@ -1244,8 +1282,10 @@ void MainWindow::on_pushButton_7_clicked()
         QMessageBox::information(this, tr("提示"), tr("当前已经是手动模式!"));
         return;
     }
-    //手动模式，
-    manualWriteOneCMDBuild(static_cast<char>(0x00), static_cast<char>(0x03), static_cast<char>(0x00), static_cast<char>(0x04));
+    // //手动模式，
+    // manualWriteOneCMDBuild(static_cast<char>(0x00), static_cast<char>(0x03), static_cast<char>(0x00), static_cast<char>(0x04));
+    //手动模式，设置停止变换控制字为4
+    writeCanData(3, 0, 4);
 }
 
 //手动关闭
@@ -1261,7 +1301,9 @@ void MainWindow::on_pushButton_9_clicked()
         QMessageBox::information(this, tr("提示"), tr("当前已经是关闭状态!"));
         return;
     }
-    manualWriteOneCMDBuild(static_cast<char>(0x00), 0x03, static_cast<char>(0x00), 0x05);
+    //manualWriteOneCMDBuild(static_cast<char>(0x00), 0x03, static_cast<char>(0x00), 0x05);
+    //手动关闭，设置停止变换控制字为5
+    writeCanData(3, 0, 5);
 }
 
 void MainWindow::resetKeyPressCount()
