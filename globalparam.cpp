@@ -8,6 +8,7 @@ const int DATA_REFRESH_CYCLE = 20;
 int dataRefreshRemaingTime = 0;
 int dataRefreshStep = 1;
 int waitMessageRemaingTime = 0;
+int moduleId = 0;
 const char READ_CMD = 3;
 const char WRITE_ONE_CMD = 6;
 const char WRITE_MULTIPLE_CMD = 16;

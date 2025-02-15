@@ -245,7 +245,7 @@ void TForm7::on_lineEdit_returnPressed()
 
                 }
             }
-            mainwindow->writeCanData(editAddrLow, value >> 8, value & 0xFF);
+            mainwindow->writeCanData(editAddrLow, value & 0xFF, value >> 8);
         }
 
     }
@@ -263,7 +263,7 @@ void TForm7::on_lineEdit_returnPressed()
             if(value >= timingDataBuf[14] * 0.9)
             {
                 quint16 newHighV = value * 1.1;
-                mainwindow->writeCanData(14, newHighV >> 8, newHighV & 0xFF);
+                mainwindow->writeCanData(14, newHighV & 0xFF, newHighV >> 8);
             }
             //将A翻高写入配置
             qDebug() << "A侧翻转高压修改：" << value;
@@ -280,7 +280,7 @@ void TForm7::on_lineEdit_returnPressed()
             if(value >= timingDataBuf[15] * 0.9)
             {
                 quint16 newHighV = value * 1.1;
-                mainwindow->writeCanData(15, newHighV >> 8, newHighV & 0xFF);
+                mainwindow->writeCanData(15, newHighV & 0xFF, newHighV >> 8);
             }
             //将A翻高写入配置
             BTurnHighV = value;
@@ -296,7 +296,7 @@ void TForm7::on_lineEdit_returnPressed()
             if(value <= timingDataBuf[16] * 1.1)
             {
                 quint16 newHighV = value * 0.9;
-                mainwindow->writeCanData(16, newHighV >> 8, newHighV & 0xFF);
+                mainwindow->writeCanData(16, newHighV & 0xFF, newHighV >> 8);
             }
             ATurnLowV = value;
         }
@@ -311,7 +311,7 @@ void TForm7::on_lineEdit_returnPressed()
             if(value <= timingDataBuf[17] * 1.1)
             {
                 quint16 newHighV = value * 0.9;
-                mainwindow->writeCanData(17, newHighV >> 8, newHighV & 0xFF);
+                mainwindow->writeCanData(17, newHighV & 0xFF, newHighV >> 8);
             }
             BTurnLowV = value;
         }

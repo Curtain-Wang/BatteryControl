@@ -637,10 +637,10 @@ void MainWindow::secondCMDSend()
 // 初始化 CAN
 bool MainWindow::initCAN() {
     // 打开 USB-CAN 设备
-    dhandle = ZCAN_OpenDevice(ZCAN_USBCAN_2E_U, 0, 0);
+    dhandle = ZCAN_OpenDevice(ZCAN_USBCAN2, 0, 0);
     if (INVALID_DEVICE_HANDLE == dhandle)
     {
-        qDebug() << "打开设备失败";
+        qDebug() << "打开设备失败，错误信息：";
         return false;
     }
 
@@ -651,26 +651,28 @@ bool MainWindow::initCAN() {
         return false;
     }
 
+    if (ZCAN_SetValue(dhandle , "1/baud_rate", "500000") != STATUS_OK)
+    {
+        qDebug() << "波特率设置失败";
+        return false;
+    }
+
     ZCAN_CHANNEL_INIT_CONFIG cfg;
     memset(&cfg, 0, sizeof(cfg));
     cfg.can_type = TYPE_CAN;
-    cfg.can.filter = 1;             // 过滤器类型，1表示开启过滤器
-    cfg.can.mode = 0x01;            // 设置为支持扩展帧模式（0x01 为支持扩展帧）
-    cfg.can.acc_code = 0x80000000;   // 接收过滤器的起始码，0x80000000 表示只接收特定的帧
-    cfg.can.acc_mask = 0xFFFFFFFF;   // 接收过滤器的掩码，0xFFFFFFFF 表示接收所有 ID
-    //设置波特率为250K bps
-    cfg.can.timing0 = 0x03;   // 设置 Timing0 (TQ，BRP 等配置)
-    cfg.can.timing1 = 0x1C;   // 设置 Timing1 (SJW，BS1 和 BS2 等配置)
+    cfg.can.filter = 0;
+    cfg.can.mode = 0x0;
+    cfg.can.acc_code = 0x0;
+    cfg.can.acc_mask = 0xFFFFFFFF;
 
     //初始化CAN通道
-    chHandle = ZCAN_InitCAN(dhandle, 0, &cfg);
+    chHandle = ZCAN_InitCAN(dhandle, 1, &cfg);
     if (INVALID_CHANNEL_HANDLE == chHandle) {
         qDebug() << "初始化通道失败";
         ReleaseIProperty(property);
         ZCAN_CloseDevice(dhandle);
         return false;
     }
-
     // 启动 CAN 通道
     if (ZCAN_StartCAN(chHandle) != STATUS_OK) {
         qDebug() << "启动通道失败";
@@ -729,11 +731,16 @@ bool MainWindow::sendCANData(quint32 canId, uint8_t data[8]) {
     memset(&frame, 0, sizeof(frame));
 
     // 生成 CAN ID
-    frame.frame.can_id = canId;
+    frame.frame.can_id = (canId & 0x1FFFFF00) | moduleId | (1 << 31);
     frame.frame.can_dlc = 8;  // 数据长度，最多 8 字节
 
     // 填充数据
     memcpy(frame.frame.data, data, 8);
+    qDebug() << "发送数据：";
+    for(qint8 i = 0; i < 8; i++)
+    {
+        qDebug () << QString::number(data[i], 16);
+    }
 
     // 发送数据
     if (ZCAN_Transmit(chHandle, &frame, 1) != 1) {
@@ -748,15 +755,16 @@ void MainWindow::decodeCANData(can_frame frame)
 {
     qDebug() << "接收到数据帧，ID: " << QString::number(frame.can_id, 16);
     // 检查帧ID是否符合我们定义的格式
-    int moduleId = (frame.can_id >> 8) & 0xFF; // 0-7位为模块号
-    int command = (frame.can_id >> 8) & 0xF;   // 8-11位为读写命令
+    moduleId = frame.can_id & 0xFF; // 0-7位为模块号
     qDebug() << "模块号: " << moduleId;
-    qDebug() << "命令: " << QString::number(command, 16);
     // DCDC传过来的数据 (0x5)
-    if (command != 0x5) {
-        qDebug() << "收到脏数据, 帧ID: 0x" << QString::number(frame.can_id, 16).toUpper();
-        return;
-    }
+    // if (command != 0x5) {
+    //     qDebug() << "收到脏数据, 帧ID: 0x" << QString::number(frame.can_id, 16).toUpper();
+    //     return;
+    // }
+    //这里只是为了与缓存的key匹配
+    frame.can_id = (frame.can_id & 0x1FFFFF00) | 1;
+    qDebug() << "转换后的CANID: " << QString::number(frame.can_id, 16);
     canFrameHash.insert(frame.can_id, frame);
     switch(frame.can_id)
     {

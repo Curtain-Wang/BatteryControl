@@ -8,6 +8,7 @@ extern const int DATA_REFRESH_CYCLE;
 extern int dataRefreshRemaingTime;
 extern int dataRefreshStep;
 extern int waitMessageRemaingTime;
+extern int moduleId;
 extern const char READ_CMD;
 extern const char WRITE_ONE_CMD;
 extern const char WRITE_MULTIPLE_CMD;
