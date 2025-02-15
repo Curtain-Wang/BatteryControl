@@ -1293,7 +1293,7 @@ void MainWindow::on_pushButton_7_clicked()
     // //手动模式，
     // manualWriteOneCMDBuild(static_cast<char>(0x00), static_cast<char>(0x03), static_cast<char>(0x00), static_cast<char>(0x04));
     //手动模式，设置停止变换控制字为4
-    writeCanData(3, 0, 4);
+    writeCanData(3, 4, 0);
 }
 
 //手动关闭
@@ -1311,7 +1311,7 @@ void MainWindow::on_pushButton_9_clicked()
     }
     //manualWriteOneCMDBuild(static_cast<char>(0x00), 0x03, static_cast<char>(0x00), 0x05);
     //手动关闭，设置停止变换控制字为5
-    writeCanData(3, 0, 5);
+    writeCanData(3, 5, 0);
 }
 
 void MainWindow::resetKeyPressCount()
