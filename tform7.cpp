@@ -53,7 +53,13 @@ void TForm7::on_lineEdit_returnPressed()
     if(editAddrLow != -1)
     {
         quint16 value = 0;
-        if(deviceType < 2 && (editAddrLow == 18 || editAddrLow == 19 || editAddrLow == 25
+        //工作模式寄存器
+        if(editAddrLow == 2)
+        {
+            value = ui->lineEdit->text().toInt();
+            mainwindow->manualWriteOneCMDBuild(static_cast<char>(0), editAddrLow, value >> 8, value & 0xFF);
+        }
+        else if(deviceType < 2 && (editAddrLow == 18 || editAddrLow == 19 || editAddrLow == 25
                                || editAddrLow == 26 || editAddrLow == 27 || editAddrLow == 28))
         {
             value = ui->lineEdit->text().toFloat() * 100;
