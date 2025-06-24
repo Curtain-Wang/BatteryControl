@@ -127,21 +127,6 @@ void MainWindow::init()
     companyNameLabel->setMinimumWidth(350);
     ui->statusBar->addPermanentWidget(companyNameLabel);
 
-    QPixmap pixmapA(":/icons/images/A.png");  // 加载图片
-    ui->labelA->setPixmap(pixmapA);
-    ui->labelA->setFixedSize(40, 40);
-    ui->labelA->setScaledContents(true);
-
-    QPixmap pixmapB(":/icons/images/B.png");  // 加载图片
-    ui->labelB->setPixmap(pixmapB);
-    ui->labelB->setFixedSize(40, 40);
-    ui->labelB->setScaledContents(true);
-
-    QPixmap pixmapArrow(":/icons/images/x.png");  // 加载图片
-    ui->labelArrow->setPixmap(pixmapArrow);
-    ui->labelArrow->setFixedSize(40, 40);
-    ui->labelArrow->setScaledContents(true);
-
     //加载配置文件
     loadConfig();
     // 创建定时器，用于在一段时间后重置按键计数
@@ -229,22 +214,11 @@ void MainWindow::refresh()
         BTurnHighV = timingDataBuf[15] * 0.9;
         BTurnLowV = timingDataBuf[17] * 1.1;
     }
-    //刷新翻转电压
-    ui->lineEditAHigh->setText(QString::number(static_cast<float>(ATurnHighV) / 10, 'f', 1));
-    ui->lineEditBHigh->setText(QString::number(static_cast<float>(BTurnHighV) / 10, 'f', 1));
-    ui->lineEditALow->setText(QString::number(static_cast<float>(ATurnLowV) / 10, 'f', 1));
-    ui->lineEditBLow->setText(QString::number(static_cast<float>(BTurnLowV) / 10, 'f', 1));
+    //工作模式
+    ui->d2->setText(QString::number(timingDataBuf[2]));
     //实时电压
     ui->d20->setText(QString::number(static_cast<float>(timingDataBuf[20]) / 10, 'f', 1));
     ui->d21->setText(QString::number(static_cast<float>(timingDataBuf[21]) / 10, 'f', 1));
-    //设置仪表盘
-    ui->tPScaleA->setHighest(ATurnHighV <= 0 ? 60 : static_cast<double>(ATurnHighV) / 10);
-    ui->tPScaleA->setLowest(static_cast<double>(ATurnLowV) / 10);
-    ui->tPScaleA->setLevel(static_cast<double>(timingDataBuf[20]) / 10);
-
-    ui->tPScaleB->setHighest(BTurnHighV <= 0 ? 60 :  static_cast<double>(BTurnHighV) / 10);
-    ui->tPScaleB->setLowest(static_cast<double>(BTurnLowV) / 10);
-    ui->tPScaleB->setLevel(static_cast<double>(timingDataBuf[21]) / 10);
     //实时电流
     if(deviceType == 0 || deviceType == 1)
     {
@@ -260,19 +234,13 @@ void MainWindow::refresh()
         value = timingDataBuf[23];
         ui->d23->setText(QString::number(static_cast<float>(value) / 10, 'f', 1));
     }
-    //电流方向，循环次数刷新
-    ui->label_25->setText(displayInfo2.arg(cycleNum));
     qint16 ac = timingDataBuf[22];
     //手动/自动模式
     if(timingDataBuf[3] == 0 || timingDataBuf[3] == 4)
     {
         if(ac < 0)
         {
-            ui->label_24->setText(displayInfo1.arg(chargeTime / 3600).arg((chargeTime % 3600) / 60).arg(chargeTime % 60));
             QPixmap pixmapArrow(":/icons/images/right.png");  // 加载图片
-            ui->labelArrow->setPixmap(pixmapArrow);
-            ui->labelArrow->setFixedSize(40, 40);
-            ui->labelArrow->setScaledContents(true);
             if(!chargeTimeCountTimer->isActive())
             {
                 chargeTimeCountTimer->start();
@@ -280,11 +248,7 @@ void MainWindow::refresh()
         }
         else if(ac > 0)
         {
-            ui->label_24->setText(displayInfo1.arg(chargeTime / 3600).arg((chargeTime % 3600) / 60).arg(chargeTime % 60));
             QPixmap pixmapArrow(":/icons/images/left.png");  // 加载图片
-            ui->labelArrow->setPixmap(pixmapArrow);
-            ui->labelArrow->setFixedSize(40, 40);
-            ui->labelArrow->setScaledContents(true);
             if(!chargeTimeCountTimer->isActive())
             {
                 chargeTimeCountTimer->start();
@@ -292,11 +256,7 @@ void MainWindow::refresh()
         }
         else
         {
-            ui->label_24->setText(displayInfo1.arg(0).arg(0).arg(0));
             QPixmap pixmapArrow(":/icons/images/x.png");  // 加载图片
-            ui->labelArrow->setPixmap(pixmapArrow);
-            ui->labelArrow->setFixedSize(40, 40);
-            ui->labelArrow->setScaledContents(true);
             if(chargeTimeCountTimer->isActive())
             {
                 chargeTimeCountTimer->stop();
@@ -305,11 +265,7 @@ void MainWindow::refresh()
     }
     else
     {
-        ui->label_24->setText(displayInfo1.arg(0).arg(0).arg(0));
         QPixmap pixmapArrow(":/icons/images/x.png");  // 加载图片
-        ui->labelArrow->setPixmap(pixmapArrow);
-        ui->labelArrow->setFixedSize(40, 40);
-        ui->labelArrow->setScaledContents(true);
         if(chargeTimeCountTimer->isActive())
         {
             chargeTimeCountTimer->stop();
@@ -623,15 +579,15 @@ void MainWindow::setBtoA()
 
 void MainWindow::secondCMDSend()
 {
-    switch (secCmdType) {
-    case 1:
-        setAtoB();
-        break;
-    case 2:
-        setBtoA();
-    default:
-        break;
-    }
+    // switch (secCmdType) {
+    // case 1:
+    //     setAtoB();
+    //     break;
+    // case 2:
+    //     setBtoA();
+    // default:
+    //     break;
+    // }
 }
 
 // 初始化 CAN
@@ -793,6 +749,9 @@ void MainWindow::decodeCANData(can_frame frame)
         timingDataBuf[5] = static_cast<quint8>(frame.data[6]) + static_cast<quint8>(frame.data[7]) * 256;
         break;
     case 0x18E33501:
+        //模块号
+        timingDataBuf[0] = static_cast<quint8>(frame.data[0]);
+        timingDataBuf[2] = static_cast<quint8>(frame.data[2]);
         //停止变换控制字
         timingDataBuf[3] = static_cast<quint8>(frame.data[4]);
         //严格单向选择寄存器
@@ -1257,24 +1216,7 @@ void MainWindow::on_pushButton_clicked()
         QMessageBox::information(this, tr("提示"), tr("当前已经是自动模式!"));
         return;
     }
-    //判断初始化流向
-    if((timingDataBuf[20] - timingDataBuf[16]) * (timingDataBuf[15] - timingDataBuf[17]) > (timingDataBuf[21] - timingDataBuf[17]) * (timingDataBuf[14] - timingDataBuf[16]))
-    {
-        //A更接近过压
-        secCmdType = 1;
-    }
-    else
-    {
-        //B更接近过压
-        secCmdType = 2;
-    }
-    //先发自动模式，设置停止变换控制字为0
-   // manualWriteOneCMDBuild(static_cast<char>(0x00), static_cast<char>(0x03), static_cast<char>(0x00), static_cast<char>(0x00), 1);
     writeCanData(3, 0, 0);
-    //状态切换
-    QTimer::singleShot(500, this, [this](){
-        secondCMDSend();
-    });
 }
 
 //手动模式
@@ -1394,6 +1336,5 @@ void MainWindow::chargeTimeCountAdd()
 void MainWindow::on_pushButton_10_clicked()
 {
     cycleNum = 0;
-    ui->label_25->setText(displayInfo2.arg(cycleNum));
 }
 
