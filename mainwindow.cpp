@@ -263,40 +263,40 @@ void MainWindow::refresh()
         }
     }
 
-    //A->B, A实时电压小于翻转低压或者B大于翻转高压
-    if(ac < 0 && (timingDataBuf[20] <= ATurnLowV || timingDataBuf[21] >= BTurnHighV))
-    {
-        //翻转充电时间重置
-        chargeTime = 0;
-        //自动模式，下发B->A
-        if(timingDataBuf[3] == 0)
-        {
-            setBtoA();
-            cycleNum++;
-        }
-        //手动模式，手动停止
-        if(timingDataBuf[3] == 4)
-        {
-            manualWriteOneCMDBuild(static_cast<char>(0x00), 0x03, static_cast<char>(0x00), 0x05);
-        }
-    }
-    //B->A，B实时电压小于翻转低压或者A大于翻转高压
-    if(ac > 0 && (timingDataBuf[21] <= BTurnLowV || timingDataBuf[20] >= ATurnHighV))
-    {
-        //翻转充电时间重置
-        chargeTime = 0;
-        //自动模式，下发A->B
-        if(timingDataBuf[3] == 0)
-        {
-            setAtoB();
-            cycleNum++;
-        }
-        //手动模式，手动停止
-        if(timingDataBuf[3] == 4)
-        {
-            manualWriteOneCMDBuild(static_cast<char>(0x00), 0x03, static_cast<char>(0x00), 0x05);
-        }
-    }
+    // //A->B, A实时电压小于翻转低压或者B大于翻转高压
+    // if(ac < 0 && (timingDataBuf[20] <= ATurnLowV || timingDataBuf[21] >= BTurnHighV))
+    // {
+    //     //翻转充电时间重置
+    //     chargeTime = 0;
+    //     //自动模式，下发B->A
+    //     if(timingDataBuf[3] == 0)
+    //     {
+    //         setBtoA();
+    //         cycleNum++;
+    //     }
+    //     //手动模式，手动停止
+    //     if(timingDataBuf[3] == 4)
+    //     {
+    //         manualWriteOneCMDBuild(static_cast<char>(0x00), 0x03, static_cast<char>(0x00), 0x05);
+    //     }
+    // }
+    // //B->A，B实时电压小于翻转低压或者A大于翻转高压
+    // if(ac > 0 && (timingDataBuf[21] <= BTurnLowV || timingDataBuf[20] >= ATurnHighV))
+    // {
+    //     //翻转充电时间重置
+    //     chargeTime = 0;
+    //     //自动模式，下发A->B
+    //     if(timingDataBuf[3] == 0)
+    //     {
+    //         setAtoB();
+    //         cycleNum++;
+    //     }
+    //     //手动模式，手动停止
+    //     if(timingDataBuf[3] == 4)
+    //     {
+    //         manualWriteOneCMDBuild(static_cast<char>(0x00), 0x03, static_cast<char>(0x00), 0x05);
+    //     }
+    // }
 }
 
 void MainWindow::refresh(int num)
