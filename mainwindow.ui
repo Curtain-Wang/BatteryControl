@@ -1482,14 +1482,14 @@ QPushButton:pressed {
  </widget>
  <customwidgets>
   <customwidget>
-   <class>MyComboBox</class>
-   <extends>QComboBox</extends>
-   <header>mycombobox.h</header>
-  </customwidget>
-  <customwidget>
    <class>MyLineEdit</class>
    <extends>QLineEdit</extends>
    <header>mylineedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>MyComboBox</class>
+   <extends>QComboBox</extends>
+   <header>mycombobox.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
