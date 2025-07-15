@@ -207,50 +207,47 @@ void TForm7::on_lineEdit_returnPressed()
         {
             value = ui->lineEdit->text().toFloat() * 10;
             //修改的是A过压
-            if(editAddrLow == 14)
-            {
-                //如果A过压的0.9小于翻转高压，则需要降低翻转高压
-                if(value * 0.9 < ATurnHighV)
-                {
-                    QMessageBox::information(this, tr("提示"), tr("过压设置的9成不能低于翻转高压, 请先降低翻转高压或者增加过压设置!"));
-                    return;
+            // if(editAddrLow == 14)
+            // {
+            //     //如果A过压的0.9小于翻转高压，则需要降低翻转高压
+            //     if(value * 0.9 < ATurnHighV)
+            //     {
+            //         QMessageBox::information(this, tr("提示"), tr("过压设置的9成不能低于翻转高压, 请先降低翻转高压或者增加过压设置!"));
+            //         return;
 
-                }
-            }
+            //     }
+            // }
             //修改的是B过压
-            if(editAddrLow == 15)
-            {
-                //如果B过压的0.9小于翻转高压，则需要降低翻转高压
-                if(value * 0.9 < BTurnHighV)
-                {
-                    QMessageBox::information(this, tr("提示"), tr("过压设置的9成不能低于翻转高压, 请先降低翻转高压或者增加过压设置!"));
-                    return;
+            // if(editAddrLow == 15)
+            // {
+            //     //如果B过压的0.9小于翻转高压，则需要降低翻转高压
+            //     if(value * 0.9 < BTurnHighV)
+            //     {
+            //         QMessageBox::information(this, tr("提示"), tr("过压设置的9成不能低于翻转高压, 请先降低翻转高压或者增加过压设置!"));
+            //         return;
 
-                }
-            }
+            //     }
+            // }
             //修改的是A欠压
-            if(editAddrLow == 16)
-            {
-                //如果A欠压的1.1大于于翻转低压，则需要提高翻转低压
-                if(value * 1.1 > ATurnLowV)
-                {
+            // if(editAddrLow == 16)
+            // {
+            //     //如果A欠压的1.1大于于翻转低压，则需要提高翻转低压
+            //     if(value * 1.1 > ATurnLowV)
+            //     {
 
-                    QMessageBox::information(this, tr("提示"), tr("欠压设置的1.1倍不能大于翻转低压, 请先提升翻转低压或者降低欠压设置!"));
-                    return;
+            //         QMessageBox::information(this, tr("提示"), tr("欠压设置的1.1倍不能大于翻转低压, 请先提升翻转低压或者降低欠压设置!"));
+            //         return;
 
-                }
-            }
+            //     }
+            // }
             //修改的是B欠压
-            if(editAddrLow == 17)
-            {
-                //如果B欠压的1.1大于于翻转低压，则需要提高翻转低压
-                if(value * 1.1 > BTurnLowV)
-                {
-                    QMessageBox::information(this, tr("提示"), tr("欠压设置的1.1倍不能大于翻转低压, 请先提升翻转低压或者降低欠压设置!"));
-                    return;
-
-                }
-            }
+            // if(editAddrLow == 17)
+            // {
+            //     //如果B欠压的1.1大于于翻转低压，则需要提高翻转低压
+            //     if(value * 1.1 > BTurnLowV)
+            //     {
+            //         QMessageBox::information(this, tr("提示"), tr("欠压设置的1.1倍不能大于翻转低压, 请先提升翻转低压或者降低欠压设置!"));
+            //         return;
             mainwindow->writeCanData(editAddrLow, value & 0xFF, value >> 8);
         }
 

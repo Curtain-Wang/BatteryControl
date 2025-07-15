@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>DDC Control Panel V1.1（PN:20403-152）</string>
+   <string>DDC Control Panel V1.2（PN:20403-152）</string>
   </property>
   <property name="styleSheet">
    <string notr="true">QMainWindow {
@@ -1380,14 +1380,14 @@ QPushButton:pressed {
  </widget>
  <customwidgets>
   <customwidget>
-   <class>MyComboBox</class>
-   <extends>QComboBox</extends>
-   <header>mycombobox.h</header>
-  </customwidget>
-  <customwidget>
    <class>MyLineEdit</class>
    <extends>QLineEdit</extends>
    <header>mylineedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>MyComboBox</class>
+   <extends>QComboBox</extends>
+   <header>mycombobox.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
