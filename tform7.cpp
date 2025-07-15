@@ -57,7 +57,7 @@ void TForm7::on_lineEdit_returnPressed()
         if(editAddrLow == 2)
         {
             value = ui->lineEdit->text().toInt();
-            mainwindow->manualWriteOneCMDBuild(static_cast<char>(0), editAddrLow, value >> 8, value & 0xFF);
+            // mainwindow->manualWriteOneCMDBuild(static_cast<char>(0), editAddrLow, value >> 8, value & 0xFF);
         }
         else if(deviceType < 2 && (editAddrLow == 18 || editAddrLow == 19 || editAddrLow == 25
                                || editAddrLow == 26 || editAddrLow == 27 || editAddrLow == 28))
@@ -111,7 +111,7 @@ void TForm7::on_lineEdit_returnPressed()
             //         return;
             //     }
             // }
-            mainwindow->manualWriteOneCMDBuild(static_cast<char>(0), editAddrLow, value >> 8, value & 0xFF);
+            // mainwindow->manualWriteOneCMDBuild(static_cast<char>(0), editAddrLow, value >> 8, value & 0xFF);
         }
         mainwindow->manualWriteOneCMDBuild(static_cast<char>(0), editAddrLow, value >> 8, value & 0xFF);
     }
