@@ -214,7 +214,7 @@ void MainWindow::refresh()
         BTurnLowV = timingDataBuf[17] * 1.1;
     }
     //工作模式
-    ui->d2->setText(QString::number(timingDataBuf[2]));
+    ui->d2->setText(QString::number(timingDataBuf[2], 16));
     //实时电压
     ui->d20->setText(QString::number(static_cast<float>(timingDataBuf[20]) / 10, 'f', 1));
     ui->d21->setText(QString::number(static_cast<float>(timingDataBuf[21]) / 10, 'f', 1));
