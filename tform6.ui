@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>482</width>
-    <height>187</height>
+    <width>518</width>
+    <height>209</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -27,7 +27,7 @@
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_6">
       <item>
-       <widget class="QGroupBox" name="groupBox_43">
+       <widget class="QGroupBox" name="groupBox_46">
         <property name="styleSheet">
          <string notr="true">QGroupBox {
     border: none
@@ -37,9 +37,9 @@
         <property name="title">
          <string/>
         </property>
-        <layout class="QHBoxLayout" name="horizontalLayout_34">
+        <layout class="QHBoxLayout" name="horizontalLayout_37">
          <item>
-          <widget class="QLabel" name="label_32">
+          <widget class="QLabel" name="label_35">
            <property name="font">
             <font>
              <family>Microsoft YaHei</family>
@@ -47,12 +47,12 @@
             </font>
            </property>
            <property name="text">
-            <string>反向充电限压</string>
+            <string>电压变比设置</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="d11">
+          <widget class="MyLineEdit" name="d31">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -83,7 +83,71 @@
             <set>Qt::AlignCenter</set>
            </property>
            <property name="readOnly">
-            <bool>false</bool>
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QGroupBox" name="groupBox_43">
+        <property name="styleSheet">
+         <string notr="true">QGroupBox {
+    border: none
+}
+</string>
+        </property>
+        <property name="title">
+         <string/>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout_34">
+         <item>
+          <widget class="QLabel" name="label_32">
+           <property name="font">
+            <font>
+             <family>Microsoft YaHei</family>
+             <bold>true</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>反向充电限压</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="MyLineEdit" name="d11">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>80</width>
+             <height>35</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>80</width>
+             <height>35</height>
+            </size>
+           </property>
+           <property name="font">
+            <font>
+             <family>Microsoft YaHei</family>
+            </font>
+           </property>
+           <property name="text">
+            <string>99</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+           <property name="readOnly">
+            <bool>true</bool>
            </property>
           </widget>
          </item>
@@ -116,7 +180,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="d7">
+          <widget class="MyLineEdit" name="d7">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -145,6 +209,9 @@
            </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
+           </property>
+           <property name="readOnly">
+            <bool>true</bool>
            </property>
           </widget>
          </item>
@@ -231,7 +298,7 @@
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
-       <widget class="QGroupBox" name="groupBox_50">
+       <widget class="QGroupBox" name="groupBox_52">
         <property name="styleSheet">
          <string notr="true">QGroupBox {
     border: none
@@ -241,9 +308,9 @@
         <property name="title">
          <string/>
         </property>
-        <layout class="QHBoxLayout" name="horizontalLayout_40">
+        <layout class="QHBoxLayout" name="horizontalLayout_42">
          <item>
-          <widget class="QLabel" name="label_38">
+          <widget class="QLabel" name="label_40">
            <property name="font">
             <font>
              <family>Microsoft YaHei</family>
@@ -251,12 +318,12 @@
             </font>
            </property>
            <property name="text">
-            <string>B侧输出功率设置(KW)</string>
+            <string>风扇启动温度</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="d37_1">
+          <widget class="MyLineEdit" name="d9">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -287,7 +354,71 @@
             <set>Qt::AlignCenter</set>
            </property>
            <property name="readOnly">
-            <bool>false</bool>
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QGroupBox" name="groupBox_50">
+        <property name="styleSheet">
+         <string notr="true">QGroupBox {
+    border: none
+}
+</string>
+        </property>
+        <property name="title">
+         <string/>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout_40">
+         <item>
+          <widget class="QLabel" name="label_38">
+           <property name="font">
+            <font>
+             <family>Microsoft YaHei</family>
+             <bold>true</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>B侧输出功率设置(KW)</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="MyLineEdit" name="d37">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>80</width>
+             <height>35</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>80</width>
+             <height>35</height>
+            </size>
+           </property>
+           <property name="font">
+            <font>
+             <family>Microsoft YaHei</family>
+            </font>
+           </property>
+           <property name="text">
+            <string>99</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+           <property name="readOnly">
+            <bool>true</bool>
            </property>
           </widget>
          </item>
@@ -320,7 +451,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="d36_1">
+          <widget class="MyLineEdit" name="d36">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -351,7 +482,7 @@
             <set>Qt::AlignCenter</set>
            </property>
            <property name="readOnly">
-            <bool>false</bool>
+            <bool>true</bool>
            </property>
           </widget>
          </item>
@@ -489,6 +620,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>MyLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>mylineedit.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

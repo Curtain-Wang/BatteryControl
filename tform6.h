@@ -14,9 +14,7 @@ public:
     explicit TForm6(QWidget *parent = nullptr);
     ~TForm6();
     void refresh();
-    void connectAll();
 private slots:
-    void onEditingFinished();
 private:
     Ui::TForm6 *ui;
 };

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1045</width>
-    <height>702</height>
+    <width>1227</width>
+    <height>660</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -616,7 +616,7 @@ QPushButton:pressed {
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_5">
          <item>
-          <layout class="QHBoxLayout" name="horizontalLayout">
+          <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,1,0">
            <item>
             <spacer name="horizontalSpacer_7">
              <property name="orientation">
@@ -653,25 +653,120 @@ QPushButton:pressed {
             </widget>
            </item>
            <item>
-            <widget class="MyLineEdit" name="d2">
+            <widget class="QComboBox" name="cbx_workingmode">
              <property name="minimumSize">
               <size>
-               <width>0</width>
+               <width>100</width>
                <height>30</height>
               </size>
              </property>
+             <property name="maximumSize">
+              <size>
+               <width>300</width>
+               <height>30</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Microsoft YaHei</family>
+               <pointsize>-1</pointsize>
+              </font>
+             </property>
              <property name="styleSheet">
-              <string notr="true">QLineEdit {
-    border: 1px solid #bbbbbb;
-    border-radius: 3px;
-    padding: 5px;
-    height: 20px; /* 控制输入框的高度 */
+              <string notr="true">QComboBox {
+    border: 1px solid #cccccc; /* 边框 */
+    border-radius: 5px;
+    background-color: #ffffff;
+}
+QComboBox::drop-down {
+    border-left: 1px solid #cccccc; /* 下拉按钮的边框 */
+    width: 30px;
+}
+QComboBox::down-arrow {
+    image: url(:/icons/images/arrow_down.png); /* 您可以替换为您自己的下拉箭头图标 */
 }
 </string>
              </property>
-             <property name="readOnly">
-              <bool>true</bool>
-             </property>
+             <item>
+              <property name="text">
+               <string>空闲模式</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>升降压模式由外部使能控制模式</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>低压侧自动稳压模式</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>高压侧自动稳压模式</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>高压侧MPPT 输入模式</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>低压侧MPPT 输入模式</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>低压侧恒流输出/输入模式</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>高压侧恒流输出/输入模式</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>低压侧恒功率输出/输入模式</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>高压侧恒功率，输出/输入模式</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>低压侧母线压控，电流源模式</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>高压侧母线压控，电流源模式</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>高低压侧电压恒比例模式</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>初始化复位模式</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>低压侧窗口电压输出/输入模式</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>高压侧窗口模式</string>
+              </property>
+             </item>
             </widget>
            </item>
            <item>
@@ -1481,11 +1576,6 @@ QPushButton:pressed {
   <widget class="QStatusBar" name="statusBar"/>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>MyLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>mylineedit.h</header>
-  </customwidget>
   <customwidget>
    <class>MyComboBox</class>
    <extends>QComboBox</extends>

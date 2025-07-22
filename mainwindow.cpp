@@ -214,7 +214,19 @@ void MainWindow::refresh()
         BTurnLowV = timingDataBuf[17] * 1.1;
     }
     //工作模式
-    ui->d2->setText(QString::number(timingDataBuf[2], 16));
+    quint8 workMode = (timingDataBuf[2] & 0x1f);
+    if(workMode != ui->cbx_workingmode->currentIndex() * 2 + 1)
+    {
+        // 禁用信号触发
+        ui->cbx_workingmode->blockSignals(true);
+
+        // 修改 currentIndex 时不会触发信号
+        ui->cbx_workingmode->setCurrentIndex(workMode / 2);
+
+        // 重新启用信号触发
+        ui->cbx_workingmode->blockSignals(false);
+    }
+
     //实时电压
     ui->d20->setText(QString::number(static_cast<float>(timingDataBuf[20]) / 10, 'f', 1));
     ui->d21->setText(QString::number(static_cast<float>(timingDataBuf[21]) / 10, 'f', 1));
@@ -1098,5 +1110,12 @@ void MainWindow::chargeTimeCountAdd()
 void MainWindow::on_pushButton_10_clicked()
 {
     cycleNum = 0;
+}
+
+
+void MainWindow::on_cbx_workingmode_currentIndexChanged(int index)
+{
+    quint16 value = index * 2 + 1 + (timingDataBuf[2] & 0xE0);
+    manualWriteOneCMDBuild(static_cast<char>(0), 2, value >> 8, value & 0xFF);
 }
 
