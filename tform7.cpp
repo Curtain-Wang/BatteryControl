@@ -202,6 +202,9 @@ void TForm7::on_lineEdit_returnPressed()
                                || editAddrLow == 26 || editAddrLow == 27 || editAddrLow == 28))
         {
             value = ui->lineEdit->text().toFloat() * 100;
+        }else if(editAddrLow == 7 || editAddrLow == 9 || editAddrLow == 11)
+        {
+            value = ui->lineEdit->text().toInt();
         }
         else
         {

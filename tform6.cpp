@@ -12,7 +12,6 @@ TForm6::TForm6(QWidget *parent)
     setWindowFlags(Qt::Window | Qt::WindowTitleHint | Qt::WindowCloseButtonHint);
     setWindowIcon(QIcon(":/icons/images/battery_control_icon.ico"));
     refresh();
-    connectAll();
 }
 
 TForm6::~TForm6()
@@ -26,41 +25,9 @@ void TForm6::refresh()
     ui->d11->setText(QString::number(timingDataBuf[11]));
     ui->d32->setText(QString::number(timingDataBuf[32]));
     ui->d33->setText(QString::number(timingDataBuf[33]));
-    ui->d36_2->setText(QString::number(static_cast<float>(timingDataBuf[36]) / 100, 'f', 2));
-    ui->d37_2->setText(QString::number(static_cast<float>(timingDataBuf[37]) / 100, 'f', 2));
+    ui->d36->setText(QString::number(static_cast<float>(timingDataBuf[36]) / 10, 'f', 1));
+    ui->d37->setText(QString::number(static_cast<float>(timingDataBuf[37]) / 10, 'f', 1));
     ui->d64->setText(QString::number(timingDataBuf[64]));
-}
-
-void TForm6::connectAll()
-{
-    connect(ui->d7, &QLineEdit::returnPressed, this, &TForm6::onEditingFinished);
-    connect(ui->d36_2, &QLineEdit::returnPressed, this, &TForm6::onEditingFinished);
-    connect(ui->d11, &QLineEdit::returnPressed, this, &TForm6::onEditingFinished);
-    connect(ui->d37_2, &QLineEdit::returnPressed, this, &TForm6::onEditingFinished);
-}
-
-void TForm6::onEditingFinished()
-{
-    if(connFlag == 0)
-    {
-        QMessageBox::information(this, tr("提示"), tr("请先建立连接!"));
-        return;
-    }
-    QLineEdit* senderLineEdit = qobject_cast<QLineEdit*>(sender());
-    if (senderLineEdit) {
-        // 打印对象名称
-        qDebug() << "当前的 QLineEdit 对象名称是：" << senderLineEdit->objectName();
-        if(senderLineEdit->objectName() == "d36_1" || senderLineEdit->objectName() == "d37_1")
-        {
-            quint8 addrLow = senderLineEdit->objectName().mid(1).toInt();
-            quint16 value = senderLineEdit->text().toFloat() * 10;
-            mainwindow->manualWriteOneCMDBuild(static_cast<char>(0), addrLow, value >> 8, value & 0xFF);
-        }
-        if(senderLineEdit->objectName() == "d7" || senderLineEdit->objectName() == "d11")
-        {
-            quint8 addrLow = senderLineEdit->objectName().mid(1).toInt();
-            quint16 value = senderLineEdit->text().toInt();
-            mainwindow->manualWriteOneCMDBuild(static_cast<char>(0), addrLow, value >> 8, value & 0xFF);
-        }
-    }
+    ui->d9->setText(QString::number(timingDataBuf[9]));
+    ui->d31->setText(QString::number(static_cast<float>(timingDataBuf[31]) / 10, 'f', 1));
 }

@@ -85,6 +85,8 @@ private slots:
 
     void on_pushButton_10_clicked();
 
+    void on_cbx_workingmode_currentIndexChanged(int index);
+
 private:
     Ui::MainWindow *ui;
     QSerialPort* serialPort;
