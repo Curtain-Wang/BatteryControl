@@ -59,8 +59,8 @@ void TForm7::on_lineEdit_returnPressed()
             value = ui->lineEdit->text().toInt(nullptr, 16);
             // mainwindow->manualWriteOneCMDBuild(static_cast<char>(0), editAddrLow, value >> 8, value & 0xFF);
         }
-        else if(deviceType < 2 && (editAddrLow == 18 || editAddrLow == 19 || editAddrLow == 25
-                               || editAddrLow == 26 || editAddrLow == 27 || editAddrLow == 28))
+        else if(deviceType < 2 && (editAddrLow == 18 || editAddrLow == 19 || editAddrLow == 25 || editAddrLow == 36
+                               || editAddrLow == 26 || editAddrLow == 27 || editAddrLow == 28 || editAddrLow == 37))
         {
             value = ui->lineEdit->text().toFloat() * 100;
         }else if(editAddrLow == 7 || editAddrLow == 9 || editAddrLow == 11)
