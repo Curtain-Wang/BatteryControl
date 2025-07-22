@@ -25,8 +25,8 @@ void TForm6::refresh()
     ui->d11->setText(QString::number(timingDataBuf[11]));
     ui->d32->setText(QString::number(timingDataBuf[32]));
     ui->d33->setText(QString::number(timingDataBuf[33]));
-    ui->d36->setText(QString::number(static_cast<float>(timingDataBuf[36]) / 10, 'f', 1));
-    ui->d37->setText(QString::number(static_cast<float>(timingDataBuf[37]) / 10, 'f', 1));
+    ui->d36->setText(QString::number(static_cast<float>(static_cast<qint16>(timingDataBuf[36])) / 100, 'f', 2));
+    ui->d37->setText(QString::number(static_cast<float>(static_cast<qint16>(timingDataBuf[37])) / 100, 'f', 2));
     ui->d64->setText(QString::number(timingDataBuf[64]));
     ui->d9->setText(QString::number(timingDataBuf[9]));
     ui->d31->setText(QString::number(static_cast<float>(timingDataBuf[31]) / 10, 'f', 1));
