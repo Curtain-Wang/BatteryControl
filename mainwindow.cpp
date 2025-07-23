@@ -141,6 +141,7 @@ void MainWindow::init()
     chargeTimeCountTimer->setInterval(1000);
     connect(chargeTimeCountTimer, &QTimer::timeout, this, &MainWindow::chargeTimeCountAdd);
     refresh();
+    ui->pushButton_2->setVisible(false);
 }
 
 void MainWindow::refreshPort()
