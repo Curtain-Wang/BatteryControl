@@ -43,9 +43,9 @@ void TForm3::refresh()
     ui->d21->setText(QString::number(static_cast<float>(timingDataBuf[21]) / 10, 'f', 1));
     ui->d20->setText(QString::number(static_cast<float>(timingDataBuf[20]) / 10, 'f', 1));
     value = timingDataBuf[23];
-    ui->d23->setText(QString::number(static_cast<float>(value) / 10, 'f', 1));
+    ui->d23->setText(QString::number(static_cast<float>(value) / 10, 'f', 2));
     value = timingDataBuf[22];
-    ui->d22->setText(QString::number(static_cast<float>(value) / 10, 'f', 1));
+    ui->d22->setText(QString::number(static_cast<float>(value) / 10, 'f', 2));
 }
 
 void TForm3::connectAll()
@@ -56,51 +56,51 @@ void TForm3::connectAll()
     }
 }
 
-void TForm3::on_lineEdit_13_returnPressed()
-{
-    if(connFlag == 0)
-    {
-        QMessageBox::information(this, tr("提示"), tr("请先建立连接!"));
-        return;
-    }
-    QString input = ui->lineEdit_13->text().trimmed();  // 获取并去掉空白字符
+// void TForm3::on_lineEdit_13_returnPressed()
+// {
+//     if(connFlag == 0)
+//     {
+//         QMessageBox::information(this, tr("提示"), tr("请先建立连接!"));
+//         return;
+//     }
+//     QString input = ui->lineEdit_13->text().trimmed();  // 获取并去掉空白字符
 
-    // 定义16进制校验的正则表达式，要求8个16进制字符（0-9, a-f, A-F）
-    QRegularExpression hexPattern("^[0-9a-fA-F]{8}$");
+//     // 定义16进制校验的正则表达式，要求8个16进制字符（0-9, a-f, A-F）
+//     QRegularExpression hexPattern("^[0-9a-fA-F]{8}$");
 
-    // 校验输入是否匹配
-    if (hexPattern.match(input).hasMatch()) {
-        // 输入合法，继续处理
-        // 将8个字符分成两个部分
-        QString highStr = input.mid(0, 4);  // 前4个字符
-        QString lowStr = input.mid(4, 4);  // 后4个字符
+//     // 校验输入是否匹配
+//     if (hexPattern.match(input).hasMatch()) {
+//         // 输入合法，继续处理
+//         // 将8个字符分成两个部分
+//         QString highStr = input.mid(0, 4);  // 前4个字符
+//         QString lowStr = input.mid(4, 4);  // 后4个字符
 
-        // 转换成数字（使用16进制）
-        bool ok1, ok2;
-        int high = highStr.toInt(&ok1, 16);  // 将第一部分转成整数
-        int low = lowStr.toInt(&ok2, 16);  // 将第二部分转成整数
+//         // 转换成数字（使用16进制）
+//         bool ok1, ok2;
+//         int high = highStr.toInt(&ok1, 16);  // 将第一部分转成整数
+//         int low = lowStr.toInt(&ok2, 16);  // 将第二部分转成整数
 
-        if (ok1 && ok2) {
-            // 转换成功，可以进行进一步处理
-            QByteArray buf;
-            buf.append(static_cast<char>(0x00));
-            buf.append(0x42);
-            buf.append(static_cast<char>(0x00));
-            buf.append(0x02);
-            buf.append(0x04);
-            buf.append(low >> 8);
-            buf.append(low & 0xFF);
-            buf.append(high >> 8);
-            buf.append(high & 0xFF);
-            mainwindow->manualWriteMultipleCMDBuild(buf);
-        } else {
-            QMessageBox::warning(this, "错误", "输入转换失败");
-        }
-    } else {
-        // 输入不合法，弹出错误提示
-        QMessageBox::warning(this, "错误", "请输入8个合法的16进制字符（0-9, a-f, A-F）");
-    }
-}
+//         if (ok1 && ok2) {
+//             // 转换成功，可以进行进一步处理
+//             QByteArray buf;
+//             buf.append(static_cast<char>(0x00));
+//             buf.append(0x42);
+//             buf.append(static_cast<char>(0x00));
+//             buf.append(0x02);
+//             buf.append(0x04);
+//             buf.append(low >> 8);
+//             buf.append(low & 0xFF);
+//             buf.append(high >> 8);
+//             buf.append(high & 0xFF);
+//             mainwindow->manualWriteMultipleCMDBuild(buf);
+//         } else {
+//             QMessageBox::warning(this, "错误", "输入转换失败");
+//         }
+//     } else {
+//         // 输入不合法，弹出错误提示
+//         QMessageBox::warning(this, "错误", "请输入8个合法的16进制字符（0-9, a-f, A-F）");
+//     }
+// }
 
 void TForm3::onEditingFinished()
 {
@@ -134,6 +134,40 @@ void TForm3::onEditingFinished()
         }
 
         mainwindow->manualWriteOneCMDBuild(static_cast<char>(0), addrLow, value >> 8, value & 0xFF);
+    }
+}
+
+
+void TForm3::on_pushButton_clicked()
+{
+    if(connFlag == 0)
+    {
+        QMessageBox::information(this, tr("提示"), tr("请先建立连接!"));
+        return;
+    }
+    QString input = ui->lineEdit_13->text().trimmed();  // 获取并去掉空白字符
+
+    // 定义16进制校验的正则表达式，要求8个16进制字符（0-9, a-f, A-F）
+    QRegularExpression hexPattern("^[0-9a-fA-F]{8}$");
+
+    // 校验输入是否匹配
+    if (hexPattern.match(input).hasMatch()) {
+        quint32 password = ui->lineEdit_13->text().toUInt(nullptr, 16);
+       // 转换成功，可以进行进一步处理
+        QByteArray buf;
+        buf.append(static_cast<char>(0x00));
+        buf.append(0x44);
+        buf.append(static_cast<char>(0x00));
+        buf.append(0x02);
+        buf.append(0x04);
+        buf.append(char((password >> 8) & 0xFF));
+        buf.append(char(password & 0xFF));
+        buf.append(char(password >> 24));
+        buf.append(char((password >> 16) & 0xFF));
+        mainwindow->manualWriteMultipleCMDBuild(buf);
+    } else {
+        // 输入不合法，弹出错误提示
+        QMessageBox::warning(this, "错误", "请输入8个合法的16进制字符（0-9, a-f, A-F）");
     }
 }
 

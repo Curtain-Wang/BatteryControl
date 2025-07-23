@@ -142,6 +142,7 @@ void MainWindow::init()
     connect(chargeTimeCountTimer, &QTimer::timeout, this, &MainWindow::chargeTimeCountAdd);
     refresh();
     staticCanDataInit();
+    ui->pushButton_2->setVisible(false);
 }
 
 void MainWindow::refreshPort()

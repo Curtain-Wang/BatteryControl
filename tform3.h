@@ -18,8 +18,10 @@ public:
     void refresh();
     void connectAll();
 private slots:
-    void on_lineEdit_13_returnPressed();
+    // void on_lineEdit_13_returnPressed();
     void onEditingFinished();
+
+    void on_pushButton_clicked();
 
 private:
     Ui::TForm3 *ui;

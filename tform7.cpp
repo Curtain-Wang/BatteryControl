@@ -202,7 +202,14 @@ void TForm7::on_lineEdit_returnPressed()
                                || editAddrLow == 26 || editAddrLow == 27 || editAddrLow == 28 || editAddrLow == 37))
         {
             value = ui->lineEdit->text().toFloat() * 100;
-        }else if(editAddrLow == 7 || editAddrLow == 9 || editAddrLow == 11)
+        }else if(editAddrLow == 53 || editAddrLow == 57 || editAddrLow == 49 || editAddrLow == 61)
+        {
+            value = ui->lineEdit->text().toFloat() * 10000;
+        }else if(editAddrLow == 52 || editAddrLow == 48 || editAddrLow == 56 || editAddrLow == 60)
+        {
+            value = ui->lineEdit->text().toFloat() * 1000;
+        }
+        else if(editAddrLow == 7 || editAddrLow == 9 || editAddrLow == 11)
         {
             value = ui->lineEdit->text().toInt();
         }
