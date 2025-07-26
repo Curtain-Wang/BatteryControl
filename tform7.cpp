@@ -192,8 +192,7 @@ void TForm7::on_lineEdit_returnPressed()
     if(editAddrLow != -1)
     {
         quint16 value = 0;
-        //工作模式寄存器
-        if(editAddrLow == 2)
+        if(editAddrLow == 2 || editAddrLow == 0 || editAddrLow == 1)
         {
             value = ui->lineEdit->text().toInt(nullptr, 16);
             // mainwindow->manualWriteOneCMDBuild(static_cast<char>(0), editAddrLow, value >> 8, value & 0xFF);
