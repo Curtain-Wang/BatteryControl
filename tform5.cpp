@@ -48,6 +48,8 @@ void TForm5::refresh()
     // ui->lineEditBHigh->setText(QString::number(static_cast<float>(BTurnHighV) / 10, 'f', 1));
     // ui->lineEditALow->setText(QString::number(static_cast<float>(ATurnLowV) / 10, 'f', 1));
     // ui->lineEditBLow->setText(QString::number(static_cast<float>(BTurnLowV) / 10, 'f', 1));
+    ui->d0->setText(QString::number(timingDataBuf[0], 16));
+    ui->d1->setText(QString::number(timingDataBuf[1], 16));
 }
 
 // void TForm5::connectAll()
