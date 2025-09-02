@@ -102,8 +102,8 @@ void MainWindow::init()
     //发送数据
     sendTimer = new QTimer(this);
     connect(sendTimer, &QTimer::timeout, this, &MainWindow::onSendTimerTimeout);
-    sendTimer->setInterval(100);
-    // sendTimer->start();
+    sendTimer->setInterval(500);
+    sendTimer->start();
     //接收数据
     receiveTimer = new QTimer(this);
     connect(receiveTimer, &QTimer::timeout, this, &MainWindow::onReceiveTimerTimeout);
@@ -768,6 +768,7 @@ void MainWindow::decodeCANData(can_frame frame)
         timingDataBuf[7] = static_cast<quint8>(frame.data[5]);
         //反向充电限压使能
         timingDataBuf[11] = static_cast<quint8>(frame.data[3]);
+        break;
     case 0x18E43501:
         //低压侧最大输入电流
         timingDataBuf[25] = static_cast<quint8>(frame.data[0]) + static_cast<quint8>(frame.data[1]) * 256;
@@ -787,6 +788,7 @@ void MainWindow::decodeCANData(can_frame frame)
         timingDataBuf[14] = static_cast<quint8>(frame.data[4]) + static_cast<quint8>(frame.data[5]) * 256;
         //高压侧过压保护电压设置
         timingDataBuf[15] = static_cast<quint8>(frame.data[6]) + static_cast<quint8>(frame.data[7]) * 256;
+        break;
     case 0x18E63501:
         //低压侧输出电压设置
         timingDataBuf[12] = static_cast<quint8>(frame.data[0]) + static_cast<quint8>(frame.data[1]) * 256;
@@ -798,12 +800,17 @@ void MainWindow::decodeCANData(can_frame frame)
         timingDataBuf[17] = static_cast<quint8>(frame.data[6]) + static_cast<quint8>(frame.data[7]) * 256;
         break;
     case 0x18E73501:
+        //低压侧导纳设置
+        timingDataBuf[29] = static_cast<quint8>(frame.data[0]);
+        //高压侧导纳设置
+        timingDataBuf[30] = static_cast<quint8>(frame.data[1]);
         //累计上电小时数
         timingDataBuf[64] = static_cast<quint8>(frame.data[2]) + static_cast<quint8>(frame.data[3]) * 256;
         //累计变换时间，分钟部分
         timingDataBuf[33] = static_cast<quint8>(frame.data[4]);
         //累计变换时间，小时部分
         timingDataBuf[32] = static_cast<quint8>(frame.data[6]) + static_cast<quint8>(frame.data[7]) * 256;
+        break;
     case 0x18EC3501:
         //低压侧输出/输入功率设置
         timingDataBuf[36] = static_cast<quint8>(frame.data[0]) + static_cast<quint8>(frame.data[1]) * 256;
@@ -840,11 +847,6 @@ void MainWindow::decodeCANData(can_frame frame)
         //高压侧电流校正系数B
         timingDataBuf[60] = static_cast<quint8>(frame.data[6]) + static_cast<quint8>(frame.data[7]) * 256;
         break;
-    }
-    refresh();
-    for(int i = 1; i < 7; i++)
-    {
-        refresh(i);
     }
 }
 
@@ -948,42 +950,43 @@ void MainWindow::sendPortData(QByteArray data)
 
 void MainWindow::onSendTimerTimeout()
 {
-    if(connFlag == 0)
+    refresh();
+    for(int i = 1; i < 7; i++)
     {
-        return;
+        refresh(i);
     }
-    if(waitMessageRemaingTime > 0)
-    {
-        waitMessageRemaingTime--;
-    }
-    if(dataRefreshRemaingTime > 0)
-    {
-        dataRefreshRemaingTime--;
-    }
+    // if(waitMessageRemaingTime > 0)
+    // {
+    //     waitMessageRemaingTime--;
+    // }
+    // if(dataRefreshRemaingTime > 0)
+    // {
+    //     dataRefreshRemaingTime--;
+    // }
 
-    //说明串口空闲，看看有没有手动的命令要下发
-    if(waitMessageRemaingTime == 0)
-    {
-        //说明有二次手动命令
-        if(manualFlag == 2)
-        {
-            sendPortData();
-            manualFlag = 0;
-            secondCMDSend();
-        }
-        //说明有手动命令要下发
-        else if(manualFlag == 1)
-        {
-            //手动命令下发
-            sendPortData();
-            manualFlag = 0;
-        }
-        //说明没有手动命令要下发，就判断是否到了刷新时间
-        else if(dataRefreshRemaingTime <= 0)
-        {
-            sendGetAllDataCMD();
-        }
-    }
+    // //说明串口空闲，看看有没有手动的命令要下发
+    // if(waitMessageRemaingTime == 0)
+    // {
+    //     //说明有二次手动命令
+    //     if(manualFlag == 2)
+    //     {
+    //         sendPortData();
+    //         manualFlag = 0;
+    //         secondCMDSend();
+    //     }
+    //     //说明有手动命令要下发
+    //     else if(manualFlag == 1)
+    //     {
+    //         //手动命令下发
+    //         sendPortData();
+    //         manualFlag = 0;
+    //     }
+    //     //说明没有手动命令要下发，就判断是否到了刷新时间
+    //     else if(dataRefreshRemaingTime <= 0)
+    //     {
+    //         sendGetAllDataCMD();
+    //     }
+    // }
 }
 
 void MainWindow::onReceiveTimerTimeout()

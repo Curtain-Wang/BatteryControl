@@ -50,6 +50,8 @@ void TForm5::refresh()
     // ui->lineEditBLow->setText(QString::number(static_cast<float>(BTurnLowV) / 10, 'f', 1));
     ui->d0->setText(QString::number(timingDataBuf[0], 16));
     ui->d1->setText(QString::number(timingDataBuf[1], 16));
+    ui->groupBox_24->setVisible(false);
+    ui->groupBox_33->setVisible(false);
 }
 
 // void TForm5::connectAll()
