@@ -248,7 +248,7 @@
                </font>
               </property>
               <property name="text">
-               <string>A侧设定输入电流</string>
+               <string>A侧设定输出电流</string>
               </property>
              </widget>
             </item>
@@ -773,7 +773,7 @@
                </font>
               </property>
               <property name="text">
-               <string>B侧设定输入电流</string>
+               <string>B侧设定输出电流</string>
               </property>
              </widget>
             </item>

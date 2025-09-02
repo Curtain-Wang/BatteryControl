@@ -23,10 +23,10 @@ TForm5::~TForm5()
 
 void TForm5::refresh()
 {
-    QVector<int> indices = {14, 15, 16, 17, 18, 19, 25, 26, 27, 28};
-    QVector<QLineEdit*> lineEdits = {ui->d14, ui->d15, ui->d16, ui->d17, ui->d18, ui->d19, ui->d25, ui->d26, ui->d27, ui->d28};
+    QVector<int> indices = {12, 13, 14, 15, 16, 17, 18, 19, 25, 26, 27, 28};
+    QVector<QLineEdit*> lineEdits = {ui->d12, ui->d13, ui->d14, ui->d15, ui->d16, ui->d17, ui->d18, ui->d19, ui->d25, ui->d26, ui->d27, ui->d28};
     for (int i = 0; i < indices.size(); ++i) {
-        if(i < 4)
+        if(i < 6)
         {
             lineEdits[i]->setText(QString::number(static_cast<float>(timingDataBuf[indices[i]]) / 10, 'f', 1));
         }

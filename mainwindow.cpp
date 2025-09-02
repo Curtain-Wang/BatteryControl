@@ -604,7 +604,7 @@ bool MainWindow::initCAN() {
         return false;
     }
 
-    if (ZCAN_SetValue(dhandle , "1/baud_rate", "500000") != STATUS_OK)
+    if (ZCAN_SetValue(dhandle , "1/baud_rate", "250000") != STATUS_OK)
     {
         qDebug() << "波特率设置失败";
         return false;
@@ -619,7 +619,7 @@ bool MainWindow::initCAN() {
     cfg.can.acc_mask = 0xFFFFFFFF;
 
     //初始化CAN通道
-    chHandle = ZCAN_InitCAN(dhandle, 1, &cfg);
+    chHandle = ZCAN_InitCAN(dhandle, 0, &cfg);
     if (INVALID_CHANNEL_HANDLE == chHandle) {
         qDebug() << "初始化通道失败";
         ReleaseIProperty(property);
@@ -766,11 +766,19 @@ void MainWindow::decodeCANData(can_frame frame)
         timingDataBuf[28] = static_cast<quint8>(frame.data[6]) + static_cast<quint8>(frame.data[7]) * 256;
         break;
     case 0x18E53501:
+        //低压侧输出电流设置
+        timingDataBuf[18] = static_cast<quint8>(frame.data[0]) + static_cast<quint8>(frame.data[1]) * 256;
+        //高压侧输出电流设置
+        timingDataBuf[19] = static_cast<quint8>(frame.data[2]) + static_cast<quint8>(frame.data[3]) * 256;
         //低压侧过压保护电压设置
         timingDataBuf[14] = static_cast<quint8>(frame.data[4]) + static_cast<quint8>(frame.data[5]) * 256;
         //高压侧过压保护电压设置
         timingDataBuf[15] = static_cast<quint8>(frame.data[6]) + static_cast<quint8>(frame.data[7]) * 256;
     case 0x18E63501:
+        //低压侧输出电压设置
+        timingDataBuf[12] = static_cast<quint8>(frame.data[0]) + static_cast<quint8>(frame.data[1]) * 256;
+        //高压侧输出电压设置
+        timingDataBuf[13] = static_cast<quint8>(frame.data[2]) + static_cast<quint8>(frame.data[3]) * 256;
         //低压侧欠压保护电压设置
         timingDataBuf[16] = static_cast<quint8>(frame.data[4]) + static_cast<quint8>(frame.data[5]) * 256;
         //高压侧欠压保护电压设置
@@ -819,6 +827,11 @@ void MainWindow::decodeCANData(can_frame frame)
         //高压侧电流校正系数B
         timingDataBuf[60] = static_cast<quint8>(frame.data[6]) + static_cast<quint8>(frame.data[7]) * 256;
         break;
+    }
+    refresh();
+    for(int i = 1; i < 7; i++)
+    {
+        refresh(i);
     }
 }
 

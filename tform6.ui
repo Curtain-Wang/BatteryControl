@@ -256,7 +256,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="d37_1">
+          <widget class="QLineEdit" name="d37_2">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -320,7 +320,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="d36_1">
+          <widget class="QLineEdit" name="d36_2">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -392,7 +392,7 @@
           </property>
           <layout class="QHBoxLayout" name="horizontalLayout">
            <item>
-            <widget class="QLineEdit" name="d33">
+            <widget class="QLineEdit" name="d32">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                <horstretch>0</horstretch>
@@ -444,7 +444,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QLineEdit" name="d32">
+            <widget class="QLineEdit" name="d33">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                <horstretch>0</horstretch>
