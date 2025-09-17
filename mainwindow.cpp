@@ -860,7 +860,7 @@ void MainWindow::on_connBtn_clicked()
                                      tr("请选择串口!"));
             return;
         }
-        serialPort->setBaudRate(BR);
+        serialPort->setBaudRate(ui->cbx_br->currentText().toInt());
         serialPort->setPortName(ui->comboBox_2->currentText());
         serialPort->setDataBits(QSerialPort::Data8);
         serialPort->setStopBits(QSerialPort::OneStop);
