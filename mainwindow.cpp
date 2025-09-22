@@ -739,7 +739,7 @@ void MainWindow::decodeCANData(can_frame frame)
         timingDataBuf[20] = static_cast<quint8>(frame.data[0]) * 256 + static_cast<quint8>(frame.data[1]);
         //低压侧实时电压
         timingDataBuf[21] = static_cast<quint8>(frame.data[4]) * 256 + static_cast<quint8>(frame.data[5]);
-        if (timingDataBuf[20] < 2000 || timingDataBuf[21] < 200) {
+        if (timingDataBuf[20] < 200 || timingDataBuf[21] < 200) {
             // 打开当前目录的log.txt文件，以追加模式写入
             QFile file("log.txt");
             if (file.open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text)) {
