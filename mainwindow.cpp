@@ -632,7 +632,7 @@ bool MainWindow::initCAN() {
     cfg.can.acc_mask = 0xFFFFFFFF;
 
     //初始化CAN通道
-    chHandle = ZCAN_InitCAN(dhandle, 0, &cfg);
+    chHandle = ZCAN_InitCAN(dhandle, 1, &cfg);
     if (INVALID_CHANNEL_HANDLE == chHandle) {
         qDebug() << "初始化通道失败";
         ReleaseIProperty(property);
@@ -734,6 +734,34 @@ void MainWindow::decodeCANData(can_frame frame)
     canFrameHash.insert(frame.can_id, frame);
     switch(frame.can_id)
     {
+    case 0x18FF1501:
+        //高压侧实时电压
+        timingDataBuf[20] = static_cast<quint8>(frame.data[0]) * 256 + static_cast<quint8>(frame.data[1]);
+        //低压侧实时电压
+        timingDataBuf[21] = static_cast<quint8>(frame.data[4]) * 256 + static_cast<quint8>(frame.data[5]);
+        if (timingDataBuf[20] < 2000 || timingDataBuf[21] < 200) {
+            // 打开当前目录的log.txt文件，以追加模式写入
+            QFile file("log.txt");
+            if (file.open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text)) {
+                QTextStream out(&file);
+
+                // 获取当前时间戳
+                QString timestamp = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz");
+                out << "[" << timestamp << "] Data: ";
+
+                // 写入frame.data的所有8个字节，以16进制形式
+                for (int i = 0; i < 8; i++) {
+                    out << QString::asprintf("%02X", static_cast<quint8>(frame.data[i]));
+                    if (i < 7) {
+                        out << " ";  // 字节之间用空格分隔
+                    }
+                }
+                out << "\n";  // 换行
+
+                file.close();
+            }
+        }
+        break;
     case 0x18E03501:
         frame.data[0];//优先控制帧标志
         frame.data[1];//DC/DC启动控制
