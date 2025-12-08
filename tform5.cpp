@@ -32,7 +32,14 @@ void TForm5::refresh()
             qint16 value = timingDataBuf[indices[i]];
             if(deviceType == 0 || deviceType == 1)
             {
-                lineEdits[i]->setText(QString::number(static_cast<float>(value) / 100, 'f', 2));
+                if(i == 4 || i == 5)
+                {
+                    lineEdits[i]->setText(QString::number(static_cast<float>(value - 25000) / 100, 'f', 2));
+                }else
+                {
+                    lineEdits[i]->setText(QString::number(static_cast<float>(value) / 100, 'f', 2));
+                }
+
             }
             else
             {
