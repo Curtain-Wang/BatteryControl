@@ -35,7 +35,14 @@ void TForm5::refresh()
             qint16 value = timingDataBuf[indices[i]];
             if(deviceType == 0 || deviceType == 1)
             {
-                lineEdits[i]->setText(QString::number(static_cast<float>(value) / 100, 'f', 2));
+                if(i == 6 || i == 7)
+                {
+                    lineEdits[i]->setText(QString::number(static_cast<float>(value - 25000) / 100, 'f', 2));
+                }else
+                {
+                    lineEdits[i]->setText(QString::number(static_cast<float>(value) / 100, 'f', 2));
+                }
+
             }
             else
             {
@@ -43,6 +50,7 @@ void TForm5::refresh()
             }
         }
     }
+
     //刷新翻转电压
     // ui->lineEditAHigh->setText(QString::number(static_cast<float>(ATurnHighV) / 10, 'f', 1));
     // ui->lineEditBHigh->setText(QString::number(static_cast<float>(BTurnHighV) / 10, 'f', 1));

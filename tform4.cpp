@@ -37,9 +37,9 @@ void TForm4::refresh()
         ui->d23_1->setText(QString::number(static_cast<float>(value) / 100, 'f', 2));
     }
     value = timingDataBuf[34];
-    ui->d34_2->setText(QString::number(static_cast<float>(value) / 100, 'f', 2));
+    ui->d34_2->setText(QString::number(static_cast<float>(value - 25000) / 100, 'f', 2));
     value = timingDataBuf[35];
-    ui->d35_2->setText(QString::number(static_cast<float>(value) / 100, 'f', 2));
+    ui->d35_2->setText(QString::number(static_cast<float>(value - 25000) / 100, 'f', 2));
     qint32 value32 = timingDataBuf[38] + timingDataBuf[39] * 256;
     ui->d38_1->setText(QString::number(static_cast<float>(value32) / 10, 'f', 1));
     value32 = timingDataBuf[40] + timingDataBuf[41] * 256;
