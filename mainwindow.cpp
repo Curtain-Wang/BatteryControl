@@ -235,9 +235,9 @@ void MainWindow::refresh()
     if(deviceType == 0 || deviceType == 1)
     {
         qint16 value = timingDataBuf[22];
-        ui->d22->setText(QString::number(static_cast<float>(value) / 100, 'f', 2));
+        ui->d22->setText(QString::number(static_cast<float>(value - 25000) / 100, 'f', 2));
         value = timingDataBuf[23];
-        ui->d23->setText(QString::number(static_cast<float>(value) / 100, 'f', 2));
+        ui->d23->setText(QString::number(static_cast<float>(value - 25000) / 100, 'f', 2));
     }
     else
     {
