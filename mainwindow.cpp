@@ -926,6 +926,11 @@ void MainWindow::staticCanDataInit()
     lowByteIndexHash.insert(0x0c, 0);
     highByteIndexHash.insert(0x0c, 1);
     writeCanidHash.insert(0x0c, 0x18E43A01);
+    //模式
+    canidHash.insert(2, 0x18E33501);
+    lowByteIndexHash.insert(2, 2);
+    highByteIndexHash.insert(2, -1);
+    writeCanidHash.insert(2, 0x18E13A01);
     //B侧输出电压
     canidHash.insert(0x0d, 0x18E63501);
     lowByteIndexHash.insert(0x0d, 2);
@@ -1368,6 +1373,6 @@ void MainWindow::on_pushButton_10_clicked()
 void MainWindow::on_cbx_workingmode_currentIndexChanged(int index)
 {
     quint16 value = index * 2 + 1 + (timingDataBuf[2] & 0xE0);
-    manualWriteOneCMDBuild(static_cast<char>(0), 2, value >> 8, value & 0xFF);
+    writeCanData(2, value & 0xFF, value >> 8);
 }
 
