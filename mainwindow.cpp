@@ -896,6 +896,16 @@ void MainWindow::staticCanDataInit()
     lowByteIndexHash.insert(28, 6);
     highByteIndexHash.insert(28, 7);
     writeCanidHash.insert(28, 0x18E23A01);
+    //A 设定输出电流
+    canidHash.insert(18, 0x18E53501);
+    lowByteIndexHash.insert(18, 0);
+    highByteIndexHash.insert(18, 1);
+    writeCanidHash.insert(18, 0x18E33A01);
+    //B 设定输出电流
+    canidHash.insert(19, 0x18E53501);
+    lowByteIndexHash.insert(19, 2);
+    highByteIndexHash.insert(19, 3);
+    writeCanidHash.insert(19, 0x18E33A01);
     //A侧过压保护电压
     canidHash.insert(14, 0x18E53501);
     lowByteIndexHash.insert(14, 4);
@@ -931,12 +941,56 @@ void MainWindow::staticCanDataInit()
     lowByteIndexHash.insert(2, 2);
     highByteIndexHash.insert(2, -1);
     writeCanidHash.insert(2, 0x18E13A01);
+    //模块号
+    canidHash.insert(0, 0x18E33501);
+    lowByteIndexHash.insert(0, 0);
+    highByteIndexHash.insert(0, -1);
+    writeCanidHash.insert(0, 0x18E13A01);
+    //波特率选择
+    canidHash.insert(1, 0x18E33501);
+    lowByteIndexHash.insert(1, 1);
+    highByteIndexHash.insert(1, -1);
+    writeCanidHash.insert(1, 0x18E13A01);
     //B侧输出电压
     canidHash.insert(0x0d, 0x18E63501);
     lowByteIndexHash.insert(0x0d, 2);
     highByteIndexHash.insert(0x0d, 3);
     writeCanidHash.insert(0x0d, 0x18E43A01);
-
+    //A 导纳
+    canidHash.insert(29, 0x18E73501);
+    lowByteIndexHash.insert(29, 0);
+    highByteIndexHash.insert(29, -1);
+    writeCanidHash.insert(29, 0x18E53A01);
+    //B 导纳
+    canidHash.insert(30, 0x18E73501);
+    lowByteIndexHash.insert(30, 1);
+    highByteIndexHash.insert(30, -1);
+    writeCanidHash.insert(30, 0x18E53A01);
+    //风扇启动温度
+    canidHash.insert(9, 0x18E33501);
+    lowByteIndexHash.insert(9, 7);
+    highByteIndexHash.insert(9, -1);
+    writeCanidHash.insert(9, 0x18E13A01);
+    //反向充电使能
+    canidHash.insert(11, 0x18E33501);
+    lowByteIndexHash.insert(11, 3);
+    highByteIndexHash.insert(11, -1);
+    writeCanidHash.insert(11, 0x18E13A01);
+    //A 侧输出功率
+    canidHash.insert(36, 0x18EC3501);
+    lowByteIndexHash.insert(36, 0);
+    highByteIndexHash.insert(36, 1);
+    writeCanidHash.insert(36, 0x18EB3A01);
+    //B 侧输出功率
+    canidHash.insert(37, 0x18EC3501);
+    lowByteIndexHash.insert(37, 2);
+    highByteIndexHash.insert(37, 3);
+    writeCanidHash.insert(37, 0x18EB3A01);
+    //单双向选择
+    canidHash.insert(7, 0x18E33501);
+    lowByteIndexHash.insert(7, 5);
+    highByteIndexHash.insert(7, -1);
+    writeCanidHash.insert(7, 0x18E13A01);
 }
 
 void MainWindow::sendPortData(QByteArray data)
