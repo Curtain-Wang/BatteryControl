@@ -860,8 +860,10 @@ void MainWindow::on_connBtn_clicked()
                                      tr("请选择串口!"));
             return;
         }
-        serialPort->setBaudRate(ui->cbx_br->currentText().toInt());
-        serialPort->setPortName(ui->comboBox_2->currentText());
+        quint16 br = ui->cbx_br->currentText().toInt();
+        serialPort->setBaudRate(br);
+        QString portname = ui->comboBox_2->currentText();
+        serialPort->setPortName(portname);
         serialPort->setDataBits(QSerialPort::Data8);
         serialPort->setStopBits(QSerialPort::OneStop);
         serialPort->setParity(QSerialPort::EvenParity);
@@ -900,6 +902,7 @@ void MainWindow::on_connBtn_clicked()
             {
                 dataRefreshTimer->start();
             }
+            connect(serialPort, &QSerialPort::readyRead, this, &MainWindow::handleReadyRead);
         }
     }
     else if(ui->connBtn->text() == "断开连接")
@@ -926,6 +929,7 @@ void MainWindow::on_connBtn_clicked()
         {
             timeoutTimer->stop();
         }
+        disconnect(serialPort, &QSerialPort::readyRead, this, &MainWindow::handleReadyRead);
     }
 }
 
