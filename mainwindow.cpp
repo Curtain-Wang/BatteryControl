@@ -1373,6 +1373,5 @@ void MainWindow::on_pushButton_10_clicked()
 void MainWindow::on_cbx_workingmode_currentIndexChanged(int index)
 {
     quint16 value = index * 2 + 1 + (timingDataBuf[2] & 0xE0);
-    writeCanData(2, value >> 8, value & 0xFF);
+    writeCanData(2, value & 0xFF, value >> 8);
 }
-
