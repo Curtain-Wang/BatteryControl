@@ -100,6 +100,7 @@ void MainWindow::timerUpDate()
 
 void MainWindow::init()
 {
+    ui->cbx_module->setCurrentIndex(1);
     //定时刷新数据
     dataRefreshTimer = new QTimer(this);
     connect(dataRefreshTimer, &QTimer::timeout, this, &MainWindow::onDataRefreshTimerTimeout);
@@ -163,7 +164,7 @@ void MainWindow::refreshPort()
 void MainWindow::addGetAllDataCMD()
 {
     QByteArray buf;
-    buf.append(MODULE);
+    buf.append(ui->cbx_module->currentIndex());
     buf.append(READ_CMD);
     //起始地址
     buf.append(static_cast<char>(0x00));
@@ -181,7 +182,7 @@ void MainWindow::addGetAllDataCMD()
 void MainWindow::manualReadCMDBuild(char startHigh, char startLow, char numHigh, char numLow)
 {
     QByteArray buf;
-    buf.append(MODULE);
+    buf.append(ui->cbx_module->currentIndex());
     buf.append(READ_CMD);
     buf.append(startHigh);
     buf.append(startLow);
@@ -458,7 +459,7 @@ void MainWindow::loadConfig()
 void MainWindow::manualWriteOneCMDBuild(char startHigh, char startLow, char valueHigh, char valueLow, quint8 secFlag)
 {
     QByteArray buf;
-    buf.append(MODULE);
+    buf.append(ui->cbx_module->currentIndex());
     buf.append(WRITE_ONE_CMD);
     buf.append(startHigh);
     buf.append(startLow);
@@ -474,7 +475,7 @@ void MainWindow::manualWriteOneCMDBuild(char startHigh, char startLow, char valu
 void MainWindow::manualWriteMultipleCMDBuild(QByteArray bodyBuf, quint8 secFlag)
 {
     QByteArray buf;
-    buf.append(MODULE);
+    buf.append(ui->cbx_module->currentIndex());
     buf.append(WRITE_MULTIPLE_CMD);
     buf.append(bodyBuf);
     QByteArray crcArray = calculateCRCArray(buf, buf.size());
@@ -591,7 +592,7 @@ void MainWindow::handleReadyRead()
         int module = static_cast<uint8_t>(receiveDataBuf[receiveStartIndex]);
         int cmd = static_cast<uint8_t>(receiveDataBuf[(receiveStartIndex + 1) % 500]);
         //没有匹配到开始
-        if(module != MODULE || (cmd != 3 && cmd != 6 && cmd != 16))
+        if(module != ui->cbx_module->currentIndex() || (cmd != 3 && cmd != 6 && cmd != 16))
         {
             //更新开始点
             receiveStartIndex = (receiveStartIndex + 1) % 500;
