@@ -62,6 +62,7 @@ void TForm7::on_lineEdit_returnPressed()
                                || editAddrLow == 26 || editAddrLow == 27 || editAddrLow == 28))
         {
             value = ui->lineEdit->text().toFloat() * 100;
+            mainwindow->manualWriteOneCMDBuild(static_cast<char>(0), editAddrLow, value >> 8, value & 0xFF);
         }
         else
         {
